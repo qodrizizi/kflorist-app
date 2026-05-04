@@ -9,8 +9,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('perawatans', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('bonsai_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('bonsai_id')->constrained('bonsais')->onDelete('cascade');
+            $table->foreignUuid('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->date('tanggal_perawatan');
             $table->string('jenis_perawatan'); // penyiraman, pemupukan, pemangkasan, repotting
             $table->text('catatan')->nullable();

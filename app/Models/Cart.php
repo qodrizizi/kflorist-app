@@ -6,21 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
-class Perawatan extends Model
+class Cart extends Model
 {
     use HasFactory, HasUuids;
 
     protected $fillable = [
+        'user_id',
         'bonsai_id',
-        'tanggal_perawatan',
-        'jenis_perawatan',
-        'catatan',
-        'status',
+        'quantity'
     ];
 
-    protected $casts = [
-        'tanggal_perawatan' => 'date',
-    ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function bonsai()
     {

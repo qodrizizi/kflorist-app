@@ -6,25 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('carts', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('order_code')->unique();
             $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignUuid('bonsai_id')->constrained('bonsais')->onDelete('cascade');
             $table->integer('quantity')->default(1);
-            $table->decimal('total_price', 15, 2);
-            $table->string('status')->default('pending'); // pending, diproses, dikirim, selesai, dibatalkan
-            $table->text('alamat_pengiriman')->nullable();
-            $table->string('metode_pembayaran')->nullable();
-            $table->text('catatan')->nullable();
             $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('carts');
     }
 };

@@ -18,18 +18,28 @@ class OrderSeeder extends Seeder
         $metode = ['Transfer Bank', 'E-Wallet', 'COD'];
 
         $orderNum = 1;
-        foreach ($bonsais->take(5) as $bonsai) {
+        // Create specific order types for testing
+        $specificStatuses = ['pending', 'diproses', 'dikirim', 'selesai'];
+        
+        foreach ($bonsais->take(4) as $index => $bonsai) {
+            $status = $specificStatuses[$index];
             Order::create([
                 'order_code' => 'ORD-' . now()->format('Ymd') . '-' . str_pad($orderNum, 3, '0', STR_PAD_LEFT),
                 'user_id' => $user->id,
                 'bonsai_id' => $bonsai->id,
                 'quantity' => 1,
                 'total_price' => $bonsai->current_value ?? 500000,
-                'status' => $statuses[array_rand($statuses)],
-                'alamat_pengiriman' => 'Jl. Contoh No. ' . rand(1, 100) . ', Jakarta Selatan',
-                'metode_pembayaran' => $metode[array_rand($metode)],
-                'catatan' => 'Pesanan bonsai ' . $bonsai->name,
+                'status' => $status,
+                'alamat_pengiriman' => 'Jl. Kebon Jeruk No. 12, Jakarta Barat',
+                'metode_pembayaran' => 'Transfer Bank',
+                'catatan' => 'Pesanan testing untuk status ' . $status,
             ]);
+
+            // Jika status bukan pending, tandai bonsai sebagai sold
+            if ($status !== 'pending') {
+                $bonsai->update(['status' => 'sold']);
+            }
+            
             $orderNum++;
         }
     }

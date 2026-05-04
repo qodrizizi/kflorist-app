@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Category extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     /**
      * Atribut yang dapat diisi secara massal.

@@ -67,23 +67,52 @@ Route::prefix('dashboard')
         // Profile
         Route::get('/profile', [BonsaiController::class, 'profile'])->name('dashboard.profile');
     });
-
+use App\Http\Controllers\ShopController;
 
 /*
 |--------------------------------------------------------------------------
-| Shop Routes (User Only)
+| Shop Routes (Public)
 |--------------------------------------------------------------------------
 */
-Route::get('/', fn() => view('shop.index'))->name('shop.index');
-Route::get('/produk', fn() => view('shop.produk'))->name('shop.produk');
+Route::get('/', [ShopController::class, 'index'])->name('shop.index');
+Route::get('/produk', [ShopController::class, 'produk'])->name('shop.produk');
+Route::get('/produk/{id}', [ShopController::class, 'show'])->name('shop.produk.show');
 Route::get('/tentang', fn() => view('shop.tentang'))->name('shop.tentang');
 Route::get('/kategori', fn() => view('shop.kategori'))->name('shop.kategori');
 
+use App\Http\Controllers\CartController;
+
 Route::middleware(['auth'])->group(function () {
-    Route::get('/profil', fn() => view('shop.profil'))->name('shop.profil');
-    Route::get('/keranjang', fn() => view('shop.keranjang'))->name('shop.keranjang');
-    Route::get('/profile', fn() => view('shop.profile'))->name('shop.profile');
+    // Profile Routes
+    Route::get('/profil', [App\Http\Controllers\ProfileController::class, 'index'])->name('shop.profil');
+    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('shop.profile');
+    Route::put('/profile/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('shop.profile.update');
+    Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('shop.profile.password');
+    Route::post('/profile/address', [App\Http\Controllers\ProfileController::class, 'storeAddress'])->name('shop.profile.address.store');
+    Route::delete('/profile/address/{id}', [App\Http\Controllers\ProfileController::class, 'destroyAddress'])->name('shop.profile.address.destroy');
+    Route::put('/profile/address/{id}/default', [App\Http\Controllers\ProfileController::class, 'setDefaultAddress'])->name('shop.profile.address.default');
+    
+    // Cart Routes
+    Route::get('/keranjang', [CartController::class, 'index'])->name('shop.keranjang');
+    Route::post('/keranjang', [CartController::class, 'store'])->name('shop.keranjang.store');
+    Route::put('/keranjang/{cart}', [CartController::class, 'update'])->name('shop.keranjang.update');
+    Route::delete('/keranjang/{cart}', [CartController::class, 'destroy'])->name('shop.keranjang.destroy');
+    
+    // Checkout Routes
+    Route::get('/checkout', [App\Http\Controllers\CheckoutController::class, 'index'])->name('shop.checkout');
+    Route::post('/checkout', [App\Http\Controllers\CheckoutController::class, 'process'])->name('shop.checkout.process');
+    
+    // Pesanan Saya Routes
+    Route::get('/pesanan', [App\Http\Controllers\PesananController::class, 'index'])->name('shop.pesanan');
+    Route::get('/pesanan/{id}/bayar', [App\Http\Controllers\PesananController::class, 'pay'])->name('shop.pesanan.pay');
+    Route::put('/pesanan/{id}/selesai', [App\Http\Controllers\PesananController::class, 'complete'])->name('shop.pesanan.complete');
+    
+    // Review Route
+    Route::post('/review', [App\Http\Controllers\ReviewController::class, 'store'])->name('shop.review.store');
 });
+
+// Midtrans Callback (Public)
+Route::post('/midtrans/callback', [App\Http\Controllers\MidtransController::class, 'callback']);
 
 
 /*

@@ -9,10 +9,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('bonsais', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('code')->unique();
             $table->string('name');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('category_id')->constrained('categories')->onDelete('cascade');
             $table->string('species')->nullable();
             $table->integer('age_years')->nullable();
             $table->integer('age_months')->nullable();

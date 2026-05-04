@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuids;
 
     protected $fillable = [
         'order_code',
@@ -19,6 +20,13 @@ class Order extends Model
         'alamat_pengiriman',
         'metode_pembayaran',
         'catatan',
+        'payment_type',
+        'payment_bank',
+        'payment_va_number',
+        'payment_bill_key',
+        'payment_biller_code',
+        'payment_qr_url',
+        'payment_expiry_time',
     ];
 
     public function user()
