@@ -1,7 +1,8 @@
 @import 'tailwindcss';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Enable dark mode variant using class strategy */
+@custom-variant dark (&:where(.dark, .dark *));
 
-/* Kalau mau extend theme/font pakai tailwind.config.js, bukan di sini */
+/* Source paths for Tailwind to scan */
+@source "../views";
+@source "../../public";

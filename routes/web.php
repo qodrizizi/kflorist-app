@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BonsaiController;
 use App\Http\Middleware\Role;
@@ -25,29 +26,47 @@ Route::get('/auth-google-redirect', [AuthController::class, 'redirectToGoogle'])
 Route::get('/auth/google/callback', [AuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 
 
+use App\Http\Controllers\DashboardController;
+
 /*
 |--------------------------------------------------------------------------
 | Dashboard Routes (Admin Only)
 |--------------------------------------------------------------------------
 */
-// Dashboard admin
 Route::prefix('dashboard')
     ->middleware([Role::class.':admin','auth'])
     ->group(function () {
-        Route::get('/', fn() => view('dashboard.home'))->name('dashboard.home');
+        // Home - Overview
+        Route::get('/', [DashboardController::class, 'home'])->name('dashboard.home');
 
-
+        // Manajemen Bonsai
         Route::get('/manajemen', [BonsaiController::class, 'manajemen'])->name('dashboard.manajemen');
         Route::post('/manajemen', [BonsaiController::class, 'storeManajemen'])->name('dashboard.manajemen.store');
         Route::put('/manajemen/{bonsai}', [BonsaiController::class, 'updateManajemen'])->name('dashboard.manajemen.update');
         Route::delete('/manajemen/{bonsai}', [BonsaiController::class, 'destroyManajemen'])->name('dashboard.manajemen.destroy');
 
+        // Kategori
+        Route::get('/categories', [DashboardController::class, 'categories'])->name('dashboard.categories');
+        Route::post('/categories', [DashboardController::class, 'storeCategory'])->name('dashboard.categories.store');
+        Route::put('/categories/{category}', [DashboardController::class, 'updateCategory'])->name('dashboard.categories.update');
+        Route::delete('/categories/{category}', [DashboardController::class, 'destroyCategory'])->name('dashboard.categories.destroy');
 
-    Route::get('/keuangan', [BonsaiController::class, 'keuangan'])->name('dashboard.keuangan');
-    Route::get('/perawatan', [BonsaiController::class, 'perawatan'])->name('dashboard.perawatan');
-    Route::get('/laporan', [BonsaiController::class, 'laporan'])->name('dashboard.laporan');
-    Route::get('/profile', [BonsaiController::class, 'profile'])->name('dashboard.profile');
-});
+        // Pesanan
+        Route::get('/orders', [DashboardController::class, 'orders'])->name('dashboard.orders');
+        Route::put('/orders/{order}/status', [DashboardController::class, 'updateOrderStatus'])->name('dashboard.orders.updateStatus');
+
+        // Perawatan
+        Route::get('/perawatan', [BonsaiController::class, 'perawatan'])->name('dashboard.perawatan');
+
+        // Keuangan
+        Route::get('/keuangan', [BonsaiController::class, 'keuangan'])->name('dashboard.keuangan');
+
+        // Laporan
+        Route::get('/laporan', [BonsaiController::class, 'laporan'])->name('dashboard.laporan');
+
+        // Profile
+        Route::get('/profile', [BonsaiController::class, 'profile'])->name('dashboard.profile');
+    });
 
 
 /*
@@ -74,12 +93,12 @@ Route::middleware(['auth'])->group(function () {
 */
 Route::fallback(function () {
     // jika user login sebagai admin -> dashboard.profile
-    if(auth()->check() && auth()->user()->role === 'admin'){
+    if(Auth::check() && Auth::user()->role === 'admin'){
         return redirect()->route('dashboard.profile');
     }
 
     // jika user login sebagai user -> shop.profile
-    if(auth()->check() && auth()->user()->role === 'user'){
+    if(Auth::check() && Auth::user()->role === 'user'){
         return redirect()->route('shop.profile');
     }
 
