@@ -131,10 +131,10 @@
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <!-- Logo -->
-                <div class="flex items-center space-x-2">
-                    <i class="fas fa-leaf text-green-600 text-2xl"></i>
+                <a href="{{ route('shop.index') }}" class="flex items-center space-x-2 group">
+                    <i class="fas fa-leaf text-green-600 text-2xl group-hover:rotate-12 transition-transform"></i>
                     <h1 class="text-2xl font-bold text-gray-800">BonsaiKu</h1>
-                </div>
+                </a>
                 
                 <!-- Desktop Menu -->
                 <div class="hidden lg:flex space-x-8">
@@ -648,7 +648,9 @@
             });
         }
     </script>
-    <!-- CHAT WIDGET START -->
+
+    </div>
+
     @auth
     <div x-data="chatWidget()" x-init="init()" class="fixed bottom-6 right-6 z-[60]">
         <!-- Chat Bubble -->
@@ -875,8 +877,5 @@
         }
     </script>
     @endauth
-    <!-- CHAT WIDGET END -->
-
-    </div>
 </body>
 </html>
