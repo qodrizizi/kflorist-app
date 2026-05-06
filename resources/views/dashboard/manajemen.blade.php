@@ -39,74 +39,58 @@
             </div>
         </div>
 
-        {{-- Notifications --}}
-        @if (session('success'))
-            <div id="success-message" class="p-4 mb-6 text-sm text-green-800 rounded-2xl bg-green-50 border border-green-200" role="alert">
-                <span class="font-medium">Sukses!</span> {{ session('success') }}
-            </div>
-        @endif
-        
-        @if ($errors->any())
-            <div id="error-message" class="p-4 mb-6 text-sm text-red-800 rounded-2xl bg-red-50 border border-red-200" role="alert">
-                <span class="font-medium">Terjadi Kesalahan!</span> Mohon periksa kembali data yang Anda masukkan.
-                <ul class="mt-1.5 list-disc list-inside">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+
 
         {{-- Stats Cards --}}
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-lg border border-gray-100/50 hover:shadow-xl transition-all duration-300">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-lg border border-gray-100/50 dark:border-slate-800 hover:shadow-xl transition-all duration-300">
                 <div class="flex items-center space-x-4">
                     <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center">
                         <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600">Total Bonsai</p>
-                        <p class="text-2xl font-bold text-gray-800" id="totalBonsai">{{ $bonsais->total() ?? 0 }}</p>
+                        <p class="text-sm text-gray-600 dark:text-slate-400">Total Bonsai</p>
+                        <p class="text-2xl font-bold text-gray-800 dark:text-white" id="totalBonsai">{{ $bonsais->total() ?? 0 }}</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-lg border border-gray-100/50 hover:shadow-xl transition-all duration-300">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-lg border border-gray-100/50 dark:border-slate-800 hover:shadow-xl transition-all duration-300">
                 <div class="flex items-center space-x-4">
                     <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center">
                         <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600">Tersedia</p>
-                        <p class="text-2xl font-bold text-gray-800" id="availableBonsai">{{ $stats['available'] ?? 0 }}</p>
+                        <p class="text-sm text-gray-600 dark:text-slate-400">Tersedia</p>
+                        <p class="text-2xl font-bold text-gray-800 dark:text-white" id="availableBonsai">{{ $stats['available'] ?? 0 }}</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-lg border border-gray-100/50 hover:shadow-xl transition-all duration-300">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-lg border border-gray-100/50 dark:border-slate-800 hover:shadow-xl transition-all duration-300">
                 <div class="flex items-center space-x-4">
                     <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-2xl flex items-center justify-center">
                         <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.472-2.472a3.75 3.75 0 00-5.303-5.303L6.25 9.75M11.42 15.17L6.25 9.75m5.17 5.42l2.472-2.472a3.75 3.75 0 00-5.303-5.303L6.25 9.75" /></svg>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600">Perawatan</p>
-                        <p class="text-2xl font-bold text-gray-800" id="maintenanceBonsai">{{ $stats['maintenance'] ?? 0 }}</p>
+                        <p class="text-sm text-gray-600 dark:text-slate-400">Perawatan</p>
+                        <p class="text-2xl font-bold text-gray-800 dark:text-white" id="maintenanceBonsai">{{ $stats['maintenance'] ?? 0 }}</p>
                     </div>
                 </div>
             </div>
-            <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-lg border border-gray-100/50 hover:shadow-xl transition-all duration-300">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-lg border border-gray-100/50 dark:border-slate-800 hover:shadow-xl transition-all duration-300">
                 <div class="flex items-center space-x-4">
                     <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center">
                         <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75" /></svg>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600">Total Nilai</p>
-                        <p class="text-xl font-bold text-gray-800" id="totalValue">Rp {{ number_format($stats['total_value'] ?? 0, 0, ',', '.') }}</p>
+                        <p class="text-sm text-gray-600 dark:text-slate-400">Total Nilai</p>
+                        <p class="text-xl font-bold text-gray-800 dark:text-white" id="totalValue">Rp {{ number_format($stats['total_value'] ?? 0, 0, ',', '.') }}</p>
                     </div>
                 </div>
             </div>
         </div>
 
         {{-- Filter & Search --}}
-        <div class="bg-white/80 backdrop-blur-sm rounded-3xl p-6 shadow-lg border border-gray-100/50 mb-8">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-lg border border-gray-100/50 dark:border-slate-800 mb-8">
             <form method="GET" action="{{ route('dashboard.manajemen') }}">
                 <div class="flex flex-col sm:flex-row gap-4">
                     <div class="flex-1">
@@ -117,10 +101,10 @@
                                 </svg>
                             </div>
                             <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari bonsai..." 
-                                class="pl-10 pr-4 py-3 w-full border border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all duration-300">
+                                class="pl-10 pr-4 py-3 w-full border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-2xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all duration-300">
                         </div>
                     </div>
-                    <select name="category" class="px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all duration-300">
+                    <select name="category" class="px-4 py-3 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-2xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all duration-300">
                         <option value="">Semua Kategori</option>
                         @foreach($categories ?? [] as $category)
                             <option value="{{ $category->id }}" {{ request('category') == $category->id ? 'selected' : '' }}>
@@ -128,7 +112,7 @@
                             </option>
                         @endforeach
                     </select>
-                    <select name="status" class="px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all duration-300">
+                    <select name="status" class="px-4 py-3 border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-2xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-all duration-300">
                         <option value="">Semua Status</option>
                         <option value="available" {{ request('status') == 'available' ? 'selected' : '' }}>Tersedia</option>
                         <option value="sold" {{ request('status') == 'sold' ? 'selected' : '' }}>Terjual</option>
@@ -145,24 +129,24 @@
         </div>
 
         {{-- Table Container --}}
-        <div class="bg-white/80 backdrop-blur-sm rounded-3xl shadow-lg border border-gray-100/50 overflow-hidden">
+        <div class="bg-white dark:bg-slate-900 rounded-3xl shadow-lg border border-gray-100/50 dark:border-slate-800 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full">
-                    <thead class="bg-gradient-to-r from-gray-50 to-gray-100">
+                    <thead class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-900">
                         <tr>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">No</th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Gambar</th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Detail Bonsai</th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Kategori</th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
-                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700">Nilai</th>
-                            <th class="px-6 py-4 text-center text-sm font-semibold text-gray-700">Aksi</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 dark:text-slate-300">No</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 dark:text-slate-300">Gambar</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 dark:text-slate-300">Detail Bonsai</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 dark:text-slate-300">Kategori</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 dark:text-slate-300">Status</th>
+                            <th class="px-6 py-4 text-left text-sm font-semibold text-gray-700 dark:text-slate-300">Nilai</th>
+                            <th class="px-6 py-4 text-center text-sm font-semibold text-gray-700 dark:text-slate-300">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($bonsais as $key => $bonsai)
-                            <tr class="hover:bg-gray-50/50 transition-colors duration-200 border-b border-gray-100">
-                                <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ $bonsais->firstItem() + $key }}</td>
+                            <tr class="hover:bg-gray-50/50 dark:hover:bg-slate-800/50 transition-colors duration-200 border-b border-gray-100 dark:border-slate-800">
+                                <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-slate-200">{{ $bonsais->firstItem() + $key }}</td>
                                 <td class="px-6 py-4">
                                     <img src="{{ $bonsai->image_path ? asset('storage/' . $bonsai->image_path) : 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&h=300&fit=crop' }}" 
                                         alt="{{ $bonsai->name }}" 
@@ -170,14 +154,14 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="space-y-1">
-                                        <div class="font-bold text-gray-900 text-lg">{{ $bonsai->name }}</div>
-                                        <div class="text-sm text-gray-500 font-mono bg-gray-100 px-2 py-1 rounded-lg inline-block">{{ $bonsai->code }}</div>
-                                        <div class="text-sm text-gray-600">{{ $bonsai->species ?? 'N/A' }}</div>
-                                        <div class="text-xs text-gray-500">{{ $bonsai->age_years ?? 'N/A' }} tahun</div>
+                                        <div class="font-bold text-gray-900 dark:text-white text-lg">{{ $bonsai->name }}</div>
+                                        <div class="text-sm text-gray-500 dark:text-slate-400 font-mono bg-gray-100 dark:bg-slate-800 px-2 py-1 rounded-lg inline-block">{{ $bonsai->code }}</div>
+                                        <div class="text-sm text-gray-600 dark:text-slate-400">{{ $bonsai->species ?? 'N/A' }}</div>
+                                        <div class="text-xs text-gray-500 dark:text-slate-500">{{ $bonsai->age_years ?? 'N/A' }} tahun</div>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <span class="px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                    <span class="px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-400">
                                         {{ $bonsai->category->name ?? 'Tidak ada kategori' }}
                                     </span>
                                 </td>
@@ -194,6 +178,14 @@
                                 </td>
                                 <td class="px-6 py-4 text-center">
                                     <div class="flex justify-center space-x-2">
+                                        <button onclick='openViewModal(@json($bonsai))'
+                                            class="w-10 h-10 flex items-center justify-center bg-teal-500 text-white rounded-xl hover:bg-teal-600 transition-colors duration-300 shadow-md hover:shadow-lg"
+                                            title="Lihat Detail Bonsai">
+                                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            </svg>
+                                        </button>
                                         <button onclick='openEditModal(@json($bonsai))'
                                             class="w-10 h-10 flex items-center justify-center bg-blue-500 text-white rounded-xl hover:bg-blue-600 transition-colors duration-300 shadow-md hover:shadow-lg"
                                             title="Edit Bonsai">
@@ -214,8 +206,6 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                                                 </svg>
                                             </button>
-                                        </form>
-
                                         </form>
                                     </div>
                                 </td>
@@ -245,20 +235,24 @@
                 {{ $bonsais->appends(request()->query())->links() }}
             </div>
         @endif
+    @endsection
 
+    @push('modals')
         {{-- Modal --}}
-        <div id="bonsaiModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden">
-            <div class="min-h-screen flex items-center justify-center p-4">
-                <div class="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
-                    <div class="bg-gradient-to-r from-green-500 to-green-600 p-6 rounded-t-3xl">
+        <div id="bonsaiModal" class="fixed inset-0 z-[100] hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+                <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" aria-hidden="true" onclick="closeModal()"></div>
+                
+                <div class="relative bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-w-4xl w-full my-8 max-h-[90vh] flex flex-col transform transition-all duration-300 scale-95 opacity-0 text-left" id="modalContent">
+                    <div class="bg-gradient-to-r from-green-500 to-green-600 p-6 rounded-t-3xl flex-shrink-0">
                         <div class="flex justify-between items-center">
                             <h3 id="modalTitle" class="text-2xl font-bold text-white">Modal Title</h3>
-                            <button onclick="closeModal()" class="text-white/80 hover:text-white text-2xl transition-colors duration-200">
+                            <button type="button" onclick="closeModal()" class="text-white/80 hover:text-white text-2xl transition-colors duration-200">
                                 <i class="fas fa-times"></i>
                             </button>
                         </div>
                     </div>
-                    <div class="p-6">
+                    <div class="p-6 overflow-y-auto flex-grow">
                         <form id="bonsaiForm" method="POST" enctype="multipart/form-data" class="space-y-6">
                             @csrf
                             <input type="hidden" id="methodField" name="_method" value="POST">
@@ -398,7 +392,79 @@
                 </div>
             </div>
         </div>
-    @endsection
+
+        {{-- Modal View --}}
+        <div id="viewModal" class="fixed inset-0 z-[100] hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+                <div class="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" aria-hidden="true" onclick="closeViewModal()"></div>
+                
+                <div class="relative bg-white dark:bg-slate-900 rounded-3xl shadow-2xl max-w-4xl w-full my-8 max-h-[90vh] flex flex-col transform transition-all duration-300 scale-95 opacity-0 text-left" id="viewModalContent">
+                    <div class="bg-gradient-to-r from-teal-500 to-teal-600 p-6 rounded-t-3xl flex-shrink-0">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-2xl font-bold text-white">Detail Bonsai</h3>
+                            <button type="button" onclick="closeViewModal()" class="text-white/80 hover:text-white text-2xl transition-colors duration-200">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6 overflow-y-auto flex-grow">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <!-- Left: Image -->
+                            <div class="flex flex-col items-center justify-center bg-gray-50 dark:bg-slate-800/50 rounded-2xl p-4 border border-gray-100 dark:border-slate-800">
+                                <img id="view_image" class="w-full max-h-[400px] object-cover rounded-xl shadow-md" src="" alt="Bonsai Image">
+                            </div>
+                            <!-- Right: Details -->
+                            <div class="space-y-6">
+                                <div>
+                                    <h4 class="text-xs font-bold text-teal-500 uppercase tracking-wider mb-1">Nama Bonsai</h4>
+                                    <p id="view_name" class="text-2xl font-bold text-gray-900 dark:text-white"></p>
+                                </div>
+                                <div class="grid grid-cols-2 gap-6">
+                                    <div class="bg-gray-50 dark:bg-slate-800/50 p-3 rounded-xl">
+                                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Kode</h4>
+                                        <p id="view_code" class="text-sm font-medium text-gray-800 dark:text-slate-200 font-mono"></p>
+                                    </div>
+                                    <div class="bg-gray-50 dark:bg-slate-800/50 p-3 rounded-xl">
+                                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Kategori</h4>
+                                        <p id="view_category" class="text-sm font-medium text-gray-800 dark:text-slate-200"></p>
+                                    </div>
+                                    <div class="bg-gray-50 dark:bg-slate-800/50 p-3 rounded-xl">
+                                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Spesies</h4>
+                                        <p id="view_species" class="text-sm font-medium text-gray-800 dark:text-slate-200"></p>
+                                    </div>
+                                    <div class="bg-gray-50 dark:bg-slate-800/50 p-3 rounded-xl">
+                                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Umur</h4>
+                                        <p id="view_age" class="text-sm font-medium text-gray-800 dark:text-slate-200"></p>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Status</h4>
+                                        <div id="view_status_container"></div>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Kesehatan</h4>
+                                        <div id="view_health_container"></div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-green-50 dark:bg-green-900/20 border border-green-100 dark:border-green-900 p-4 rounded-xl">
+                                    <h4 class="text-xs font-bold text-green-600 dark:text-green-400 uppercase tracking-wider mb-1">Nilai Estimasi</h4>
+                                    <p id="view_value" class="text-2xl font-bold text-green-700 dark:text-green-300"></p>
+                                </div>
+
+                                <div>
+                                    <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Deskripsi</h4>
+                                    <p id="view_description" class="text-sm text-gray-600 dark:text-slate-400 leading-relaxed whitespace-pre-wrap"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endpush
 
     @push('scripts')
     <script>
@@ -520,6 +586,61 @@
             });
 
             
+
+            // View Modal Functionality
+            const viewModal = document.getElementById('viewModal');
+            const viewModalContent = document.getElementById('viewModalContent');
+
+            window.openViewModal = function(bonsai) {
+                console.log('Opening view modal...', bonsai);
+                
+                // Populate data
+                document.getElementById('view_name').innerText = bonsai.name || '-';
+                document.getElementById('view_code').innerText = bonsai.code || '-';
+                document.getElementById('view_category').innerText = bonsai.category ? bonsai.category.name : 'Tidak ada kategori';
+                document.getElementById('view_species').innerText = bonsai.species || '-';
+                document.getElementById('view_age').innerText = bonsai.age_years ? bonsai.age_years + ' Tahun' : '-';
+                
+                // Format currency
+                const valueFormatted = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(bonsai.current_value || 0);
+                document.getElementById('view_value').innerText = valueFormatted;
+                
+                document.getElementById('view_description').innerText = bonsai.description || 'Tidak ada deskripsi.';
+                
+                // Set image
+                const viewImg = document.getElementById('view_image');
+                if (bonsai.image_path) {
+                    viewImg.src = `{{ asset('storage') }}/${bonsai.image_path}`;
+                } else {
+                    viewImg.src = 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&h=300&fit=crop';
+                }
+                
+                // Set Status Badge
+                const statusClass = getStatusClass(bonsai.status || 'available');
+                const statusText = getStatusText(bonsai.status || 'available');
+                document.getElementById('view_status_container').innerHTML = `<span class="px-3 py-1 text-xs font-semibold rounded-full ${statusClass}">${statusText}</span>`;
+                
+                // Set Health Badge
+                const healthClass = getHealthClass(bonsai.health_status || 'good');
+                const healthText = getHealthText(bonsai.health_status || 'good');
+                document.getElementById('view_health_container').innerHTML = `<span class="px-3 py-1 text-xs font-semibold rounded-full ${healthClass}">${healthText}</span>`;
+                
+                // Show modal
+                viewModal.classList.remove('hidden');
+                setTimeout(() => {
+                    viewModalContent.classList.remove('scale-95', 'opacity-0');
+                    viewModalContent.classList.add('scale-100', 'opacity-100');
+                }, 10);
+            }
+
+            window.closeViewModal = function() {
+                viewModalContent.classList.remove('scale-100', 'opacity-100');
+                viewModalContent.classList.add('scale-95', 'opacity-0');
+                
+                setTimeout(() => {
+                    viewModal.classList.add('hidden');
+                }, 300);
+            }
 
             // Form submission with loading state
             bonsaiForm.addEventListener('submit', function(e) {

@@ -24,7 +24,7 @@ class ShopController extends Controller
             ->take(4)
             ->get();
 
-        $totalBonsai = Bonsai::where('is_active', true)->count();
+        $totalBonsai = Bonsai::where('is_active', true)->where('status', 'available')->count();
 
         return view('shop.index', compact('categories', 'featuredProducts', 'totalBonsai'));
     }
@@ -36,14 +36,15 @@ class ShopController extends Controller
     {
         $categories = Category::all();
 
-        $query = Bonsai::with('category')
+        // Query dasar
+        $baseQuery = Bonsai::with('category')
             ->withAvg('reviews', 'rating')
             ->withCount('reviews')
             ->where('is_active', true);
 
         // Filter kategori
         if ($request->filled('kategori') && $request->kategori !== 'all') {
-            $query->whereHas('category', function ($q) use ($request) {
+            $baseQuery->whereHas('category', function ($q) use ($request) {
                 $q->where('name', $request->kategori);
             });
         }
@@ -51,35 +52,33 @@ class ShopController extends Controller
         // Search
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function ($q) use ($search) {
+            $baseQuery->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('species', 'like', "%{$search}%")
                   ->orWhere('code', 'like', "%{$search}%");
             });
         }
 
-        // Sort
+        // Clone untuk produk tersedia
+        $availableQuery = (clone $baseQuery)->where('status', 'available');
+        
+        // Sort untuk produk tersedia
         $sort = $request->get('sort', 'terbaru');
         switch ($sort) {
-            case 'termurah':
-                $query->orderBy('current_value', 'asc');
-                break;
-            case 'termahal':
-                $query->orderBy('current_value', 'desc');
-                break;
-            case 'nama':
-                $query->orderBy('name', 'asc');
-                break;
-            default:
-                $query->latest();
-                break;
+            case 'termurah': $availableQuery->orderBy('current_value', 'asc'); break;
+            case 'termahal': $availableQuery->orderBy('current_value', 'desc'); break;
+            case 'nama':     $availableQuery->orderBy('name', 'asc'); break;
+            default:         $availableQuery->latest(); break;
         }
 
-        $products = $query->paginate(12)->appends($request->query());
+        $availableProducts = $availableQuery->paginate(12, ['*'], 'page_available')->appends($request->query());
 
-        $totalProducts = Bonsai::where('is_active', true)->count();
+        // Clone untuk produk terjual (biasanya diurutkan dari yang paling baru terjual/paling baru diinput)
+        $soldProducts = (clone $baseQuery)->where('status', 'sold')->latest()->take(8)->get();
 
-        return view('shop.produk', compact('categories', 'products', 'totalProducts'));
+        $totalProducts = Bonsai::where('is_active', true)->where('status', 'available')->count();
+
+        return view('shop.produk', compact('categories', 'availableProducts', 'soldProducts', 'totalProducts'));
     }
 
     /**

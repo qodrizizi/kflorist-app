@@ -12,6 +12,7 @@ class Perawatan extends Model
 
     protected $fillable = [
         'bonsai_id',
+        'user_id',
         'tanggal_perawatan',
         'jenis_perawatan',
         'catatan',

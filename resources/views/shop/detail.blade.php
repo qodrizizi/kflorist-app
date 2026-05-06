@@ -116,7 +116,7 @@
                             </button>
                         @else
                             <button disabled class="w-full bg-gray-200 text-gray-500 px-8 py-4 rounded-2xl font-bold cursor-not-allowed flex items-center justify-center">
-                                <i class="fas fa-times-circle mr-2"></i> Tidak Tersedia
+                                <i class="fas fa-ban mr-2"></i> {{ $product->status === 'sold' ? 'Produk Telah Terjual' : 'Produk Tidak Tersedia' }}
                             </button>
                         @endif
                     </div>

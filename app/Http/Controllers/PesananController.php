@@ -13,6 +13,12 @@ class PesananController extends Controller
      */
     public function index()
     {
+        // Otomatis batalkan pesanan yang belum dibayar > 24 jam
+        Order::where('user_id', Auth::id())
+            ->where('status', 'pending')
+            ->where('created_at', '<', now()->subHours(24))
+            ->update(['status' => 'dibatalkan']);
+
         // Ambil semua pesanan milik user yang sedang login, sertakan review milik user ini untuk bonsai tersebut
         $orders = Order::with(['bonsai.reviews' => function($query) {
             $query->where('user_id', Auth::id());
@@ -57,7 +63,8 @@ class PesananController extends Controller
             ->firstOrFail();
 
         if ($order->status !== 'pending') {
-            return redirect()->route('shop.pesanan')->with('error', 'Pesanan ini tidak dapat dibayar karena statusnya ' . $order->status);
+            $msg = $order->status === 'dibatalkan' ? 'Pesanan ini telah dibatalkan (Melebihi batas waktu 24 jam).' : 'Pesanan ini tidak dapat dibayar karena statusnya ' . $order->status;
+            return redirect()->route('shop.pesanan')->with('error', $msg);
         }
 
         // Jika data pembayaran sudah ada di DB, langsung tampilkan

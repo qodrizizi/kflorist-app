@@ -88,9 +88,9 @@
             </div>
         </div>
 
-        <!-- Product Grid -->
+        <!-- Available Product Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            @forelse($products as $product)
+            @forelse($availableProducts as $product)
             <div class="group bg-white rounded-3xl shadow-lg overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-gray-100 flex flex-col">
                 <!-- Image -->
                 <a href="{{ route('shop.produk.show', $product->id) }}" class="relative overflow-hidden block">
@@ -121,11 +121,7 @@
 
                     <!-- Status -->
                     <div class="absolute top-4 right-4 z-10">
-                        @if($product->status === 'available')
-                            <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold shadow-sm">Tersedia</span>
-                        @else
-                            <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-semibold shadow-sm">Terjual</span>
-                        @endif
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold shadow-sm">Tersedia</span>
                     </div>
                     
                     <!-- Hover Icon overlay -->
@@ -198,18 +194,59 @@
                 <i class="fas fa-search text-6xl text-gray-300 mb-4 block"></i>
                 <p class="text-gray-500 text-xl font-semibold mb-2">Tidak ada produk ditemukan</p>
                 <p class="text-gray-400">Coba ubah filter atau kata kunci pencarian Anda</p>
-                <a href="{{ route('shop.produk') }}"
-                   class="inline-block mt-4 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors">
-                    Lihat Semua Produk
-                </a>
             </div>
             @endforelse
         </div>
 
         <!-- Pagination -->
-        @if($products->hasPages())
+        @if($availableProducts->hasPages())
         <div class="mt-12 flex justify-center">
-            {{ $products->links() }}
+            {{ $availableProducts->links() }}
+        </div>
+        @endif
+
+        <!-- Sold Products Section -->
+        @if($soldProducts->count() > 0)
+        <div class="mt-24">
+            <div class="flex items-center gap-4 mb-8">
+                <h3 class="text-2xl font-bold text-gray-400">Produk Terjual</h3>
+                <div class="flex-grow h-px bg-gray-200"></div>
+                <span class="text-sm font-medium text-gray-400 italic">Portfolio Bonsai Terkurasi</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                @foreach($soldProducts as $product)
+                <div class="group bg-white rounded-3xl shadow-md overflow-hidden opacity-75 hover:opacity-100 transition-all duration-500 border border-gray-100 flex flex-col grayscale hover:grayscale-0">
+                    <!-- Image -->
+                    <a href="{{ route('shop.produk.show', $product->id) }}" class="relative overflow-hidden block">
+                        @if($product->image_path)
+                            <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}"
+                                 class="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110">
+                        @else
+                            <div class="w-full h-48 bg-gray-100 flex items-center justify-center">
+                                <i class="fas fa-seedling text-3xl text-gray-300"></i>
+                            </div>
+                        @endif
+
+                        <div class="absolute top-3 right-3 z-10">
+                            <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm">Sold Out</span>
+                        </div>
+                    </a>
+
+                    <div class="p-5 flex-grow flex flex-col">
+                        <div class="mb-1">
+                            <span class="text-[10px] font-bold text-gray-400 bg-gray-100 px-2 py-0.5 rounded">{{ $product->species ?? '-' }}</span>
+                        </div>
+                        <h4 class="text-base font-bold text-gray-600 mb-2 truncate">{{ $product->name }}</h4>
+                        
+                        <div class="mt-auto pt-4 flex justify-between items-center border-t border-gray-50">
+                            <span class="text-sm font-bold text-gray-400">Rp {{ number_format($product->current_value ?? 0, 0, ',', '.') }}</span>
+                            <a href="{{ route('shop.produk.show', $product->id) }}" class="text-xs font-bold text-emerald-600 hover:text-emerald-700">Lihat Detail</a>
+                        </div>
+                    </div>
+                </div>
+                @endforeach
+            </div>
         </div>
         @endif
 

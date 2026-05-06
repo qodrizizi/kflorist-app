@@ -57,6 +57,9 @@ Route::prefix('dashboard')
 
         // Perawatan
         Route::get('/perawatan', [BonsaiController::class, 'perawatan'])->name('dashboard.perawatan');
+        Route::post('/perawatan', [BonsaiController::class, 'storePerawatan'])->name('dashboard.perawatan.store');
+        Route::patch('/perawatan/{perawatan}/status', [BonsaiController::class, 'updateStatusPerawatan'])->name('dashboard.perawatan.status');
+        Route::delete('/perawatan/{perawatan}', [BonsaiController::class, 'destroyPerawatan'])->name('dashboard.perawatan.destroy');
 
         // Keuangan
         Route::get('/keuangan', [BonsaiController::class, 'keuangan'])->name('dashboard.keuangan');
@@ -66,6 +69,16 @@ Route::prefix('dashboard')
 
         // Profile
         Route::get('/profile', [BonsaiController::class, 'profile'])->name('dashboard.profile');
+        Route::post('/profile', [BonsaiController::class, 'updateProfile'])->name('dashboard.profile.update');
+        Route::post('/profile/password', [BonsaiController::class, 'updatePassword'])->name('dashboard.profile.password');
+
+        // Chat
+        Route::get('/chat', [App\Http\Controllers\ChatController::class, 'index'])->name('dashboard.chat.index');
+        Route::get('/chat/{user}', [App\Http\Controllers\ChatController::class, 'show'])->name('dashboard.chat.show');
+        Route::get('/chat/{user}/messages', [App\Http\Controllers\ChatController::class, 'getMessages'])->name('dashboard.chat.messages');
+        Route::get('/chat/unread-count', [App\Http\Controllers\ChatController::class, 'getAdminUnreadCount'])->name('dashboard.chat.unreadCount');
+        Route::post('/chat/send', [App\Http\Controllers\ChatController::class, 'sendMessage'])->name('dashboard.chat.send');
+        Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'getNotifications'])->name('dashboard.notifications');
     });
 use App\Http\Controllers\ShopController;
 
@@ -109,6 +122,11 @@ Route::middleware(['auth'])->group(function () {
     
     // Review Route
     Route::post('/review', [App\Http\Controllers\ReviewController::class, 'store'])->name('shop.review.store');
+
+    // Chat Route
+    Route::get('/chat/messages', [App\Http\Controllers\ChatController::class, 'getUserMessages'])->name('shop.chat.messages');
+    Route::post('/chat/send', [App\Http\Controllers\ChatController::class, 'sendMessage'])->name('shop.chat.send');
+    Route::post('/chat/read', [App\Http\Controllers\ChatController::class, 'markAsRead'])->name('shop.chat.markRead');
 });
 
 // Midtrans Callback (Public)

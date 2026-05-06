@@ -122,8 +122,8 @@
                 </thead>
                 <tbody>
                     @forelse($recentOrders as $order)
-                    <tr class="border-b border-slate-50 dark:border-slate-800">
-                        <td class="py-3 font-mono text-xs text-slate-500">{{ $order->order_code }}</td>
+                    <tr class="border-b border-slate-50 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                        <td class="py-3 font-mono text-xs text-slate-500 dark:text-slate-400">{{ $order->order_code }}</td>
                         <td class="py-3 text-slate-700 dark:text-slate-300">{{ $order->user->name ?? '-' }}</td>
                         <td class="py-3 text-slate-700 dark:text-slate-300">{{ Str::limit($order->bonsai->name ?? '-', 20) }}</td>
                         <td class="py-3 font-medium text-slate-800 dark:text-white">Rp {{ number_format($order->total_price, 0, ',', '.') }}</td>
@@ -180,7 +180,7 @@
                 </div>
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-medium text-slate-700 dark:text-slate-300 truncate">{{ $p->bonsai->name ?? '-' }}</p>
-                    <p class="text-xs text-slate-400">{{ $p->jenis_perawatan }} · {{ $p->tanggal_perawatan->format('d M Y') }}</p>
+                    <p class="text-xs text-slate-400 dark:text-slate-500">{{ $p->jenis_perawatan }} · {{ $p->tanggal_perawatan->format('d M Y') }}</p>
                 </div>
                 <span class="text-xs px-2 py-0.5 rounded-full font-medium
                     {{ $p->status === 'selesai' ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400' : 'bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400' }}">

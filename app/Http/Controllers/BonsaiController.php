@@ -7,6 +7,7 @@ use App\Models\Perawatan;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class BonsaiController extends Controller
@@ -97,24 +98,77 @@ class BonsaiController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function perawatan()
+    public function perawatan(Request $request)
     {
         $bonsais = Bonsai::orderBy('name')->get();
-        $perawatans = Perawatan::with('bonsai')->latest()->paginate(10);
-        return view('dashboard.perawatan', compact('perawatans', 'bonsais'));
+        
+        // Ambil semua perawatan untuk kalender (tanpa paginasi untuk JS kalender)
+        $allTasks = Perawatan::with('bonsai')->get()->map(function($p) {
+            return [
+                'id' => $p->id,
+                'bonsai_name' => $p->bonsai->name,
+                'task_type' => $p->jenis_perawatan,
+                'date' => $p->tanggal_perawatan->format('Y-m-d'),
+                'status' => $p->status,
+                'notes' => $p->catatan
+            ];
+        });
+
+        // Query untuk riwayat dengan filter
+        $query = Perawatan::with('bonsai');
+
+        if ($request->has('search') && $request->search != '') {
+            $query->whereHas('bonsai', function($q) use ($request) {
+                $q->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('code', 'like', '%' . $request->search . '%');
+            })->orWhere('jenis_perawatan', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->has('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->has('jenis') && $request->jenis != '') {
+            $query->where('jenis_perawatan', $request->jenis);
+        }
+
+        $riwayat = $query->latest()->paginate(10)->withQueryString();
+
+        // Hitung statistik real
+        $stats = [
+            'upcoming' => Perawatan::where('tanggal_perawatan', '>=', now()->toDateString())->where('status', 'dijadwalkan')->count(),
+            'overdue' => Perawatan::where('tanggal_perawatan', '<', now()->toDateString())->where('status', 'dijadwalkan')->count(),
+            'needing_care' => Bonsai::where('health_status', '!=', 'sehat')->count(),
+            'total_selesai' => Perawatan::where('status', 'selesai')->count(),
+            'total_terjadwal' => Perawatan::where('status', 'dijadwalkan')->count(),
+        ];
+
+        return view('dashboard.perawatan', compact('bonsais', 'allTasks', 'stats', 'riwayat'));
     }
 
     public function storePerawatan(Request $request)
     {
         $request->validate([
-            'bonsai_id' => 'required|exists:bonsais,id',
+            'bonsai_ids' => 'required|array',
+            'bonsai_ids.*' => 'exists:bonsais,id',
             'tanggal_perawatan' => 'required|date',
             'jenis_perawatan' => 'required|string',
             'catatan' => 'nullable|string',
+            'status' => 'required|string|in:selesai,dijadwalkan',
         ]);
 
-        Perawatan::create($request->all());
-        return redirect()->route('perawatan')->with('success', 'Catatan perawatan berhasil ditambahkan.');
+        foreach ($request->bonsai_ids as $bonsai_id) {
+            Perawatan::create([
+                'bonsai_id' => $bonsai_id,
+                'user_id' => auth()->id(),
+                'tanggal_perawatan' => $request->tanggal_perawatan,
+                'jenis_perawatan' => $request->jenis_perawatan,
+                'catatan' => $request->catatan,
+                'status' => $request->status,
+            ]);
+        }
+
+        return redirect()->route('dashboard.perawatan')->with('success', count($request->bonsai_ids) . ' tugas perawatan berhasil disimpan.');
     }
 
     public function updatePerawatan(Request $request, Perawatan $perawatan)
@@ -127,13 +181,23 @@ class BonsaiController extends Controller
         ]);
 
         $perawatan->update($request->all());
-        return redirect()->route('perawatan')->with('success', 'Catatan perawatan berhasil diperbarui.');
+        return redirect()->route('dashboard.perawatan')->with('success', 'Catatan perawatan berhasil diperbarui.');
+    }
+
+    public function updateStatusPerawatan(Request $request, Perawatan $perawatan)
+    {
+        $request->validate([
+            'status' => 'required|string|in:selesai,dijadwalkan',
+        ]);
+
+        $perawatan->update(['status' => $request->status]);
+        return back()->with('success', 'Status tugas berhasil diperbarui.');
     }
 
     public function destroyPerawatan(Perawatan $perawatan)
     {
         $perawatan->delete();
-        return redirect()->route('perawatan')->with('success', 'Catatan perawatan berhasil dihapus.');
+        return redirect()->route('dashboard.perawatan')->with('success', 'Catatan perawatan berhasil dihapus.');
     }
 
     /*
@@ -155,6 +219,43 @@ class BonsaiController extends Controller
     public function profile()
     {
         return view('dashboard.profile');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $user = auth()->user();
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+        ]);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        return redirect()->back()->with('success', 'Profil berhasil diperbarui!');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $user = auth()->user();
+
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Password saat ini tidak sesuai.']);
+        }
+
+        $user->update([
+            'password' => Hash::make($request->new_password),
+        ]);
+
+        return redirect()->back()->with('success', 'Password berhasil diubah!');
     }
 }
 

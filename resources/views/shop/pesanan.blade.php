@@ -36,6 +36,9 @@
                 <button onclick="switchTab('completed')" id="tab-completed" class="tab-btn snap-start flex-1 min-w-[110px] md:min-w-[140px] py-4 text-xs md:text-sm font-bold text-center border-b-2 border-transparent text-gray-500 hover:text-emerald-600 transition-colors whitespace-nowrap">
                     Selesai <span class="bg-gray-100 text-gray-600 px-1.5 md:px-2 py-0.5 rounded-full text-[10px] md:text-xs ml-1">{{ $completed->count() }}</span>
                 </button>
+                <button onclick="switchTab('cancelled')" id="tab-cancelled" class="tab-btn snap-start flex-1 min-w-[110px] md:min-w-[140px] py-4 text-xs md:text-sm font-bold text-center border-b-2 border-transparent text-gray-500 hover:text-emerald-600 transition-colors whitespace-nowrap">
+                    Dibatalkan <span class="bg-gray-100 text-gray-600 px-1.5 md:px-2 py-0.5 rounded-full text-[10px] md:text-xs ml-1">{{ $cancelled->count() }}</span>
+                </button>
             </div>
 
             <!-- Tab Contents -->
@@ -85,6 +88,18 @@
                         <div class="text-center py-12">
                             <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
                             <p class="text-gray-500">Belum ada pesanan yang selesai.</p>
+                        </div>
+                    @endforelse
+                </div>
+
+                <!-- Tab: Cancelled -->
+                <div id="content-cancelled" class="tab-content hidden space-y-6">
+                    @forelse($cancelled as $order)
+                        @include('shop.components.order-card', ['order' => $order, 'badgeClass' => 'bg-red-100 text-red-700'])
+                    @empty
+                        <div class="text-center py-12">
+                            <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
+                            <p class="text-gray-500">Tidak ada pesanan yang dibatalkan.</p>
                         </div>
                     @endforelse
                 </div>

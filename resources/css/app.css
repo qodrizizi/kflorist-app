@@ -1,5 +1,34 @@
 @import 'tailwindcss';
 
+@theme {
+  --color-bonsai-50: #ecfdf5;
+  --color-bonsai-100: #d1fae5;
+  --color-bonsai-200: #a7f3d0;
+  --color-bonsai-300: #6ee7b7;
+  --color-bonsai-400: #34d399;
+  --color-bonsai-500: #10b981;
+  --color-bonsai-600: #059669;
+  --color-bonsai-700: #047857;
+  --color-bonsai-800: #065f46;
+  --color-bonsai-900: #064e3b;
+}
+
+/* Dark Mode Global Fixes */
+@layer base {
+  .dark .bg-white\/80 { background-color: rgba(15, 23, 42, 0.8) !important; backdrop-filter: blur(8px); }
+  .dark .bg-white\/90 { background-color: rgba(15, 23, 42, 0.9) !important; backdrop-filter: blur(8px); }
+  .dark .bg-white { background-color: #0f172a !important; }
+  .dark .text-gray-800 { color: #f8fafc !important; }
+  .dark .text-gray-700 { color: #cbd5e1 !important; }
+  .dark .text-gray-600 { color: #94a3b8 !important; }
+  .dark .text-gray-500 { color: #64748b !important; }
+  .dark .border-gray-100 { border-color: #1e293b !important; }
+  .dark .border-gray-200 { border-color: #334155 !important; }
+  .dark .bg-gray-50 { background-color: #1e293b !important; }
+  .dark .bg-gray-100 { background-color: #1e293b !important; }
+  .dark .divide-gray-200 { divide-color: #1e293b !important; }
+}
+
 /* Enable dark mode variant using class strategy */
 @custom-variant dark (&:where(.dark, .dark *));
 

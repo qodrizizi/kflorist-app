@@ -36,7 +36,8 @@
         <div class="lg:col-span-2 space-y-6">
             <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-xl p-6 border border-white/20">
                 <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-4">Perbarui Informasi Profil</h3>
-                <form action="#" method="POST" class="space-y-4">
+                <form action="{{ route('dashboard.profile.update') }}" method="POST" class="space-y-4">
+                    @csrf
                     <div>
                         <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Nama</label>
                         <input type="text" id="name" name="name" value="{{ Auth::user()->name ?? 'John Doe' }}" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-bonsai-500 focus:ring-2 focus:ring-bonsai-500/20 outline-none transition-all duration-300">
@@ -55,7 +56,8 @@
 
             <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-xl p-6 border border-white/20">
                 <h3 class="text-lg sm:text-xl font-bold text-gray-800 mb-4">Perbarui Kata Sandi</h3>
-                <form action="#" method="POST" class="space-y-4">
+                <form action="{{ route('dashboard.profile.password') }}" method="POST" class="space-y-4">
+                    @csrf
                     <div>
                         <label for="current_password" class="block text-sm font-medium text-gray-700 mb-2">Kata Sandi Saat Ini</label>
                         <input type="password" id="current_password" name="current_password" required class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:border-bonsai-500 focus:ring-2 focus:ring-bonsai-500/20 outline-none transition-all duration-300">

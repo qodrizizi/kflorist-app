@@ -214,12 +214,21 @@
 
                         <!-- Buttons -->
                         <div class="flex gap-2">
-                            <button onclick="addToCart('{{ $product->id }}', true)" class="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-xl hover:from-green-600 hover:to-green-700 transition-all font-semibold text-sm shadow-sm hover:shadow-md">
-                                <i class="fas fa-shopping-cart mr-2"></i>Beli
-                            </button>
-                            <button onclick="addToCart('{{ $product->id }}', false)" class="bg-gray-100 text-gray-600 p-3 rounded-xl hover:bg-gray-200 transition-colors shadow-sm">
-                                <i class="fas fa-plus"></i>
-                            </button>
+                            @if($product->status === 'available')
+                                <button onclick="addToCart('{{ $product->id }}', true)" class="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-xl hover:from-green-600 hover:to-green-700 transition-all font-semibold text-sm shadow-sm hover:shadow-md">
+                                    <i class="fas fa-shopping-cart mr-2"></i>Beli
+                                </button>
+                                <button onclick="addToCart('{{ $product->id }}', false)" class="bg-gray-100 text-gray-600 p-3 rounded-xl hover:bg-gray-200 transition-colors shadow-sm">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            @else
+                                <button disabled class="flex-1 bg-gray-200 text-gray-500 py-3 rounded-xl font-semibold text-sm cursor-not-allowed">
+                                    <i class="fas fa-ban mr-2"></i>Terjual
+                                </button>
+                                <a href="{{ route('shop.produk.show', $product->id) }}" class="bg-gray-100 text-gray-600 p-3 rounded-xl hover:bg-gray-200 transition-all shadow-sm">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
