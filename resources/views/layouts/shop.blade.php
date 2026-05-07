@@ -159,10 +159,10 @@
                 
                 <!-- Desktop Search & Icons -->
                 <div class="hidden md:flex items-center space-x-4">
-                    <div class="relative">
+                    <!-- <div class="relative">
                         <input type="text" placeholder="Cari bonsai..." class="pl-10 pr-4 py-2 border rounded-full focus:outline-none focus:border-green-500">
                         <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                    </div>
+                    </div> -->
                     @auth
                         <a href="{{ route('shop.pesanan') }}" title="Pesanan Saya" class="fas fa-receipt text-gray-600 text-xl cursor-pointer hover:text-green-600"></a>
                     @endauth
