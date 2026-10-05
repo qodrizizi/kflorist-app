@@ -93,9 +93,15 @@
             fileType: null,
             fileName: '',
 
+            isFetching: false,
+
             init() {
                 this.$nextTick(() => this.scrollToBottom());
-                setInterval(() => this.fetchMessages(), 3000);
+                setInterval(() => {
+                    if (!document.hidden && !this.isFetching) {
+                        this.fetchMessages();
+                    }
+                }, 5000);
             },
 
             handleFileSelect(e) {
@@ -124,15 +130,20 @@
             },
 
             async fetchMessages() {
+                if (this.isFetching) return;
+                this.isFetching = true;
                 try {
                     const res = await fetch('{{ route('dashboard.chat.messages', $user->id) }}');
                     const data = await res.json();
                     
-                    if (data.messages.length > this.messages.length) {
+                    if (data.messages && data.messages.length > this.messages.length) {
                         this.messages = data.messages;
                         this.$nextTick(() => this.scrollToBottom());
                     }
                 } catch (e) { console.error('Fetch error', e); }
+                finally {
+                    this.isFetching = false;
+                }
             },
 
             async sendMessage() {

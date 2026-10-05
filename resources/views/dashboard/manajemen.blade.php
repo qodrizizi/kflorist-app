@@ -352,16 +352,23 @@
                                             <i class="fas fa-image mr-2 text-green-500"></i>Gambar Bonsai
                                         </label>
                                         <div class="relative">
-                                            <div id="imagePreviewContainer" class="mb-4 hidden">
-                                                <img id="imagePreview" class="w-full h-48 object-cover rounded-2xl shadow-lg">
+                                            <div id="imagePreviewContainer" class="mb-4 hidden relative group">
+                                                <img id="imagePreview" class="w-full h-48 object-cover rounded-2xl shadow-lg border border-gray-100">
+                                                <button type="button" id="removeImageBtn" class="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center shadow-md transition-all duration-200 opacity-90 hover:opacity-100 hover:scale-110" title="Hapus Gambar">
+                                                    <i class="fas fa-trash-alt text-xs"></i>
+                                                </button>
                                             </div>
-                                            <div class="border-2 border-dashed border-gray-300 rounded-2xl p-6 text-center hover:border-green-500 transition-colors duration-300" id="imageUploadArea">
-                                                <div class="space-y-2">
+                                            <div class="border-2 border-dashed border-gray-300 rounded-2xl p-6 text-center hover:border-green-500 transition-colors duration-300 relative" id="imageUploadArea">
+                                                <div class="space-y-2 pointer-events-none">
                                                     <i class="fas fa-cloud-upload-alt text-3xl text-gray-400"></i>
-                                                    <p class="text-gray-500">Klik untuk upload gambar atau drag & drop</p>
-                                                    <p class="text-xs text-gray-400">PNG, JPG, GIF up to 2MB</p>
+                                                    <p class="text-gray-600 font-medium">Klik untuk upload gambar atau drag & drop</p>
+                                                    <p class="text-xs text-gray-400">PNG, JPG, JPEG, WEBP, GIF (Maksimal 5 MB)</p>
                                                 </div>
-                                                <input type="file" id="image_path" name="image_path" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                                <input type="file" id="image_path" name="image_path" accept="image/png, image/jpeg, image/jpg, image/webp, image/gif" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                            </div>
+                                            <div id="imageError" class="hidden mt-2 p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-600 flex items-center gap-2 animate-pulse">
+                                                <i class="fas fa-exclamation-circle text-red-500 text-sm flex-shrink-0"></i>
+                                                <span id="imageErrorMessage"></span>
                                             </div>
                                         </div>
                                     </div>
@@ -475,8 +482,118 @@
             const bonsaiForm = document.getElementById('bonsaiForm');
             const methodField = document.getElementById('methodField');
             const modalContent = document.getElementById('modalContent');
+            const imageInput = document.getElementById('image_path');
             const imagePreview = document.getElementById('imagePreview');
             const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+            const removeImageBtn = document.getElementById('removeImageBtn');
+            const imageError = document.getElementById('imageError');
+            const imageErrorMessage = document.getElementById('imageErrorMessage');
+            let currentBonsaiImage = null;
+
+            const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
+            const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+            const ALLOWED_IMAGE_EXTS = ['jpg', 'jpeg', 'png', 'webp', 'gif'];
+
+            function clearImageInput() {
+                imageInput.value = '';
+                if (currentBonsaiImage) {
+                    imagePreview.src = currentBonsaiImage;
+                    imagePreviewContainer.classList.remove('hidden');
+                } else {
+                    imagePreview.src = '';
+                    imagePreviewContainer.classList.add('hidden');
+                }
+            }
+
+            function showImageValidationError(title, message) {
+                if (imageError && imageErrorMessage) {
+                    imageErrorMessage.innerHTML = message;
+                    imageError.classList.remove('hidden');
+                }
+
+                if (window.Swal) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: title,
+                        html: message,
+                        confirmButtonText: 'Mengerti'
+                    });
+                } else {
+                    alert(`${title}\n${message.replace(/<[^>]*>/g, '')}`);
+                }
+            }
+
+            function validateSelectedImage(file) {
+                if (!file) return true;
+
+                const ext = file.name.split('.').pop().toLowerCase();
+                const mimeType = file.type ? file.type.toLowerCase() : '';
+                const isImageMime = ALLOWED_IMAGE_TYPES.includes(mimeType) || mimeType.startsWith('image/');
+                const isAllowedExt = ALLOWED_IMAGE_EXTS.includes(ext);
+
+                // Tolak jika bukan format gambar yang didukung
+                if (!isAllowedExt || !isImageMime) {
+                    clearImageInput();
+                    showImageValidationError(
+                        'Format Gambar Ditolak!',
+                        `File <b>${file.name}</b> bukan format gambar yang didukung.<br>Harap pilih file dengan format: <b>PNG, JPG, JPEG, WEBP, atau GIF</b>.`
+                    );
+                    return false;
+                }
+
+                // Tolak jika ukuran > 5MB
+                if (file.size > MAX_IMAGE_SIZE_BYTES) {
+                    const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                    clearImageInput();
+                    showImageValidationError(
+                        'Ukuran Gambar Terlalu Besar!',
+                        `Ukuran file <b>${sizeMB} MB</b> melebihi batas maksimal <b>5 MB</b>.<br>Silakan pilih gambar dengan ukuran di bawah 5 MB.`
+                    );
+                    return false;
+                }
+
+                // Valid
+                if (imageError) imageError.classList.add('hidden');
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreviewContainer.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+                return true;
+            }
+
+            // Image input change handler
+            imageInput.addEventListener('change', function() {
+                validateSelectedImage(this.files[0]);
+            });
+
+            // Drag and drop feedback
+            const imageUploadArea = document.getElementById('imageUploadArea');
+            if (imageUploadArea) {
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    imageUploadArea.addEventListener(eventName, () => {
+                        imageUploadArea.classList.add('border-green-500', 'bg-green-50/50');
+                    });
+                });
+                ['dragleave', 'drop'].forEach(eventName => {
+                    imageUploadArea.addEventListener(eventName, () => {
+                        imageUploadArea.classList.remove('border-green-500', 'bg-green-50/50');
+                    });
+                });
+            }
+
+            // Remove image button
+            if (removeImageBtn) {
+                removeImageBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    imageInput.value = '';
+                    currentBonsaiImage = null;
+                    imagePreview.src = '';
+                    imagePreviewContainer.classList.add('hidden');
+                    if (imageError) imageError.classList.add('hidden');
+                });
+            }
 
             // Make functions globally available
             window.openModal = function() {
@@ -494,7 +611,10 @@
                 setTimeout(() => {
                     modal.classList.add('hidden');
                     bonsaiForm.reset();
+                    currentBonsaiImage = null;
+                    imagePreview.src = '';
                     imagePreviewContainer.classList.add('hidden');
+                    if (imageError) imageError.classList.add('hidden');
                 }, 300);
             }
 
@@ -504,20 +624,21 @@
                 modalTitle.innerText = 'Tambah Bonsai Baru';
                 bonsaiForm.action = "{{ route('dashboard.manajemen.store') }}";
                 methodField.value = "POST";
+                currentBonsaiImage = null;
+                imagePreview.src = '';
                 imagePreviewContainer.classList.add('hidden');
-                document.getElementById('image_path').required = true;
+                if (imageError) imageError.classList.add('hidden');
+                imageInput.required = true;
                 openModal();
             }
 
-            // Ganti fungsi openEditModal dengan yang ini:
             window.openEditModal = function(bonsai) {
                 console.log('Opening edit modal...', bonsai);
                 bonsaiForm.reset();
                 modalTitle.innerText = 'Edit Data Bonsai';
-                
-                // Solusi 1: Gunakan base URL + path langsung
                 bonsaiForm.action = `{{ url('dashboard/manajemen') }}/${bonsai.id}`;
                 methodField.value = "PUT";
+                if (imageError) imageError.classList.add('hidden');
 
                 // Populate form fields
                 document.getElementById('name').value = bonsai.name || '';
@@ -532,14 +653,16 @@
                 
                 // Show existing image if available
                 if(bonsai.image_path) {
-                    imagePreview.src = `{{ asset('storage') }}/${bonsai.image_path}`;
+                    currentBonsaiImage = `{{ asset('storage') }}/${bonsai.image_path}`;
+                    imagePreview.src = currentBonsaiImage;
                     imagePreviewContainer.classList.remove('hidden');
                 } else {
+                    currentBonsaiImage = null;
+                    imagePreview.src = '';
                     imagePreviewContainer.classList.add('hidden');
                 }
                 
-                // Image not required for edit
-                document.getElementById('image_path').required = false;
+                imageInput.required = false;
                 openModal();
             }
 
@@ -551,21 +674,6 @@
                 console.log('Bonsai ID:', bonsai.id);
                 console.log('Full URL:', fullUrl);
             }
-
-            // Image preview functionality
-            document.getElementById('image_path').addEventListener('change', function() {
-                const file = this.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        imagePreview.src = e.target.result;
-                        imagePreviewContainer.classList.remove('hidden');
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    imagePreviewContainer.classList.add('hidden');
-                }
-            });
 
             // Close modal when clicking outside
             modal.addEventListener('click', function(event) {
@@ -584,8 +692,6 @@
                     openAddModal();
                 }
             });
-
-            
 
             // View Modal Functionality
             const viewModal = document.getElementById('viewModal');
@@ -644,6 +750,13 @@
 
             // Form submission with loading state
             bonsaiForm.addEventListener('submit', function(e) {
+                if (imageInput.files && imageInput.files.length > 0) {
+                    if (!validateSelectedImage(imageInput.files[0])) {
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+
                 const submitBtn = this.querySelector('button[type="submit"]');
                 const originalText = submitBtn.innerHTML;
                 submitBtn.disabled = true;

@@ -38,7 +38,12 @@ class BonsaiController extends Controller
             'current_value' => 'nullable|numeric|min:0',
             'status' => 'required|string',
             'health_status' => 'required|string',
-            'image_path' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'image_path' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+        ], [
+            'image_path.required' => 'Gambar bonsai wajib diupload.',
+            'image_path.image' => 'File harus berupa gambar.',
+            'image_path.mimes' => 'Format gambar harus berupa PNG, JPG, JPEG, WEBP, atau GIF.',
+            'image_path.max' => 'Ukuran gambar maksimal 5MB.',
         ]);
 
         if ($request->hasFile('image_path')) {
@@ -65,7 +70,11 @@ class BonsaiController extends Controller
             'current_value' => 'nullable|numeric|min:0',
             'status' => 'required|string',
             'health_status' => 'required|string',
-            'image_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'image_path' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120',
+        ], [
+            'image_path.image' => 'File harus berupa gambar.',
+            'image_path.mimes' => 'Format gambar harus berupa PNG, JPG, JPEG, WEBP, atau GIF.',
+            'image_path.max' => 'Ukuran gambar maksimal 5MB.',
         ]);
 
         if ($request->hasFile('image_path')) {

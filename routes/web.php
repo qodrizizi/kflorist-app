@@ -78,7 +78,12 @@ Route::prefix('dashboard')
         Route::get('/chat/{user}/messages', [App\Http\Controllers\ChatController::class, 'getMessages'])->name('dashboard.chat.messages');
         Route::get('/chat/unread-count', [App\Http\Controllers\ChatController::class, 'getAdminUnreadCount'])->name('dashboard.chat.unreadCount');
         Route::post('/chat/send', [App\Http\Controllers\ChatController::class, 'sendMessage'])->name('dashboard.chat.send');
-        Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'getNotifications'])->name('dashboard.notifications');
+
+        // Notifications
+        Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('dashboard.notifications.index');
+        Route::get('/notifications/data', [App\Http\Controllers\NotificationController::class, 'getNotifications'])->name('dashboard.notifications');
+        Route::post('/notifications/mark-all-read', [App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('dashboard.notifications.markAllRead');
+        Route::post('/notifications/{id}/mark-read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('dashboard.notifications.markRead');
     });
 use App\Http\Controllers\ShopController;
 

@@ -45,21 +45,34 @@
     function adminChatList() {
         return {
             chats: @json($chats),
+            isFetching: false,
             
             init() {
-                setInterval(() => this.fetchChats(), 3000);
+                // Poll only when active tab, every 15 seconds
+                setInterval(() => {
+                    if (!document.hidden && !this.isFetching) {
+                        this.fetchChats();
+                    }
+                }, 15000);
             },
 
             async fetchChats() {
+                if (this.isFetching) return;
+                this.isFetching = true;
                 try {
-                    // We can reuse the index route if it returns JSON or create a new API route
-                    // Let's assume we want a clean API for this
                     const res = await fetch('{{ route('dashboard.chat.index') }}', {
                         headers: { 'Accept': 'application/json' }
                     });
                     const data = await res.json();
-                    this.chats = data.chats;
+                    if (data && data.chats) {
+                        if (JSON.stringify(this.chats) !== JSON.stringify(data.chats)) {
+                            this.chats = data.chats;
+                        }
+                    }
                 } catch (e) { console.error('Fetch chats error', e); }
+                finally {
+                    this.isFetching = false;
+                }
             }
         }
     }

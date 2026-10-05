@@ -20,11 +20,13 @@ class AuthController extends Controller
     // 🔹 Proses register
     public function register(Request $request)
     {
-        $request->validate([
+        $rules = [
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
-        ]);
+            'password' => 'required|string|min:6' . ($request->filled('password_confirmation') ? '|confirmed' : ''),
+        ];
+
+        $request->validate($rules);
 
         $user = User::create([
             'name' => $request->name,
@@ -37,15 +39,7 @@ class AuthController extends Controller
         // kirim OTP
         Mail::to($user->email)->send(new \App\Mail\VerifyEmail($user));
 
-        return redirect()->route('verify.form')->with('success', 'Kode OTP sudah dikirim ke email. Silakan verifikasi.');
-
-
-        // 🔹 JANGAN login otomatis
-        // Auth::login($user);
-
-        // 🔹 Paksa redirect ke halaman verify OTP
-        return redirect()->route('verify.form')
-            ->with('success', 'Kode OTP sudah dikirim ke email kamu. Silakan verifikasi.');
+        return redirect()->route('verify.form')->with('success', 'Kode OTP sudah dikirim ke email kamu. Silakan verifikasi.');
     }
    
 
@@ -63,7 +57,9 @@ class AuthController extends Controller
             'password' => ['required'],
         ]);
 
-        if (Auth::attempt($credentials)) {
+        $remember = $request->boolean('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
             $user = Auth::user();

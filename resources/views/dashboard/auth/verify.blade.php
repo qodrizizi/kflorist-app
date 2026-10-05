@@ -1,118 +1,169 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Khadir Florist Dashboard - Verifikasi OTP</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifikasi OTP - BonsaiKu | Khadir Florist</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logonobg.png') }}">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
     <style>
         body {
-            background: linear-gradient(135deg, #0f766e 0%, #059669 25%, #10b981 50%, #34d399 100%);
-            background-attachment: fixed;
-            position: relative;
-            overflow: auto;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #0f172a;
         }
-        .login-container {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.1),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+        .bg-pattern {
+            background-color: #022c22;
+            background-image: radial-gradient(rgba(16, 185, 129, 0.15) 1.2px, transparent 1.2px);
+            background-size: 24px 24px;
         }
-        .logo-section {
-            background: linear-gradient(135deg, #059669, #10b981);
-            color: white;
-            border-radius: 20px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(5, 150, 105, 0.3);
+
+        .ambient-glow {
+            position: absolute;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(52, 211, 153, 0.25) 0%, rgba(5, 150, 105, 0) 70%);
+            filter: blur(50px);
+            pointer-events: none;
         }
-        .input-field {
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid rgba(16, 185, 129, 0.2);
-            transition: all 0.3s ease;
-            padding: 0.5rem;
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            box-shadow: 0 10px 25px -5px rgba(5, 150, 105, 0.4);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .input-field:focus {
-            border-color: #10b981;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-            background: rgba(255, 255, 255, 1);
-        }
-        .login-btn {
-            background: linear-gradient(135deg, #059669, #10b981, #34d399);
-            background-size: 200% 200%;
-            animation: gradient-shift 3s ease infinite;
-            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
-            transition: all 0.3s ease;
-        }
-        .login-btn:hover {
+
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #047857 0%, #059669 100%);
+            box-shadow: 0 14px 28px -5px rgba(5, 150, 105, 0.5);
             transform: translateY(-2px);
-            box-shadow: 0 12px 35px rgba(5, 150, 105, 0.4);
         }
-        @keyframes gradient-shift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        .error-message {
-            background: linear-gradient(135deg, #fee2e2, #fecaca);
-            border: 1px solid #fca5a5;
-            color: #dc2626;
-        }
-        .welcome-text {
-            background: linear-gradient(135deg, #059669, #34d399);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+
+        .input-otp {
+            letter-spacing: 0.35em;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body class="min-h-screen bg-pattern flex items-center justify-center p-4 relative overflow-hidden">
 
-    <div class="w-full max-w-md md:max-w-xl login-container p-6 rounded-3xl relative">
+    <!-- Ambient Glows -->
+    <div class="ambient-glow -top-20 -left-20"></div>
+    <div class="ambient-glow -bottom-20 -right-20"></div>
+
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 sm:p-10 border border-slate-100 relative z-10">
         
-        <div class="logo-section">
-            <div class="text-4xl mb-2">🔐</div>
-            <h1 class="text-xl font-bold mb-1">Khaidir Florist</h1>
-            <p class="text-green-100 text-xs">Verifikasi Akun</p>
+        <!-- Header & Logo -->
+        <div class="text-center mb-6">
+            <div class="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mx-auto mb-4 p-2 shadow-sm">
+                <img src="{{ asset('images/logonobg.png') }}" alt="BonsaiKu" class="w-full h-full object-contain"
+                     onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%23059669\'><path d=\'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z\'/></svg>'">
+            </div>
+            <span class="inline-block text-[11px] font-bold tracking-widest uppercase text-emerald-600 bg-emerald-50 px-3 py-1 rounded-md mb-2">
+                Verifikasi Keamanan
+            </span>
+            <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Masukkan Kode OTP</h1>
+            <p class="text-slate-500 text-sm mt-1.5 leading-relaxed">
+                Kami telah mengirimkan 6 karakter kode verifikasi ke email Anda.
+            </p>
         </div>
 
-        <div class="text-center mb-4">
-            <h2 class="text-xl font-bold welcome-text mb-1">Masukkan Kode OTP 📩</h2>
-            <p class="text-gray-600 text-sm">Kode verifikasi sudah dikirim ke email kamu</p>
-        </div>
-
-        {{-- Pesan sukses --}}
+        <!-- Alert Success -->
         @if(session('success'))
-            <div class="mb-4 p-3 rounded-lg text-sm flex items-center space-x-2 bg-green-100 text-green-700">
-                <span>✅</span>
-                <span>{{ session('success') }}</span>
+            <div class="mb-5 p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 flex items-start space-x-2.5 text-xs">
+                <svg class="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="font-medium">{{ session('success') }}</span>
             </div>
         @endif
 
-        {{-- Pesan error --}}
+        <!-- Alert Error -->
         @if($errors->any())
-            <div class="error-message mb-4 p-3 rounded-lg text-sm flex items-center space-x-2">
-                <span>⚠️</span>
-                <span>{{ $errors->first() }}</span>
+            <div class="mb-5 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 flex items-start space-x-2.5 text-xs">
+                <svg class="w-4 h-4 text-rose-600 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="font-medium">{{ $errors->first() }}</span>
             </div>
         @endif
 
-        <form action="{{ route('verify.submit') }}" method="POST" class="space-y-4">
+        <!-- Form OTP -->
+        <form action="{{ route('verify.submit') }}" method="POST" id="verifyForm" class="space-y-5">
             @csrf
             <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1">🔑 Kode OTP</label>
-                <input type="text" name="code" required
-                       class="input-field w-full px-4 py-2 rounded-lg focus:outline-none"
-                       placeholder="Masukkan kode OTP">
+                <label for="code" class="block text-xs font-bold text-slate-700 uppercase tracking-wider text-center mb-2">
+                    Kode 6 Karakter
+                </label>
+                <input type="text" name="code" id="code" required autofocus maxlength="10"
+                       class="input-otp w-full py-3.5 px-4 rounded-xl border border-slate-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/15 focus:outline-none text-slate-900 placeholder:text-slate-300 transition"
+                       placeholder="••••••">
             </div>
 
-            <button type="submit" class="login-btn w-full text-white py-2 px-6 rounded-lg font-semibold flex items-center justify-center space-x-2 focus:outline-none">
-                <span>✅</span>
-                <span>Verifikasi</span>
+            <button type="submit" id="submitBtn"
+                    class="btn-gradient w-full text-white font-bold py-3.5 px-4 rounded-xl shadow-md focus:outline-none focus:ring-4 focus:ring-emerald-400/40 flex items-center justify-center space-x-2 text-sm">
+                <span id="btnText">Verifikasi Sekarang</span>
+                <span id="btnLoader" class="hidden items-center space-x-2">
+                    <svg class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                    </svg>
+                    <span>Memverifikasi...</span>
+                </span>
             </button>
         </form>
+
+        <!-- Footer Actions -->
+        <div class="mt-6 pt-5 border-t border-slate-100 text-center space-y-2">
+            <p class="text-xs text-slate-500">
+                Belum menerima email? Periksa folder spam atau
+                <a href="{{ route('login') }}" class="font-semibold text-emerald-600 hover:underline">
+                    Login ulang
+                </a>
+            </p>
+            <div>
+                <a href="{{ route('shop.index') }}" class="inline-flex items-center text-xs text-slate-400 hover:text-slate-600 transition">
+                    ← Kembali ke Beranda Toko
+                </a>
+            </div>
+        </div>
+
     </div>
 
+    <script>
+        document.getElementById('verifyForm').addEventListener('submit', function() {
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnLoader = document.getElementById('btnLoader');
+
+            btnText.classList.add('hidden');
+            btnLoader.classList.remove('hidden');
+            btnLoader.classList.add('inline-flex');
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.85';
+        });
+    </script>
 </body>
 </html>
