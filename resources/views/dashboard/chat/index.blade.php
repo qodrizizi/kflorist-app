@@ -48,12 +48,19 @@
             isFetching: false,
             
             init() {
-                // Poll only when active tab, every 15 seconds
+                if (window.Echo) {
+                    window.Echo.private('chat.{{ Auth::id() }}')
+                        .listen('.message.sent', () => {
+                            this.fetchChats();
+                        });
+                }
+
+                // Fallback sync inbox list tiap 10 detik (hanya saat tab aktif)
                 setInterval(() => {
                     if (!document.hidden && !this.isFetching) {
                         this.fetchChats();
                     }
-                }, 15000);
+                }, 10000);
             },
 
             async fetchChats() {

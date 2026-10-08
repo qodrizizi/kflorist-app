@@ -86,52 +86,60 @@ Route::prefix('dashboard')
         Route::post('/notifications/{id}/mark-read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('dashboard.notifications.markRead');
     });
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
-| Shop Routes (Public)
+| Shop Routes (Public & Customer - Admin Dilarang Mengakses)
 |--------------------------------------------------------------------------
 */
-Route::get('/', [ShopController::class, 'index'])->name('shop.index');
-Route::get('/produk', [ShopController::class, 'produk'])->name('shop.produk');
-Route::get('/produk/{id}', [ShopController::class, 'show'])->name('shop.produk.show');
-Route::get('/tentang', fn() => view('shop.tentang'))->name('shop.tentang');
-Route::get('/kategori', fn() => view('shop.kategori'))->name('shop.kategori');
+Route::middleware(['prevent.admin'])->group(function () {
+    Route::get('/', [ShopController::class, 'index'])->name('shop.index');
+    Route::get('/produk', [ShopController::class, 'produk'])->name('shop.produk');
+    Route::get('/komunitas', [App\Http\Controllers\CommunityController::class, 'index'])->name('shop.komunitas');
+    Route::post('/komunitas/post', [App\Http\Controllers\CommunityController::class, 'storePost'])->name('shop.komunitas.store');
+    Route::delete('/komunitas/post/{id}', [App\Http\Controllers\CommunityController::class, 'destroyPost'])->name('shop.komunitas.destroy');
+    Route::post('/komunitas/post/{id}/react', [App\Http\Controllers\CommunityController::class, 'toggleReaction'])->name('shop.komunitas.react');
+    Route::post('/komunitas/post/{id}/comment', [App\Http\Controllers\CommunityController::class, 'storeComment'])->name('shop.komunitas.comment');
+    Route::post('/komunitas/comment/{id}/best-solution', [App\Http\Controllers\CommunityController::class, 'toggleBestSolution'])->name('shop.komunitas.bestSolution');
+    Route::post('/komunitas/poll/{id}/vote', [App\Http\Controllers\CommunityController::class, 'votePoll'])->name('shop.komunitas.votePoll');
+    Route::get('/produk/{id}', [ShopController::class, 'show'])->name('shop.produk.show');
+    Route::get('/tentang', fn() => view('shop.tentang'))->name('shop.tentang');
+    Route::get('/kategori', fn() => view('shop.kategori'))->name('shop.kategori');
 
-use App\Http\Controllers\CartController;
+    Route::middleware(['auth'])->group(function () {
+        // Profile Routes
+        Route::get('/profil', [App\Http\Controllers\ProfileController::class, 'index'])->name('shop.profil');
+        Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('shop.profile');
+        Route::put('/profile/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('shop.profile.update');
+        Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('shop.profile.password');
+        Route::post('/profile/address', [App\Http\Controllers\ProfileController::class, 'storeAddress'])->name('shop.profile.address.store');
+        Route::delete('/profile/address/{id}', [App\Http\Controllers\ProfileController::class, 'destroyAddress'])->name('shop.profile.address.destroy');
+        Route::put('/profile/address/{id}/default', [App\Http\Controllers\ProfileController::class, 'setDefaultAddress'])->name('shop.profile.address.default');
+        
+        // Cart Routes
+        Route::get('/keranjang', [CartController::class, 'index'])->name('shop.keranjang');
+        Route::post('/keranjang', [CartController::class, 'store'])->name('shop.keranjang.store');
+        Route::put('/keranjang/{cart}', [CartController::class, 'update'])->name('shop.keranjang.update');
+        Route::delete('/keranjang/{cart}', [CartController::class, 'destroy'])->name('shop.keranjang.destroy');
+        
+        // Checkout Routes
+        Route::get('/checkout', [App\Http\Controllers\CheckoutController::class, 'index'])->name('shop.checkout');
+        Route::post('/checkout', [App\Http\Controllers\CheckoutController::class, 'process'])->name('shop.checkout.process');
+        
+        // Pesanan Saya Routes
+        Route::get('/pesanan', [App\Http\Controllers\PesananController::class, 'index'])->name('shop.pesanan');
+        Route::get('/pesanan/{id}/bayar', [App\Http\Controllers\PesananController::class, 'pay'])->name('shop.pesanan.pay');
+        Route::put('/pesanan/{id}/selesai', [App\Http\Controllers\PesananController::class, 'complete'])->name('shop.pesanan.complete');
+        
+        // Review Route
+        Route::post('/review', [App\Http\Controllers\ReviewController::class, 'store'])->name('shop.review.store');
 
-Route::middleware(['auth'])->group(function () {
-    // Profile Routes
-    Route::get('/profil', [App\Http\Controllers\ProfileController::class, 'index'])->name('shop.profil');
-    Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('shop.profile');
-    Route::put('/profile/update', [App\Http\Controllers\ProfileController::class, 'update'])->name('shop.profile.update');
-    Route::put('/profile/password', [App\Http\Controllers\ProfileController::class, 'updatePassword'])->name('shop.profile.password');
-    Route::post('/profile/address', [App\Http\Controllers\ProfileController::class, 'storeAddress'])->name('shop.profile.address.store');
-    Route::delete('/profile/address/{id}', [App\Http\Controllers\ProfileController::class, 'destroyAddress'])->name('shop.profile.address.destroy');
-    Route::put('/profile/address/{id}/default', [App\Http\Controllers\ProfileController::class, 'setDefaultAddress'])->name('shop.profile.address.default');
-    
-    // Cart Routes
-    Route::get('/keranjang', [CartController::class, 'index'])->name('shop.keranjang');
-    Route::post('/keranjang', [CartController::class, 'store'])->name('shop.keranjang.store');
-    Route::put('/keranjang/{cart}', [CartController::class, 'update'])->name('shop.keranjang.update');
-    Route::delete('/keranjang/{cart}', [CartController::class, 'destroy'])->name('shop.keranjang.destroy');
-    
-    // Checkout Routes
-    Route::get('/checkout', [App\Http\Controllers\CheckoutController::class, 'index'])->name('shop.checkout');
-    Route::post('/checkout', [App\Http\Controllers\CheckoutController::class, 'process'])->name('shop.checkout.process');
-    
-    // Pesanan Saya Routes
-    Route::get('/pesanan', [App\Http\Controllers\PesananController::class, 'index'])->name('shop.pesanan');
-    Route::get('/pesanan/{id}/bayar', [App\Http\Controllers\PesananController::class, 'pay'])->name('shop.pesanan.pay');
-    Route::put('/pesanan/{id}/selesai', [App\Http\Controllers\PesananController::class, 'complete'])->name('shop.pesanan.complete');
-    
-    // Review Route
-    Route::post('/review', [App\Http\Controllers\ReviewController::class, 'store'])->name('shop.review.store');
-
-    // Chat Route
-    Route::get('/chat/messages', [App\Http\Controllers\ChatController::class, 'getUserMessages'])->name('shop.chat.messages');
-    Route::post('/chat/send', [App\Http\Controllers\ChatController::class, 'sendMessage'])->name('shop.chat.send');
-    Route::post('/chat/read', [App\Http\Controllers\ChatController::class, 'markAsRead'])->name('shop.chat.markRead');
+        // Chat Route
+        Route::get('/chat/messages', [App\Http\Controllers\ChatController::class, 'getUserMessages'])->name('shop.chat.messages');
+        Route::post('/chat/send', [App\Http\Controllers\ChatController::class, 'sendMessage'])->name('shop.chat.send');
+        Route::post('/chat/read', [App\Http\Controllers\ChatController::class, 'markAsRead'])->name('shop.chat.markRead');
+    });
 });
 
 // Midtrans Callback (Public)

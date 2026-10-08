@@ -337,7 +337,7 @@
                 </a>
                 
                 <!-- Desktop Menu -->
-                <div class="hidden lg:flex space-x-8">
+                <div class="hidden lg:flex space-x-8 items-center">
                     <a href="{{ route('shop.index') }}" 
                     class="{{ request()->routeIs('shop.index') ? 'text-green-600 font-semibold' : 'text-gray-600 hover:text-green-600' }} transition">
                     Beranda
@@ -353,6 +353,11 @@
                     <a href="{{ route('shop.produk') }}" 
                     class="{{ request()->routeIs('shop.produk') ? 'text-green-600 font-semibold' : 'text-gray-600 hover:text-green-600' }} transition">
                     Produk
+                    </a>
+                    <a href="{{ route('shop.komunitas') }}" 
+                    class="{{ request()->routeIs('shop.komunitas') ? 'text-green-600 font-semibold' : 'text-gray-600 hover:text-green-600' }} transition inline-flex items-center gap-1.5">
+                    <span>Komunitas</span>
+                    <span class="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 tracking-wide uppercase">Baru</span>
                     </a>
                 </div>
 
@@ -482,8 +487,11 @@
                 <a href="{{ route('shop.kategori') }}" class="block py-3 px-4 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition">
                     <i class="fas fa-th-large mr-3"></i>Kategori
                 </a>
-                <a href="{{ route('shop.produk') }}" class="block py-3 px-4 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition">
+                <a href="{{ route('shop.produk') }}" class="block py-3 px-4 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition {{ request()->routeIs('shop.produk') ? 'bg-green-50 text-green-600 font-semibold' : '' }}">
                     <i class="fas fa-leaf mr-3"></i>Produk
+                </a>
+                <a href="{{ route('shop.komunitas') }}" class="block py-3 px-4 text-gray-700 hover:bg-green-50 hover:text-green-600 rounded-lg transition {{ request()->routeIs('shop.komunitas') ? 'bg-green-50 text-green-600 font-semibold' : '' }}">
+                    <i class="fas fa-users mr-3"></i>Komunitas
                 </a>
 
                 <div class="border-t pt-4 mt-4">
@@ -517,99 +525,121 @@
     @yield('content')
 
     <!-- FOOTER START -->
-    <footer class="bg-gray-900 text-white py-16">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+    <footer class="relative text-white pt-16 pb-12 overflow-hidden bg-slate-950">
+        <!-- Background Wallpaper: footer.webp -->
+        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20 pointer-events-none scale-105"
+             style="background-image: url('{{ asset('images/footer.webp') }}');"></div>
+        <!-- Deep Gradient Overlay for text contrast -->
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/92 to-slate-950/85 pointer-events-none"></div>
+
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-12">
                 <!-- Company Info -->
-                <div class="space-y-6">
+                <div class="space-y-5">
                     <div class="flex items-center space-x-3">
-                        <div class="bg-green-500 p-2 rounded-lg">
-                            <i class="fas fa-leaf text-white text-xl"></i>
+                        <div class="w-11 h-11 rounded-xl bg-emerald-500/20 border border-emerald-400/30 flex items-center justify-center p-2 shadow-inner">
+                            <img src="{{ asset('images/logonobg.png') }}" alt="Logo BonsaiKu" class="w-full h-full object-contain"
+                                 onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%2334d399\'><path d=\'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z\'/></svg>'">
                         </div>
-                        <h4 class="text-2xl font-bold bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">BonsaiKu</h4>
+                        <div>
+                            <span class="text-[10px] uppercase font-extrabold tracking-widest text-emerald-400 block">Khadir Florist</span>
+                            <h4 class="text-2xl font-extrabold text-white leading-tight">BonsaiKu</h4>
+                        </div>
                     </div>
-                    <p class="text-gray-400 leading-relaxed">
-                        Destinasi terpercaya untuk koleksi bunga dan bonsai berkualitas premium. Kami menghadirkan keindahan alam langsung ke depan pintu Anda dengan pelayanan terbaik.
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        Destinasi terpercaya untuk koleksi seni bonsai nusantara berkualitas prima dan bergaransi. Kami menghadirkan ketenangan alam langsung ke hunian Anda.
                     </p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-green-500 hover:text-white transition-all duration-300">
-                            <i class="fab fa-facebook-f"></i>
+                    <div class="flex space-x-3 pt-1">
+                        <a href="#" class="w-9 h-9 bg-slate-900/90 border border-slate-700/80 rounded-xl flex items-center justify-center text-gray-400 hover:bg-emerald-600 hover:text-white hover:border-emerald-500 transition-all duration-300" title="Facebook">
+                            <i class="fab fa-facebook-f text-sm"></i>
                         </a>
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-green-500 hover:text-white transition-all duration-300">
-                            <i class="fab fa-instagram"></i>
+                        <a href="#" class="w-9 h-9 bg-slate-900/90 border border-slate-700/80 rounded-xl flex items-center justify-center text-gray-400 hover:bg-emerald-600 hover:text-white hover:border-emerald-500 transition-all duration-300" title="Instagram">
+                            <i class="fab fa-instagram text-sm"></i>
                         </a>
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-green-500 hover:text-white transition-all duration-300">
-                            <i class="fab fa-whatsapp"></i>
+                        <a href="https://wa.me/6281234567890" target="_blank" class="w-9 h-9 bg-slate-900/90 border border-slate-700/80 rounded-xl flex items-center justify-center text-gray-400 hover:bg-emerald-600 hover:text-white hover:border-emerald-500 transition-all duration-300" title="WhatsApp">
+                            <i class="fab fa-whatsapp text-sm"></i>
                         </a>
-                        <a href="#" class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center text-gray-400 hover:bg-green-500 hover:text-white transition-all duration-300">
-                            <i class="fab fa-tiktok"></i>
+                        <a href="#" class="w-9 h-9 bg-slate-900/90 border border-slate-700/80 rounded-xl flex items-center justify-center text-gray-400 hover:bg-emerald-600 hover:text-white hover:border-emerald-500 transition-all duration-300" title="TikTok">
+                            <i class="fab fa-tiktok text-sm"></i>
                         </a>
                     </div>
                 </div>
                 
                 <!-- Quick Links -->
                 <div>
-                    <h5 class="text-lg font-bold mb-6 flex items-center">
-                        <span class="w-8 h-1 bg-green-500 mr-3 rounded-full"></span>
-                        Koleksi Produk
+                    <h5 class="text-base font-bold mb-5 flex items-center text-white">
+                        <span class="w-2 h-2 bg-emerald-500 mr-2.5 rounded-full"></span>
+                        Koleksi Pilihan
                     </h5>
-                    <ul class="space-y-4">
+                    <ul class="space-y-3 text-sm">
                         <li>
-                            <a href="{{ route('shop.produk', ['kategori' => 'Indoor']) }}" class="text-gray-400 hover:text-green-500 hover:translate-x-2 flex items-center transition-all duration-300">
-                                <i class="fas fa-chevron-right text-[10px] mr-3 opacity-50"></i>
+                            <a href="{{ route('shop.produk', ['kategori' => 'Indoor']) }}" class="text-gray-400 hover:text-emerald-400 hover:translate-x-1.5 flex items-center transition-all duration-300">
+                                <i class="fas fa-chevron-right text-[9px] mr-2.5 text-emerald-500/60"></i>
                                 Bonsai Indoor
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('shop.produk', ['kategori' => 'Outdoor']) }}" class="text-gray-400 hover:text-green-500 hover:translate-x-2 flex items-center transition-all duration-300">
-                                <i class="fas fa-chevron-right text-[10px] mr-3 opacity-50"></i>
+                            <a href="{{ route('shop.produk', ['kategori' => 'Outdoor']) }}" class="text-gray-400 hover:text-emerald-400 hover:translate-x-1.5 flex items-center transition-all duration-300">
+                                <i class="fas fa-chevron-right text-[9px] mr-2.5 text-emerald-500/60"></i>
                                 Bonsai Outdoor
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('shop.produk', ['kategori' => 'Premium']) }}" class="text-gray-400 hover:text-green-500 hover:translate-x-2 flex items-center transition-all duration-300">
-                                <i class="fas fa-chevron-right text-[10px] mr-3 opacity-50"></i>
-                                Koleksi Premium
+                            <a href="{{ route('shop.produk', ['kategori' => 'Premium']) }}" class="text-gray-400 hover:text-emerald-400 hover:translate-x-1.5 flex items-center transition-all duration-300">
+                                <i class="fas fa-chevron-right text-[9px] mr-2.5 text-emerald-500/60"></i>
+                                Koleksi Eksklusif & Juara
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('shop.produk', ['kategori' => 'Bibit']) }}" class="text-gray-400 hover:text-green-500 hover:translate-x-2 flex items-center transition-all duration-300">
-                                <i class="fas fa-chevron-right text-[10px] mr-3 opacity-50"></i>
-                                Bibit & Bakalan
+                            <a href="{{ route('shop.produk', ['kategori' => 'Bibit']) }}" class="text-gray-400 hover:text-emerald-400 hover:translate-x-1.5 flex items-center transition-all duration-300">
+                                <i class="fas fa-chevron-right text-[9px] mr-2.5 text-emerald-500/60"></i>
+                                Bakalan & Bahan Bonsai
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('shop.produk') }}" class="text-gray-400 hover:text-emerald-400 hover:translate-x-1.5 flex items-center transition-all duration-300">
+                                <i class="fas fa-chevron-right text-[9px] mr-2.5 text-emerald-500/60"></i>
+                                Semua Produk Toko
                             </a>
                         </li>
                     </ul>
                 </div>
                 
-                <!-- Support -->
+                <!-- Support & Navigation -->
                 <div>
-                    <h5 class="text-lg font-bold mb-6 flex items-center">
-                        <span class="w-8 h-1 bg-green-500 mr-3 rounded-full"></span>
-                        Layanan
+                    <h5 class="text-base font-bold mb-5 flex items-center text-white">
+                        <span class="w-2 h-2 bg-emerald-500 mr-2.5 rounded-full"></span>
+                        Bantuan & Layanan
                     </h5>
-                    <ul class="space-y-4">
+                    <ul class="space-y-3 text-sm">
                         <li>
-                            <a href="{{ route('shop.tentang') }}" class="text-gray-400 hover:text-green-500 hover:translate-x-2 flex items-center transition-all duration-300">
-                                <i class="fas fa-chevron-right text-[10px] mr-3 opacity-50"></i>
-                                Tentang Kami
+                            <a href="{{ route('shop.tentang') }}" class="text-gray-400 hover:text-emerald-400 hover:translate-x-1.5 flex items-center transition-all duration-300">
+                                <i class="fas fa-chevron-right text-[9px] mr-2.5 text-emerald-500/60"></i>
+                                Tentang Khadir Florist
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('shop.pesanan') }}" class="text-gray-400 hover:text-green-500 hover:translate-x-2 flex items-center transition-all duration-300">
-                                <i class="fas fa-chevron-right text-[10px] mr-3 opacity-50"></i>
-                                Lacak Pesanan
+                            <a href="{{ route('shop.komunitas') }}" class="text-gray-400 hover:text-emerald-400 hover:translate-x-1.5 flex items-center transition-all duration-300">
+                                <i class="fas fa-chevron-right text-[9px] mr-2.5 text-emerald-500/60"></i>
+                                Komunitas Bonsai Nusantara
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="text-gray-400 hover:text-green-500 hover:translate-x-2 flex items-center transition-all duration-300">
-                                <i class="fas fa-chevron-right text-[10px] mr-3 opacity-50"></i>
-                                Syarat & Ketentuan
+                            <a href="{{ route('shop.pesanan') }}" class="text-gray-400 hover:text-emerald-400 hover:translate-x-1.5 flex items-center transition-all duration-300">
+                                <i class="fas fa-chevron-right text-[9px] mr-2.5 text-emerald-500/60"></i>
+                                Status & Lacak Pesanan
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="text-gray-400 hover:text-green-500 hover:translate-x-2 flex items-center transition-all duration-300">
-                                <i class="fas fa-chevron-right text-[10px] mr-3 opacity-50"></i>
+                            <a href="javascript:void(0)" onclick="triggerPolicyModal('kebijakan-privasi')" class="text-gray-400 hover:text-emerald-400 hover:translate-x-1.5 flex items-center transition-all duration-300">
+                                <i class="fas fa-chevron-right text-[9px] mr-2.5 text-emerald-500/60"></i>
                                 Kebijakan Privasi
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" onclick="triggerPolicyModal('syarat-ketentuan')" class="text-gray-400 hover:text-emerald-400 hover:translate-x-1.5 flex items-center transition-all duration-300">
+                                <i class="fas fa-chevron-right text-[9px] mr-2.5 text-emerald-500/60"></i>
+                                Syarat & Ketentuan Layanan
                             </a>
                         </li>
                     </ul>
@@ -617,57 +647,84 @@
                 
                 <!-- Contact Info -->
                 <div>
-                    <h5 class="text-lg font-bold mb-6 flex items-center">
-                        <span class="w-8 h-1 bg-green-500 mr-3 rounded-full"></span>
-                        Hubungi Kami
+                    <h5 class="text-base font-bold mb-5 flex items-center text-white">
+                        <span class="w-2 h-2 bg-emerald-500 mr-2.5 rounded-full"></span>
+                        Galeri & Kontak
                     </h5>
-                    <ul class="space-y-4">
+                    <ul class="space-y-3.5 text-sm">
                         <li class="flex items-start group">
-                            <div class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-green-500/20 transition-colors">
-                                <i class="fas fa-map-marker-alt text-green-500"></i>
+                            <div class="bg-slate-900 border border-slate-700/80 p-2 rounded-xl mr-3 group-hover:bg-emerald-500/20 group-hover:border-emerald-500/40 transition-colors flex-shrink-0">
+                                <i class="fas fa-map-marker-alt text-emerald-400 text-xs"></i>
                             </div>
-                            <span class="text-gray-400 text-sm leading-relaxed">
+                            <span class="text-gray-400 text-xs leading-relaxed">
                                 Jl. Bilal No. 123, Pulo Brayan Darat I, Kec. Medan Timur, Kota Medan, Sumatera Utara 20239
                             </span>
                         </li>
                         <li class="flex items-center group">
-                            <div class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-green-500/20 transition-colors">
-                                <i class="fas fa-phone text-green-500"></i>
+                            <div class="bg-slate-900 border border-slate-700/80 p-2 rounded-xl mr-3 group-hover:bg-emerald-500/20 group-hover:border-emerald-500/40 transition-colors flex-shrink-0">
+                                <i class="fas fa-phone text-emerald-400 text-xs"></i>
                             </div>
-                            <a href="tel:+6281234567890" class="text-gray-400 hover:text-white transition-colors">+62 812-3456-7890</a>
+                            <a href="tel:+6281234567890" class="text-gray-400 text-xs hover:text-emerald-400 transition-colors">+62 812-3456-7890</a>
                         </li>
                         <li class="flex items-center group">
-                            <div class="bg-gray-800 p-2 rounded-lg mr-4 group-hover:bg-green-500/20 transition-colors">
-                                <i class="fas fa-envelope text-green-500"></i>
+                            <div class="bg-slate-900 border border-slate-700/80 p-2 rounded-xl mr-3 group-hover:bg-emerald-500/20 group-hover:border-emerald-500/40 transition-colors flex-shrink-0">
+                                <i class="fas fa-envelope text-emerald-400 text-xs"></i>
                             </div>
-                            <a href="mailto:admin@bonsaiku.com" class="text-gray-400 hover:text-white transition-colors">admin@bonsaiku.com</a>
+                            <a href="mailto:admin@bonsaiku.com" class="text-gray-400 text-xs hover:text-emerald-400 transition-colors">admin@bonsaiku.com</a>
                         </li>
                     </ul>
                 </div>
             </div>
             
-            <div class="border-t border-gray-800 mt-16 pt-8">
-                <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                    <p class="text-gray-500 text-sm">
-                        &copy; 2025 <span class="text-green-500 font-semibold">BonsaiKu</span>. Semua Hak Cipta Dilindungi.
+            <!-- Bottom Copyright & Policy Links Bar (Replaces Midtrans) -->
+            <div class="border-t border-slate-800/90 mt-12 pt-7">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+                    <p class="text-gray-400 text-xs">
+                        &copy; {{ date('Y') }} <span class="text-emerald-400 font-bold">Khadir Florist • BonsaiKu</span>. Seluruh Hak Cipta Dilindungi.
                     </p>
-                    <div class="flex items-center space-x-6">
-                        <i class="fab fa-cc-visa text-3xl text-gray-500 hover:text-[#1a1f71] transition-colors cursor-help" title="Visa"></i>
-                        <i class="fab fa-cc-mastercard text-3xl text-gray-500 hover:text-[#eb001b] transition-colors cursor-help" title="Mastercard"></i>
-                        <i class="fab fa-cc-jcb text-3xl text-gray-500 hover:text-[#0034a8] transition-colors cursor-help" title="JCB"></i>
-                        <div class="flex items-center bg-gray-800 px-3 py-1 rounded-lg border border-gray-700 hover:border-green-500 transition-colors group">
-                            <span class="text-[10px] font-bold text-gray-500 group-hover:text-white mr-2">Secured by</span>
-                            <img src="https://assets.midtrans.com/img/logo-midtrans-color.png" 
-                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" 
-                                 alt="Midtrans" class="h-4 brightness-0 invert opacity-60 group-hover:opacity-100 transition-opacity">
-                            <span class="hidden text-[10px] font-bold text-green-500">MIDTRANS</span>
-                        </div>
+                    
+                    <!-- Legal & Policy Links -->
+                    <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs text-gray-400">
+                        <a href="javascript:void(0)" onclick="triggerPolicyModal('kebijakan-privasi')" class="hover:text-emerald-400 transition font-medium">
+                            Kebijakan Privasi
+                        </a>
+                        <span class="text-slate-700 hidden sm:inline">•</span>
+                        <a href="javascript:void(0)" onclick="triggerPolicyModal('syarat-ketentuan')" class="hover:text-emerald-400 transition font-medium">
+                            Syarat & Ketentuan
+                        </a>
+                        <span class="text-slate-700 hidden sm:inline">•</span>
+                        <a href="{{ route('shop.tentang') }}" class="hover:text-emerald-400 transition font-medium">
+                            Tentang Kami
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </footer>
     <!-- FOOTER END -->
+
+    <script>
+        function triggerPolicyModal(type) {
+            if (typeof Swal === 'undefined') return;
+            if (type === 'kebijakan-privasi') {
+                Swal.fire({
+                    title: 'Kebijakan Privasi',
+                    html: '<div class="text-left text-xs text-slate-600 space-y-2 leading-relaxed"><p>Khadir Florist (BonsaiKu) berkomitmen melindungi kerahasiaan data pribadi seluruh pelanggan dan anggota komunitas kami.</p><p>1. Informasi akun & alamat hanya digunakan untuk pemrosesan pesanan dan pengiriman tanaman.</p><p>2. Data transaksi dilindungi dengan enkripsi keamanan standar tinggi.</p><p>3. Kami tidak pernah membagikan atau menjual data Anda kepada pihak ketiga.</p></div>',
+                    icon: 'info',
+                    confirmButtonColor: '#059669',
+                    confirmButtonText: 'Tutup'
+                });
+            } else {
+                Swal.fire({
+                    title: 'Syarat & Ketentuan Layanan',
+                    html: '<div class="text-left text-xs text-slate-600 space-y-2 leading-relaxed"><p>Ketentuan berbelanja dan berinteraksi di platform Khadir Florist:</p><p>1. Seluruh pesanan bonsai dikemas dengan proteksi kayu bergaransi hidup sampai tujuan.</p><p>2. Klaim garansi kerusakan tanaman wajib menyertakan video unboxing maksimal 1x24 jam setelah paket tiba.</p><p>3. Di area komunitas, postingan promosi jualan hanya diperbolehkan bagi akun resmi Khadir Florist.</p></div>',
+                    icon: 'info',
+                    confirmButtonColor: '#059669',
+                    confirmButtonText: 'Tutup'
+                });
+            }
+        }
+    </script>
 
     <script>
         // Mobile menu functionality
@@ -851,24 +908,34 @@
 
     </div>
 
-    @auth
-    <div x-data="chatWidget()" x-init="init()" class="fixed bottom-6 right-6 z-[60]">
-        <!-- Chat Bubble -->
-        <button @click="toggle()" 
-                class="w-14 h-14 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 group relative">
-            <i class="fas fa-comment-dots text-2xl group-hover:rotate-12 transition-transform"></i>
-            <span x-show="unreadCount > 0" x-text="unreadCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white"></span>
+    @if(Auth::check() && Auth::user()->role === 'user')
+    <div x-data="chatWidget()" x-init="init()" 
+         :style="getContainerStyle()"
+         class="fixed z-[60] select-none"
+         style="bottom: 1.5rem; right: 1.5rem;">
+        
+        <!-- Chat Bubble (Draggable) -->
+        <button type="button"
+                @mousedown="startDrag($event)" 
+                @touchstart="startDrag($event)"
+                @click="handleClick()" 
+                :class="isDragging ? 'cursor-grabbing scale-105 shadow-emerald-500/50' : 'cursor-grab hover:scale-110 active:scale-95'"
+                class="w-14 h-14 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full shadow-2xl flex items-center justify-center transition-transform duration-200 group relative touch-none select-none"
+                title="Klik untuk membuka pesan / Tahan dan geser untuk memindahkan ikon">
+            <i class="fas fa-comment-dots text-2xl group-hover:rotate-12 transition-transform pointer-events-none"></i>
+            <span x-show="unreadCount > 0" x-text="unreadCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white pointer-events-none"></span>
         </button>
 
         <!-- Chat Window -->
         <div x-show="open" 
+             :class="getWindowClass()"
              x-transition:enter="transition ease-out duration-300"
              x-transition:enter-start="opacity-0 translate-y-10 scale-90"
              x-transition:enter-end="opacity-100 translate-y-0 scale-100"
              x-transition:leave="transition ease-in duration-200"
              x-transition:leave-start="opacity-100 translate-y-0 scale-100"
              x-transition:leave-end="opacity-0 translate-y-10 scale-90"
-             class="absolute bottom-20 right-0 w-80 sm:w-96 bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col h-[500px]"
+             class="absolute w-80 sm:w-96 bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden flex flex-col h-[500px]"
              style="display: none;">
             
             <!-- Header -->
@@ -971,9 +1038,149 @@
                 fileType: null,
                 fileName: '',
 
+                // Draggable states
+                posX: null,
+                posY: null,
+                isDragging: false,
+                hasMoved: false,
+                startX: 0,
+                startY: 0,
+                initialPosX: 0,
+                initialPosY: 0,
+
                 async init() {
+                    // Restore saved position or use default
+                    try {
+                        const saved = localStorage.getItem('bonsaiku_chat_pos');
+                        if (saved) {
+                            const parsed = JSON.parse(saved);
+                            const maxX = Math.max(10, window.innerWidth - 75);
+                            const maxY = Math.max(10, window.innerHeight - 75);
+                            this.posX = Math.max(10, Math.min(maxX, parsed.x));
+                            this.posY = Math.max(10, Math.min(maxY, parsed.y));
+                        }
+                    } catch (e) {}
+
+                    window.addEventListener('resize', () => {
+                        if (this.posX !== null && this.posY !== null) {
+                            const maxX = Math.max(10, window.innerWidth - 75);
+                            const maxY = Math.max(10, window.innerHeight - 75);
+                            this.posX = Math.max(10, Math.min(maxX, this.posX));
+                            this.posY = Math.max(10, Math.min(maxY, this.posY));
+                        }
+                    });
+
                     await this.fetchMessages();
-                    this.interval = setInterval(() => this.fetchMessages(), 3000);
+                    @auth
+                    if (window.Echo) {
+                        window.Echo.private('chat.{{ Auth::id() }}')
+                            .listen('.message.sent', (e) => {
+                                if (e.message && !this.messages.some(m => m.id === e.message.id)) {
+                                    this.messages.push(e.message);
+                                    if (!this.open) {
+                                        this.unreadCount++;
+                                    } else {
+                                        this.markAsRead();
+                                        setTimeout(() => this.scrollToBottom(), 100);
+                                    }
+                                }
+                            });
+                    }
+
+                    // Fallback polling saat widget chat sedang dibuka
+                    setInterval(() => {
+                        if (!document.hidden && this.open) {
+                            this.fetchMessages();
+                        }
+                    }, 4000);
+                    @endauth
+                },
+
+                startDrag(e) {
+                    const isTouch = e.type === 'touchstart';
+                    const clientX = isTouch ? e.touches[0].clientX : e.clientX;
+                    const clientY = isTouch ? e.touches[0].clientY : e.clientY;
+
+                    this.hasMoved = false;
+                    this.startX = clientX;
+                    this.startY = clientY;
+
+                    const el = e.currentTarget.parentElement;
+                    const rect = el.getBoundingClientRect();
+                    this.initialPosX = rect.left;
+                    this.initialPosY = rect.top;
+
+                    const onMove = (moveEvt) => {
+                        const mX = isTouch ? moveEvt.touches[0].clientX : moveEvt.clientX;
+                        const mY = isTouch ? moveEvt.touches[0].clientY : moveEvt.clientY;
+                        const dx = mX - this.startX;
+                        const dy = mY - this.startY;
+
+                        if (Math.hypot(dx, dy) > 5) {
+                            this.hasMoved = true;
+                            this.isDragging = true;
+                            if (isTouch && moveEvt.cancelable) {
+                                moveEvt.preventDefault();
+                            }
+
+                            const maxX = Math.max(10, window.innerWidth - 75);
+                            const maxY = Math.max(10, window.innerHeight - 75);
+                            this.posX = Math.max(10, Math.min(maxX, this.initialPosX + dx));
+                            this.posY = Math.max(10, Math.min(maxY, this.initialPosY + dy));
+                        }
+                    };
+
+                    const onEnd = () => {
+                        window.removeEventListener(isTouch ? 'touchmove' : 'mousemove', onMove);
+                        window.removeEventListener(isTouch ? 'touchend' : 'mouseup', onEnd);
+
+                        if (this.hasMoved && this.posX !== null && this.posY !== null) {
+                            try {
+                                localStorage.setItem('bonsaiku_chat_pos', JSON.stringify({ x: this.posX, y: this.posY }));
+                            } catch (e) {}
+                        }
+
+                        setTimeout(() => {
+                            this.isDragging = false;
+                        }, 50);
+                    };
+
+                    window.addEventListener(isTouch ? 'touchmove' : 'mousemove', onMove, { passive: false });
+                    window.addEventListener(isTouch ? 'touchend' : 'mouseup', onEnd);
+                },
+
+                handleClick() {
+                    if (this.hasMoved) {
+                        return; // Sedang digeser, jangan buka/tutup chat
+                    }
+                    this.toggle();
+                },
+
+                getContainerStyle() {
+                    if (this.posX === null || this.posY === null) {
+                        return 'bottom: 1.5rem; right: 1.5rem;';
+                    }
+                    return `left: ${this.posX}px; top: ${this.posY}px; bottom: auto; right: auto;`;
+                },
+
+                getWindowClass() {
+                    const isRight = this.posX === null || this.posX > (window.innerWidth / 2);
+                    const isTop = this.posY !== null && this.posY < 520;
+
+                    let classes = [];
+                    if (isRight) {
+                        classes.push('right-0');
+                    } else {
+                        classes.push('left-0');
+                    }
+
+                    if (isTop) {
+                        classes.push('top-16');
+                    } else {
+                        classes.push('bottom-20');
+                    }
+
+                    return classes.join(' ');
                 },
 
                 handleFileSelect(e) {
@@ -1076,6 +1283,6 @@
             }
         }
     </script>
-    @endauth
+    @endif
 </body>
 </html>

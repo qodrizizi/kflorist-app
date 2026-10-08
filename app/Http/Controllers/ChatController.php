@@ -136,6 +136,10 @@ class ChatController extends Controller
             'attachment' => 'nullable|file|mimes:jpg,jpeg,png,mp4,mov,avi|max:20480', // Max 20MB
         ]);
 
+        if (Auth::id() === $request->receiver_id) {
+            return response()->json(['error' => 'Tidak dapat mengirim pesan ke diri sendiri.'], 422);
+        }
+
         $attachmentPath = null;
         $attachmentType = null;
 
@@ -161,6 +165,8 @@ class ChatController extends Controller
             'attachment_type' => $attachmentType,
             'is_read' => false
         ]);
+
+        broadcast(new \App\Events\MessageSent($message));
 
         if ($request->expectsJson()) {
             return response()->json(['success' => true, 'message' => $message]);

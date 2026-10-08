@@ -97,11 +97,22 @@
 
             init() {
                 this.$nextTick(() => this.scrollToBottom());
+                if (window.Echo) {
+                    window.Echo.private(`chat.${this.userId}`)
+                        .listen('.message.sent', (e) => {
+                            if (e.message && !this.messages.some(m => m.id === e.message.id)) {
+                                this.messages.push(e.message);
+                                this.$nextTick(() => this.scrollToBottom());
+                            }
+                        });
+                }
+
+                // Fallback sync otomatis jika WebSocket belum tersambung
                 setInterval(() => {
                     if (!document.hidden && !this.isFetching) {
                         this.fetchMessages();
                     }
-                }, 5000);
+                }, 4000);
             },
 
             handleFileSelect(e) {

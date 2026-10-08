@@ -14,6 +14,12 @@ class AuthController extends Controller
     // 🔹 Tampilkan form register
     public function showRegisterForm()
     {
+        if (Auth::check()) {
+            return Auth::user()->role === 'admin' 
+                ? redirect()->route('dashboard.home') 
+                : redirect()->route('shop.index');
+        }
+
         return view('dashboard.auth.register');
     }
 
@@ -46,6 +52,12 @@ class AuthController extends Controller
     // 🔹 Tampilkan form login
     public function showLoginForm()
     {
+        if (Auth::check()) {
+            return Auth::user()->role === 'admin' 
+                ? redirect()->route('dashboard.home') 
+                : redirect()->route('shop.index');
+        }
+
         return view('dashboard.auth.login');
     }
 

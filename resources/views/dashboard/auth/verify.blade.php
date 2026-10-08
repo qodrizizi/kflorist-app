@@ -67,13 +67,22 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-pattern flex items-center justify-center p-4 relative overflow-hidden">
+<body class="min-h-screen relative flex items-center justify-center p-4 sm:p-6 overflow-x-hidden">
+
+    <!-- Fullpage Background bglogin.webp -->
+    <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none select-none">
+        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105 filter blur-[3px] brightness-[0.45]"
+             style="background-image: url('{{ asset('images/bglogin.webp') }}');"></div>
+        <div class="absolute inset-0 bg-gradient-to-tr from-slate-950/85 via-emerald-950/65 to-slate-950/85"></div>
+        <div class="absolute inset-0 opacity-[0.07]" 
+             style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 24px 24px;"></div>
+    </div>
 
     <!-- Ambient Glows -->
     <div class="ambient-glow -top-20 -left-20"></div>
     <div class="ambient-glow -bottom-20 -right-20"></div>
 
-    <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 sm:p-10 border border-slate-100 relative z-10">
+    <div class="w-full max-w-md bg-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl shadow-emerald-950/50 p-7 sm:p-9 border border-white/40 relative z-10">
         
         <!-- Header & Logo -->
         <div class="text-center mb-6">
