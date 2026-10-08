@@ -427,8 +427,23 @@
                                 </div>
                             @endif
 
+                            <!-- Multi-image Upload Preview Section -->
+                            <div id="imagePreviewContainer" class="hidden mb-3 p-3 bg-slate-50 border border-slate-200/80 rounded-xl space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <i class="fas fa-images text-emerald-600 text-xs"></i>
+                                        <span id="previewCountBadge" class="text-xs font-bold text-slate-700">0 Foto Dipilih</span>
+                                    </div>
+                                    <button type="button" onclick="clearSelectedImages()" class="text-[11px] font-semibold text-rose-600 hover:text-rose-700 hover:underline">
+                                        Hapus Semua
+                                    </button>
+                                </div>
+                                <div id="previewThumbnailList" class="flex flex-wrap items-center gap-2 pt-1"></div>
+                                <p class="text-[10px] text-slate-400">💡 Anda bisa memilih banyak foto sekaligus (maksimal 10 foto) untuk satu postingan.</p>
+                            </div>
+
                             <!-- Hidden file input for standard photos -->
-                            <input type="file" name="images[]" id="standardImagesInput" multiple accept="image/*" class="hidden" onchange="updateFileCountText(this)">
+                            <input type="file" name="images[]" id="standardImagesInput" multiple accept="image/*" class="hidden" onchange="handleStandardImagesSelect(this)">
 
                             <!-- Action Bar inside Create Post -->
                             <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
@@ -436,7 +451,7 @@
                                     <!-- Upload Photo Button -->
                                     <button type="button" onclick="document.getElementById('standardImagesInput').click()"
                                             class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-emerald-700 bg-slate-100 hover:bg-emerald-50 px-2.5 py-1.5 rounded-lg transition">
-                                        <i class="fas fa-image text-emerald-600"></i>
+                                        <i class="fas fa-images text-emerald-600"></i>
                                         <span id="photoBtnText">Foto Bonsai</span>
                                     </button>
 
@@ -626,11 +641,9 @@
                                     </div>
                                 @endif
 
-                                <!-- Promo Images -->
+                                <!-- Promo Images (Multi-Image Gallery & Lightbox) -->
                                 @if(!empty($post->images))
-                                    <div class="relative bg-slate-950 overflow-hidden max-h-[380px] flex items-center justify-center">
-                                        <img src="{{ asset($post->images[0]) }}" alt="Foto Promo" class="w-full h-full object-cover">
-                                    </div>
+                                    @include('shop.components.community-gallery', ['images' => $post->images])
                                 @endif
 
                                 <!-- Linked Catalog Product -->
@@ -664,6 +677,12 @@
 
                             <!-- ================= TYPE: BEFORE VS AFTER SLIDER ================= -->
                             @elseif($post->post_type === 'before_after' && $post->before_image && $post->after_image)
+                                @php
+                                    $baGallery = [
+                                        str_starts_with($post->before_image, 'http') ? $post->before_image : asset($post->before_image),
+                                        str_starts_with($post->after_image, 'http') ? $post->after_image : asset($post->after_image)
+                                    ];
+                                @endphp
                                 <div class="relative w-full h-[360px] sm:h-[400px] overflow-hidden select-none bg-slate-950 before-after-container" id="ba-container-{{ $post->id }}">
                                     <!-- AFTER IMAGE (Background) -->
                                     <img src="{{ asset($post->after_image) }}" alt="Sesudah" class="absolute inset-0 w-full h-full object-cover pointer-events-none">
@@ -678,6 +697,13 @@
                                             ⏳ Sebelum
                                         </span>
                                     </div>
+
+                                    <!-- Lightbox Zoom Button -->
+                                    <button type="button" onclick="openLightbox({{ json_encode($baGallery) }}, 0)" 
+                                            class="absolute bottom-3 right-3 z-30 px-2.5 py-1 rounded-full bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-semibold hover:bg-emerald-600 transition flex items-center gap-1.5 shadow-lg border border-white/20">
+                                        <i class="fas fa-search-plus text-xs text-emerald-400"></i>
+                                        <span>Perbesar Foto</span>
+                                    </button>
 
                                     <!-- Draggable Range Slider Bar -->
                                     <input type="range" min="0" max="100" value="50" 
@@ -700,9 +726,7 @@
                             <!-- ================= TYPE: POLL INTERAKTIF ================= -->
                             @elseif($post->post_type === 'poll' && $post->poll)
                                 @if(!empty($post->images))
-                                    <div class="relative bg-slate-950 overflow-hidden max-h-[320px] flex items-center justify-center">
-                                        <img src="{{ asset($post->images[0]) }}" alt="Foto Poling" class="w-full h-full object-cover">
-                                    </div>
+                                    @include('shop.components.community-gallery', ['images' => $post->images])
                                 @endif
 
                                 @php
@@ -738,11 +762,9 @@
                                     <p class="text-[10px] text-slate-400 mt-2.5 text-right total-votes-text">Total {{ $totalVotes }} kolektor telah memberikan suara</p>
                                 </div>
 
-                            <!-- ================= STANDARD PHOTO DISPLAY ================= -->
+                            <!-- ================= STANDARD PHOTO DISPLAY (Multi-Image Gallery & Lightbox) ================= -->
                             @elseif(!empty($post->images))
-                                <div class="relative bg-slate-950 overflow-hidden max-h-[380px] flex items-center justify-center">
-                                    <img src="{{ asset($post->images[0]) }}" alt="Foto Postingan" class="w-full h-full object-cover">
-                                </div>
+                                @include('shop.components.community-gallery', ['images' => $post->images])
                             @endif
 
                             <!-- Action Bar: Reactions & Comments Counter -->
@@ -954,6 +976,70 @@
     </div>
 </div>
 
+<!-- ================= LIGHTBOX / IMAGE MODAL VIEWER ================= -->
+<div id="communityLightbox" class="fixed inset-0 z-[99999] bg-slate-950/95 backdrop-blur-xl flex flex-col justify-between hidden select-none transition-opacity duration-300 opacity-0" role="dialog" aria-modal="true">
+    <!-- Top Navigation & Controls Bar -->
+    <div class="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-white/10 bg-slate-900/60 backdrop-blur-md z-30">
+        <!-- Counter & Badge -->
+        <div class="flex items-center gap-3">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 text-xs font-mono font-bold">
+                <i class="fas fa-camera text-[10px]"></i>
+                <span id="lbCounter">Foto 1 / 1</span>
+            </span>
+            <span id="lbZoomLevel" class="text-xs font-mono text-white/60 hidden sm:inline-block">100%</span>
+        </div>
+
+        <!-- Center Zoom & Action Buttons -->
+        <div class="flex items-center gap-1 sm:gap-2">
+            <button type="button" onclick="zoomLightbox(0.25)" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-emerald-600 text-white flex items-center justify-center text-xs transition" title="Perbesar (+)">
+                <i class="fas fa-search-plus"></i>
+            </button>
+            <button type="button" onclick="zoomLightbox(-0.25)" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-emerald-600 text-white flex items-center justify-center text-xs transition" title="Perkecil (-)">
+                <i class="fas fa-search-minus"></i>
+            </button>
+            <button type="button" onclick="resetLightboxZoom()" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs font-mono font-bold transition" title="Reset Ukuran (1:1)">
+                1:1
+            </button>
+            <button type="button" onclick="openOriginalImageInTab()" class="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center text-xs transition" title="Buka Gambar Asli">
+                <i class="fas fa-external-link-alt text-[10px]"></i>
+            </button>
+        </div>
+
+        <!-- Close Button -->
+        <div class="flex items-center">
+            <button type="button" onclick="closeLightbox()" class="w-9 h-9 rounded-xl bg-rose-500/20 hover:bg-rose-600 text-rose-300 hover:text-white flex items-center justify-center text-sm transition" title="Tutup (Esc)">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Canvas Area -->
+    <div class="relative flex-1 flex items-center justify-center overflow-hidden p-2 sm:p-6" id="lbCanvasArea">
+        <!-- Prev Arrow Button -->
+        <button type="button" id="lbPrevBtn" onclick="prevLightboxImage()" 
+                class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-2xl bg-slate-900/80 hover:bg-emerald-600 text-white flex items-center justify-center text-base transition shadow-2xl border border-white/15 z-20 hover:scale-105 active:scale-95">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <!-- Image Viewport -->
+        <div class="relative max-h-full max-w-full flex items-center justify-center cursor-grab active:cursor-grabbing" id="lbImageWrapper">
+            <img id="lbMainImage" src="" alt="Pratinjau Foto Bonsai" 
+                 class="max-h-[75vh] sm:max-h-[82vh] max-w-[94vw] sm:max-w-[88vw] object-contain rounded-xl shadow-2xl transition-transform duration-150 select-none">
+        </div>
+
+        <!-- Next Arrow Button -->
+        <button type="button" id="lbNextBtn" onclick="nextLightboxImage()" 
+                class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-2xl bg-slate-900/80 hover:bg-emerald-600 text-white flex items-center justify-center text-base transition shadow-2xl border border-white/15 z-20 hover:scale-105 active:scale-95">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Bottom Thumbnails Strip -->
+    <div id="lbThumbnailsBar" class="px-4 py-3 bg-slate-900/80 border-t border-white/10 backdrop-blur-md flex items-center justify-center gap-2 overflow-x-auto z-30">
+        <!-- Thumbnails injected via JS -->
+    </div>
+</div>
+
 <!-- ================= JAVASCRIPT INTERACTIONS ================= -->
 <script>
     function focusCreatePost() {
@@ -989,14 +1075,298 @@
         }
     }
 
-    function updateFileCountText(input) {
-        const textSpan = document.getElementById('photoBtnText');
-        if (input.files.length > 0) {
-            textSpan.textContent = input.files.length + ' Foto Dipilih';
-        } else {
-            textSpan.textContent = 'Foto Bonsai';
+    // ================= MULTI-IMAGE UPLOAD WITH PREVIEWS =================
+    let selectedImagesList = [];
+
+    function handleStandardImagesSelect(input) {
+        if (!input.files || input.files.length === 0) return;
+
+        Array.from(input.files).forEach(file => {
+            if (file.type.startsWith('image/') && selectedImagesList.length < 10) {
+                selectedImagesList.push(file);
+            }
+        });
+
+        syncImagesInputAndRenderPreviews();
+    }
+
+    function removeSelectedImage(index) {
+        selectedImagesList.splice(index, 1);
+        syncImagesInputAndRenderPreviews();
+    }
+
+    function clearSelectedImages() {
+        selectedImagesList = [];
+        syncImagesInputAndRenderPreviews();
+    }
+
+    function syncImagesInputAndRenderPreviews() {
+        const input = document.getElementById('standardImagesInput');
+        const previewContainer = document.getElementById('imagePreviewContainer');
+        const thumbnailList = document.getElementById('previewThumbnailList');
+        const badgeText = document.getElementById('previewCountBadge');
+        const photoBtnText = document.getElementById('photoBtnText');
+
+        const dt = new DataTransfer();
+        selectedImagesList.forEach(file => dt.items.add(file));
+        if (input) {
+            input.files = dt.files;
+        }
+
+        if (selectedImagesList.length === 0) {
+            if (previewContainer) previewContainer.classList.add('hidden');
+            if (thumbnailList) thumbnailList.innerHTML = '';
+            if (photoBtnText) photoBtnText.textContent = 'Foto Bonsai';
+            return;
+        }
+
+        if (previewContainer) previewContainer.classList.remove('hidden');
+        if (badgeText) badgeText.textContent = `${selectedImagesList.length} Foto Dipilih`;
+        if (photoBtnText) photoBtnText.textContent = `${selectedImagesList.length} Foto Dipilih`;
+
+        if (thumbnailList) {
+            thumbnailList.innerHTML = '';
+            selectedImagesList.forEach((file, idx) => {
+                const reader = new FileReader();
+                const wrapper = document.createElement('div');
+                wrapper.className = 'relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border border-slate-200 shadow-2xs group flex-shrink-0 bg-slate-100';
+                
+                const img = document.createElement('img');
+                img.className = 'w-full h-full object-cover';
+                img.alt = file.name;
+
+                reader.onload = (e) => {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.type = 'button';
+                deleteBtn.className = 'absolute top-1 right-1 w-5 h-5 rounded-full bg-slate-900/80 hover:bg-rose-600 text-white flex items-center justify-center text-[10px] transition shadow';
+                deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+                deleteBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    removeSelectedImage(idx);
+                };
+
+                wrapper.appendChild(img);
+                wrapper.appendChild(deleteBtn);
+                thumbnailList.appendChild(wrapper);
+            });
+
+            if (selectedImagesList.length < 10) {
+                const addMoreBtn = document.createElement('button');
+                addMoreBtn.type = 'button';
+                addMoreBtn.className = 'w-16 h-16 sm:w-20 sm:h-20 rounded-xl border-2 border-dashed border-emerald-300 hover:border-emerald-500 bg-emerald-50/50 hover:bg-emerald-50 text-emerald-700 flex flex-col items-center justify-center gap-1 text-xs font-semibold transition flex-shrink-0';
+                addMoreBtn.innerHTML = '<i class="fas fa-plus text-sm"></i><span class="text-[10px]">Tambah</span>';
+                addMoreBtn.onclick = () => {
+                    if (input) input.click();
+                };
+                thumbnailList.appendChild(addMoreBtn);
+            }
         }
     }
+
+    // ================= LIGHTBOX / IMAGE VIEWER STATE & HANDLERS =================
+    let lbImages = [];
+    let lbCurrentIndex = 0;
+    let lbScale = 1;
+    let lbIsDragging = false;
+    let lbStartX = 0;
+    let lbStartY = 0;
+    let lbTranslateX = 0;
+    let lbTranslateY = 0;
+
+    function openLightbox(images, startIndex = 0) {
+        if (!images || images.length === 0) return;
+        lbImages = images;
+        lbCurrentIndex = Math.max(0, Math.min(startIndex, images.length - 1));
+        
+        const modal = document.getElementById('communityLightbox');
+        if (!modal) return;
+
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+        }, 10);
+
+        document.body.style.overflow = 'hidden';
+        showLightboxImage(lbCurrentIndex);
+    }
+
+    function closeLightbox() {
+        const modal = document.getElementById('communityLightbox');
+        if (!modal) return;
+
+        modal.classList.add('opacity-0');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+            resetLightboxZoom();
+        }, 200);
+    }
+
+    function showLightboxImage(index) {
+        if (index < 0 || index >= lbImages.length) return;
+        lbCurrentIndex = index;
+        resetLightboxZoom();
+
+        const mainImg = document.getElementById('lbMainImage');
+        const counter = document.getElementById('lbCounter');
+        const prevBtn = document.getElementById('lbPrevBtn');
+        const nextBtn = document.getElementById('lbNextBtn');
+
+        if (mainImg) {
+            mainImg.style.opacity = '0.4';
+            mainImg.src = lbImages[index];
+            mainImg.onload = () => {
+                mainImg.style.opacity = '1';
+            };
+        }
+
+        if (counter) {
+            counter.textContent = `Foto ${index + 1} / ${lbImages.length}`;
+        }
+
+        if (prevBtn) {
+            prevBtn.style.display = lbImages.length > 1 ? 'flex' : 'none';
+        }
+        if (nextBtn) {
+            nextBtn.style.display = lbImages.length > 1 ? 'flex' : 'none';
+        }
+
+        renderLightboxThumbnails();
+    }
+
+    function nextLightboxImage() {
+        if (lbImages.length <= 1) return;
+        const nextIdx = (lbCurrentIndex + 1) % lbImages.length;
+        showLightboxImage(nextIdx);
+    }
+
+    function prevLightboxImage() {
+        if (lbImages.length <= 1) return;
+        const prevIdx = (lbCurrentIndex - 1 + lbImages.length) % lbImages.length;
+        showLightboxImage(prevIdx);
+    }
+
+    function zoomLightbox(delta) {
+        lbScale = Math.max(0.5, Math.min(4, lbScale + delta));
+        updateLightboxTransform();
+    }
+
+    function resetLightboxZoom() {
+        lbScale = 1;
+        lbTranslateX = 0;
+        lbTranslateY = 0;
+        updateLightboxTransform();
+    }
+
+    function updateLightboxTransform() {
+        const mainImg = document.getElementById('lbMainImage');
+        const zoomLevel = document.getElementById('lbZoomLevel');
+        if (mainImg) {
+            mainImg.style.transform = `scale(${lbScale}) translate(${lbTranslateX}px, ${lbTranslateY}px)`;
+            mainImg.style.cursor = lbScale > 1 ? 'grab' : 'zoom-in';
+        }
+        if (zoomLevel) {
+            zoomLevel.textContent = `${Math.round(lbScale * 100)}%`;
+        }
+    }
+
+    function openOriginalImageInTab() {
+        if (lbImages[lbCurrentIndex]) {
+            window.open(lbImages[lbCurrentIndex], '_blank');
+        }
+    }
+
+    function renderLightboxThumbnails() {
+        const bar = document.getElementById('lbThumbnailsBar');
+        if (!bar) return;
+        
+        if (lbImages.length <= 1) {
+            bar.style.display = 'none';
+            return;
+        }
+        bar.style.display = 'flex';
+        bar.innerHTML = '';
+
+        lbImages.forEach((imgUrl, idx) => {
+            const thumb = document.createElement('button');
+            thumb.type = 'button';
+            thumb.className = `w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden flex-shrink-0 transition border-2 ${idx === lbCurrentIndex ? 'border-emerald-500 ring-2 ring-emerald-400 scale-105' : 'border-white/20 opacity-60 hover:opacity-100'}`;
+            thumb.innerHTML = `<img src="${imgUrl}" class="w-full h-full object-cover pointer-events-none">`;
+            thumb.onclick = () => showLightboxImage(idx);
+            bar.appendChild(thumb);
+        });
+    }
+
+    // Lightbox Mouse, Wheel, and Drag Listeners
+    document.addEventListener('DOMContentLoaded', () => {
+        const wrapper = document.getElementById('lbCanvasArea');
+        const mainImg = document.getElementById('lbMainImage');
+
+        if (wrapper && mainImg) {
+            mainImg.addEventListener('dblclick', (e) => {
+                e.preventDefault();
+                if (lbScale > 1) {
+                    resetLightboxZoom();
+                } else {
+                    lbScale = 2;
+                    updateLightboxTransform();
+                }
+            });
+
+            wrapper.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const delta = e.deltaY < 0 ? 0.2 : -0.2;
+                zoomLightbox(delta);
+            }, { passive: false });
+
+            mainImg.addEventListener('mousedown', (e) => {
+                if (lbScale > 1) {
+                    lbIsDragging = true;
+                    lbStartX = e.clientX - lbTranslateX;
+                    lbStartY = e.clientY - lbTranslateY;
+                    mainImg.style.cursor = 'grabbing';
+                }
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (lbIsDragging) {
+                    lbTranslateX = e.clientX - lbStartX;
+                    lbTranslateY = e.clientY - lbStartY;
+                    updateLightboxTransform();
+                }
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (lbIsDragging) {
+                    lbIsDragging = false;
+                    if (mainImg) mainImg.style.cursor = lbScale > 1 ? 'grab' : 'zoom-in';
+                }
+            });
+        }
+
+        window.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('communityLightbox');
+            if (!modal || modal.classList.contains('hidden')) return;
+
+            if (e.key === 'Escape') {
+                closeLightbox();
+            } else if (e.key === 'ArrowRight') {
+                nextLightboxImage();
+            } else if (e.key === 'ArrowLeft') {
+                prevLightboxImage();
+            } else if (e.key === '+' || e.key === '=') {
+                zoomLightbox(0.25);
+            } else if (e.key === '-') {
+                zoomLightbox(-0.25);
+            } else if (e.key === '0') {
+                resetLightboxZoom();
+            }
+        });
+    });
 
     // Before After Slider Handler
     function handleBeforeAfterSlide(rangeInput, containerId) {
