@@ -70,10 +70,14 @@ class CheckoutController extends Controller
         $item_details = [];
 
         // Konfigurasi Midtrans
-        \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
-        \Midtrans\Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
+        \Midtrans\Config::$serverKey = config('services.midtrans.server_key', env('MIDTRANS_SERVER_KEY'));
+        \Midtrans\Config::$isProduction = config('services.midtrans.is_production', env('MIDTRANS_IS_PRODUCTION', false));
         \Midtrans\Config::$isSanitized = true;
         \Midtrans\Config::$is3ds = true;
+
+        if (empty(\Midtrans\Config::$serverKey)) {
+            return redirect()->back()->with('error', 'Konfigurasi pembayaran belum lengkap: MIDTRANS_SERVER_KEY belum diisi di file .env.');
+        }
 
         // Jika Beli Langsung
         if ($request->has('bonsai_id')) {
@@ -143,10 +147,12 @@ class CheckoutController extends Controller
 
         // Ambil Metode Pembayaran
         $paymentMethod = $request->metode_pembayaran;
+        $midtransOrderId = $baseOrderCode . '-' . time();
+
         $params = [
             'transaction_details' => [
-                'order_id' => $baseOrderCode . '-' . time(),
-                'gross_amount' => $subtotal,
+                'order_id' => $midtransOrderId,
+                'gross_amount' => (int) $subtotal,
             ],
             'customer_details' => [
                 'first_name' => Auth::user()->name,
@@ -156,55 +162,228 @@ class CheckoutController extends Controller
                     'address' => $request->alamat_pengiriman,
                 ]
             ],
-            'item_details' => $item_details
+            'item_details' => $item_details,
+            'custom_expiry' => [
+                'expiry_duration' => 24,
+                'unit' => 'hour'
+            ]
         ];
 
-        // Konfigurasi Payment Type untuk Core API
-        if ($paymentMethod === 'qris') {
-            $params['payment_type'] = 'qris';
-        } else if ($paymentMethod === 'mandiri') {
-            $params['payment_type'] = 'echannel';
-            $params['echannel'] = [
-                'bill_info1' => 'Pembayaran Bonsai',
-                'bill_info2' => $baseOrderCode
-            ];
-        } else {
-            // Default ke bank_transfer (bca, bri, bni)
-            $params['payment_type'] = 'bank_transfer';
-            $params['bank_transfer'] = [
-                'bank' => $paymentMethod
-            ];
-        }
-
         try {
-            $response = \Midtrans\CoreApi::charge($params);
-            
-            // Siapkan data untuk update ke DB
+            // Generate Snap Token (Midtrans All Payment Channels)
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+
             $updateData = [
-                'payment_type' => $response->payment_type ?? $paymentMethod,
-                'payment_expiry_time' => $response->expiry_time ?? null,
+                'metode_pembayaran' => $paymentMethod,
+                'midtrans_order_id' => $midtransOrderId,
+                'snap_token' => $snapToken,
+                'payment_expiry_time' => now()->addHours(24),
             ];
 
-            if ($paymentMethod === 'qris') {
-                $updateData['payment_qr_url'] = $response->actions[0]->url ?? null;
-            } else if ($paymentMethod === 'mandiri') {
-                $updateData['payment_bill_key'] = $response->bill_key ?? null;
-                $updateData['payment_biller_code'] = $response->biller_code ?? null;
-                $updateData['payment_bank'] = 'mandiri';
-            } else {
-                $updateData['payment_va_number'] = $response->va_numbers[0]->va_number ?? null;
-                $updateData['payment_bank'] = $paymentMethod;
+            // Jika user memilih metode spesifik, coba juga CoreApi untuk direct VA / QRIS jika diperlukan
+            if (in_array($paymentMethod, ['bca', 'bri', 'bni', 'mandiri', 'qris'])) {
+                try {
+                    $coreParams = $params;
+                    if ($paymentMethod === 'qris') {
+                        $coreParams['payment_type'] = 'qris';
+                        $coreParams['qris'] = ['acquirer' => 'gopay'];
+                    } else if ($paymentMethod === 'mandiri') {
+                        $coreParams['payment_type'] = 'echannel';
+                        $coreParams['echannel'] = [
+                            'bill_info1' => 'Pembayaran Bonsai',
+                            'bill_info2' => $baseOrderCode
+                        ];
+                    } else {
+                        $coreParams['payment_type'] = 'bank_transfer';
+                        $coreParams['bank_transfer'] = ['bank' => $paymentMethod];
+                    }
+
+                    $response = \Midtrans\CoreApi::charge($coreParams);
+                    $updateData['payment_type'] = $response->payment_type ?? $paymentMethod;
+
+                    if ($paymentMethod === 'qris') {
+                        $qrUrl = null;
+                        if (!empty($response->actions) && is_array($response->actions)) {
+                            foreach ($response->actions as $action) {
+                                if (isset($action->name) && $action->name === 'generate-qr-code') {
+                                    $qrUrl = $action->url;
+                                    break;
+                                }
+                            }
+                            if (!$qrUrl && isset($response->actions[0]->url)) {
+                                $qrUrl = $response->actions[0]->url;
+                            }
+                        }
+                        $updateData['payment_qr_url'] = $qrUrl;
+                        $updateData['payment_va_number'] = $response->qr_string ?? null;
+                        $updateData['payment_bank'] = 'qris';
+                    } else if ($paymentMethod === 'mandiri') {
+                        $updateData['payment_bill_key'] = $response->bill_key ?? null;
+                        $updateData['payment_biller_code'] = $response->biller_code ?? null;
+                        $updateData['payment_bank'] = 'mandiri';
+                    } else {
+                        $updateData['payment_va_number'] = $response->va_numbers[0]->va_number ?? null;
+                        $updateData['payment_bank'] = $paymentMethod;
+                    }
+                } catch (\Exception $coreEx) {
+                    // Jika CoreApi gagal, abaikan karena Snap Token sudah berhasil
+                    \Illuminate\Support\Facades\Log::warning('CoreApi charge skipped/failed: ' . $coreEx->getMessage());
+                }
             }
 
             // Update semua order yang baru dibuat
             Order::where('order_code', $baseOrderCode)
                 ->orWhere('order_code', 'like', $baseOrderCode . '-%')
                 ->update($updateData);
-            
+
             return redirect()->route('shop.pesanan.pay', $baseOrderCode);
 
         } catch (\Exception $e) {
             return redirect()->route('shop.pesanan')->with('error', 'Gagal memproses pembayaran: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Ganti metode pembayaran pada pesanan pending
+     */
+    public function changePaymentMethod(Request $request, $id)
+    {
+        $request->validate([
+            'metode_pembayaran' => 'required|in:midtrans,bca,bni,bri,mandiri,qris',
+        ]);
+
+        $order = Order::where('user_id', Auth::id())
+            ->where(function($q) use ($id) {
+                $q->where('id', $id)->orWhere('order_code', $id);
+            })
+            ->firstOrFail();
+
+        if ($order->status !== 'pending') {
+            return redirect()->back()->with('error', 'Metode pembayaran tidak dapat diubah karena status pesanan: ' . $order->status);
+        }
+
+        // Ambil base code (ORD-XXXX)
+        $parts = explode('-', $order->order_code);
+        $baseOrderCode = (count($parts) >= 2) ? ($parts[0] . '-' . $parts[1]) : $order->order_code;
+        $allOrders = Order::with('bonsai')
+            ->where('order_code', 'like', $baseOrderCode . '%')
+            ->get();
+
+        $subtotal = $allOrders->sum('total_price');
+        $paymentMethod = $request->metode_pembayaran;
+
+        // Siapkan item details
+        $item_details = [];
+        foreach ($allOrders as $ord) {
+            $item_details[] = [
+                'id' => $ord->bonsai_id,
+                'price' => (int) ($ord->bonsai ? $ord->bonsai->current_value : ($ord->total_price / max(1, $ord->quantity))),
+                'quantity' => (int) $ord->quantity,
+                'name' => substr($ord->bonsai ? $ord->bonsai->name : 'Bonsai Item', 0, 50)
+            ];
+        }
+
+        // Konfigurasi Midtrans
+        \Midtrans\Config::$serverKey = config('services.midtrans.server_key', env('MIDTRANS_SERVER_KEY'));
+        \Midtrans\Config::$isProduction = config('services.midtrans.is_production', env('MIDTRANS_IS_PRODUCTION', false));
+        \Midtrans\Config::$isSanitized = true;
+        \Midtrans\Config::$is3ds = true;
+
+        if (empty(\Midtrans\Config::$serverKey)) {
+            return redirect()->back()->with('error', 'Konfigurasi pembayaran belum lengkap: MIDTRANS_SERVER_KEY belum diisi di file .env.');
+        }
+
+        $newMidtransOrderId = $baseOrderCode . '-' . time();
+        $params = [
+            'transaction_details' => [
+                'order_id' => $newMidtransOrderId,
+                'gross_amount' => (int) $subtotal,
+            ],
+            'customer_details' => [
+                'first_name' => Auth::user()->name,
+                'email' => Auth::user()->email,
+                'shipping_address' => [
+                    'first_name' => Auth::user()->name,
+                    'address' => $order->alamat_pengiriman,
+                ]
+            ],
+            'item_details' => $item_details,
+            'custom_expiry' => [
+                'expiry_duration' => 24,
+                'unit' => 'hour'
+            ]
+        ];
+
+        try {
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+            $updateData = [
+                'metode_pembayaran' => $paymentMethod,
+                'snap_token' => $snapToken,
+                'midtrans_order_id' => $newMidtransOrderId,
+                'payment_expiry_time' => now()->addHours(24),
+                'payment_bank' => null,
+                'payment_va_number' => null,
+                'payment_bill_key' => null,
+                'payment_biller_code' => null,
+                'payment_qr_url' => null,
+            ];
+
+            if (in_array($paymentMethod, ['bca', 'bri', 'bni', 'mandiri', 'qris'])) {
+                try {
+                    $coreParams = $params;
+                    if ($paymentMethod === 'qris') {
+                        $coreParams['payment_type'] = 'qris';
+                        $coreParams['qris'] = ['acquirer' => 'gopay'];
+                    } else if ($paymentMethod === 'mandiri') {
+                        $coreParams['payment_type'] = 'echannel';
+                        $coreParams['echannel'] = [
+                            'bill_info1' => 'Pembayaran Bonsai',
+                            'bill_info2' => $baseOrderCode
+                        ];
+                    } else {
+                        $coreParams['payment_type'] = 'bank_transfer';
+                        $coreParams['bank_transfer'] = ['bank' => $paymentMethod];
+                    }
+
+                    $response = \Midtrans\CoreApi::charge($coreParams);
+                    $updateData['payment_type'] = $response->payment_type ?? $paymentMethod;
+
+                    if ($paymentMethod === 'qris') {
+                        $qrUrl = null;
+                        if (!empty($response->actions) && is_array($response->actions)) {
+                            foreach ($response->actions as $action) {
+                                if (isset($action->name) && $action->name === 'generate-qr-code') {
+                                    $qrUrl = $action->url;
+                                    break;
+                                }
+                            }
+                            if (!$qrUrl && isset($response->actions[0]->url)) {
+                                $qrUrl = $response->actions[0]->url;
+                            }
+                        }
+                        $updateData['payment_qr_url'] = $qrUrl;
+                        $updateData['payment_va_number'] = $response->qr_string ?? null;
+                        $updateData['payment_bank'] = 'qris';
+                    } else if ($paymentMethod === 'mandiri') {
+                        $updateData['payment_bill_key'] = $response->bill_key ?? null;
+                        $updateData['payment_biller_code'] = $response->biller_code ?? null;
+                        $updateData['payment_bank'] = 'mandiri';
+                    } else {
+                        $updateData['payment_va_number'] = $response->va_numbers[0]->va_number ?? null;
+                        $updateData['payment_bank'] = $paymentMethod;
+                    }
+                } catch (\Exception $coreEx) {
+                    \Illuminate\Support\Facades\Log::warning('CoreApi charge in changePaymentMethod: ' . $coreEx->getMessage());
+                }
+            }
+
+            Order::where('order_code', 'like', $baseOrderCode . '%')
+                ->update($updateData);
+
+            return redirect()->route('shop.pesanan.pay', $baseOrderCode)->with('success', 'Metode pembayaran berhasil diubah ke ' . strtoupper($paymentMethod) . '!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Gagal mengubah metode pembayaran: ' . $e->getMessage());
         }
     }
 }

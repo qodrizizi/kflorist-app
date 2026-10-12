@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verifikasi OTP - BonsaiKu | Khadir Florist</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/logonobg.png') }}">
+    <title>Verifikasi OTP - RUANGBONSAI | Khadir Florist</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -87,7 +87,7 @@
         <!-- Header & Logo -->
         <div class="text-center mb-6">
             <div class="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center mx-auto mb-4 p-2 shadow-sm">
-                <img src="{{ asset('images/logonobg.png') }}" alt="BonsaiKu" class="w-full h-full object-contain"
+                <img src="{{ asset('images/logo.png') }}" alt="RUANGBONSAI" class="w-full h-full object-contain"
                      onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%23059669\'><path d=\'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z\'/></svg>'">
             </div>
             <span class="inline-block text-[11px] font-bold tracking-widest uppercase text-emerald-600 bg-emerald-50 px-3 py-1 rounded-md mb-2">

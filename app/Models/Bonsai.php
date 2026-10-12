@@ -15,6 +15,11 @@ class Bonsai extends Model
         return $this->hasMany(Review::class);
     }
 
+    public function perawatans()
+    {
+        return $this->hasMany(Perawatan::class)->orderBy('tanggal_perawatan', 'desc');
+    }
+
     /**
      * The attributes that are mass assignable.
      *

@@ -80,11 +80,11 @@
     </section>
 
     <!-- Categories Section - Dynamic from DB -->
-    <section id="categories" class="py-20 bg-gradient-to-br from-gray-50 to-white">
+    <section id="categories" class="py-20 bg-gradient-to-br from-gray-50 to-white dark:from-slate-900 dark:to-slate-950 transition-colors duration-300">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
-                <span class="text-green-600 font-semibold text-sm tracking-wider uppercase">Pilihan Kategori</span>
-                <h2 class="text-4xl font-bold text-gray-800 mt-2">Kategori Bonsai</h2>
+                <span class="text-green-600 dark:text-emerald-400 font-semibold text-sm tracking-wider uppercase">Pilihan Kategori</span>
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-white mt-2">Kategori Bonsai</h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-500 mx-auto mt-4"></div>
             </div>
 
@@ -112,24 +112,24 @@
     </section>
 
     <!-- Products Section - Dynamic from DB -->
-    <section id="products" class="py-20 bg-white">
+    <section id="products" class="py-20 bg-white dark:bg-slate-900 transition-colors duration-300">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
-                <span class="text-green-600 font-semibold text-sm tracking-wider uppercase">Koleksi Terpilih</span>
-                <h2 class="text-4xl font-bold text-gray-800 mt-2">Produk Terbaru</h2>
-                <p class="text-gray-600 mt-4 max-w-2xl mx-auto">Koleksi bonsai terbaru yang tersedia di toko kami</p>
+                <span class="text-green-600 dark:text-emerald-400 font-semibold text-sm tracking-wider uppercase">Koleksi Terpilih</span>
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-white mt-2">Produk Terbaru</h2>
+                <p class="text-gray-600 dark:text-slate-300 mt-4 max-w-2xl mx-auto">Koleksi bonsai terbaru yang tersedia di toko kami</p>
                 <div class="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-500 mx-auto mt-4"></div>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                 @forelse($featuredProducts as $product)
-                <div class="group bg-white rounded-3xl shadow-lg overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-gray-100 flex flex-col">
+                <div class="group bg-white dark:bg-slate-800/90 rounded-3xl shadow-lg overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-gray-100 dark:border-slate-700/60 flex flex-col">
                     <!-- Image -->
                     <a href="{{ route('shop.produk.show', $product->id) }}" class="relative overflow-hidden block">
                         @if($product->image_path)
                             <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" class="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110">
                         @else
-                            <div class="w-full h-56 bg-gradient-to-br from-emerald-100 to-green-200 flex items-center justify-center">
+                            <div class="w-full h-56 bg-gradient-to-br from-emerald-100 to-green-200 dark:from-slate-700 dark:to-slate-800 flex items-center justify-center">
                                 <i class="fas fa-seedling text-5xl text-emerald-400"></i>
                             </div>
                         @endif
@@ -153,16 +153,16 @@
                         <!-- Status -->
                         <div class="absolute top-4 right-4 z-10">
                             @if($product->status === 'available')
-                                <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-semibold shadow-sm">Tersedia</span>
+                                <span class="bg-green-100 dark:bg-emerald-950/80 text-green-700 dark:text-emerald-300 px-2 py-1 rounded-full text-xs font-semibold shadow-sm">Tersedia</span>
                             @else
-                                <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-semibold shadow-sm">Terjual</span>
+                                <span class="bg-red-100 dark:bg-rose-950/80 text-red-700 dark:text-rose-300 px-2 py-1 rounded-full text-xs font-semibold shadow-sm">Terjual</span>
                             @endif
                         </div>
                         
                         <!-- Hover Icon overlay -->
                         <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <div class="bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg transform scale-0 group-hover:scale-100 transition-transform duration-300">
-                                <i class="fas fa-search-plus text-emerald-600 text-xl"></i>
+                            <div class="bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm p-3 rounded-full shadow-lg transform scale-0 group-hover:scale-100 transition-transform duration-300">
+                                <i class="fas fa-search-plus text-emerald-600 dark:text-emerald-400 text-xl"></i>
                             </div>
                         </div>
                     </a>
@@ -170,10 +170,10 @@
                     <!-- Content -->
                     <div class="p-6 flex-grow flex flex-col">
                         <div class="mb-3">
-                            <span class="text-sm font-bold text-green-600 bg-green-100 px-2 py-1 rounded-lg">{{ $product->species ?? '-' }}</span>
+                            <span class="text-sm font-bold text-green-600 dark:text-emerald-400 bg-green-100 dark:bg-emerald-950/60 px-2 py-1 rounded-lg">{{ $product->species ?? '-' }}</span>
                         </div>
                         <a href="{{ route('shop.produk.show', $product->id) }}">
-                            <h4 class="text-lg font-bold text-gray-800 leading-tight mb-1 hover:text-emerald-600 transition-colors">{{ $product->name }}</h4>
+                            <h4 class="text-lg font-bold text-gray-800 dark:text-white leading-tight mb-1 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">{{ $product->name }}</h4>
                         </a>
 
                         <!-- Rating -->
@@ -188,8 +188,8 @@
                         </div>
 
                         <!-- Specs -->
-                        <div class="mb-4 p-3 bg-gray-50 rounded-xl">
-                            <div class="grid grid-cols-2 gap-2 text-xs text-gray-600">
+                        <div class="mb-4 p-3 bg-gray-50 dark:bg-slate-700/60 rounded-xl">
+                            <div class="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-slate-300">
                                 @if($product->height_cm)
                                 <div class="flex items-center"><i class="fas fa-ruler mr-1 text-gray-400"></i> {{ $product->height_cm }}cm</div>
                                 @endif
@@ -207,7 +207,7 @@
 
                         <!-- Price -->
                         <div class="mb-4">
-                            <span class="text-xl font-bold text-gray-800">
+                            <span class="text-xl font-bold text-gray-800 dark:text-emerald-400">
                                 Rp {{ number_format($product->current_value ?? 0, 0, ',', '.') }}
                             </span>
                         </div>
@@ -215,17 +215,17 @@
                         <!-- Buttons -->
                         <div class="flex gap-2">
                             @if($product->status === 'available')
-                                <button onclick="addToCart('{{ $product->id }}', true)" class="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-xl hover:from-green-600 hover:to-green-700 transition-all font-semibold text-sm shadow-sm hover:shadow-md">
+                                <button onclick="addToCart('{{ $product->id }}', true)" class="flex-1 bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-xl hover:from-green-600 hover:to-green-700 transition-all font-semibold text-sm shadow-sm hover:shadow-md cursor-pointer">
                                     <i class="fas fa-shopping-cart mr-2"></i>Beli
                                 </button>
-                                <button onclick="addToCart('{{ $product->id }}', false)" class="bg-gray-100 text-gray-600 p-3 rounded-xl hover:bg-gray-200 transition-colors shadow-sm">
+                                <button onclick="addToCart('{{ $product->id }}', false)" class="bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-200 p-3 rounded-xl hover:bg-gray-200 dark:hover:bg-slate-600 transition-colors shadow-sm cursor-pointer">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             @else
-                                <button disabled class="flex-1 bg-gray-200 text-gray-500 py-3 rounded-xl font-semibold text-sm cursor-not-allowed">
+                                <button disabled class="flex-1 bg-gray-200 dark:bg-slate-700 text-gray-500 dark:text-slate-400 py-3 rounded-xl font-semibold text-sm cursor-not-allowed">
                                     <i class="fas fa-ban mr-2"></i>Terjual
                                 </button>
-                                <a href="{{ route('shop.produk.show', $product->id) }}" class="bg-gray-100 text-gray-600 p-3 rounded-xl hover:bg-gray-200 transition-all shadow-sm">
+                                <a href="{{ route('shop.produk.show', $product->id) }}" class="bg-gray-100 dark:bg-slate-700 text-gray-600 dark:text-slate-200 p-3 rounded-xl hover:bg-gray-200 dark:hover:bg-slate-600 transition-all shadow-sm">
                                     <i class="fas fa-eye"></i>
                                 </a>
                             @endif
@@ -234,8 +234,8 @@
                 </div>
                 @empty
                 <div class="col-span-4 text-center py-12">
-                    <i class="fas fa-seedling text-6xl text-gray-300 mb-4"></i>
-                    <p class="text-gray-500 text-lg">Belum ada produk tersedia</p>
+                    <i class="fas fa-seedling text-6xl text-gray-300 dark:text-slate-600 mb-4"></i>
+                    <p class="text-gray-500 dark:text-slate-400 text-lg">Belum ada produk tersedia</p>
                 </div>
                 @endforelse
             </div>
@@ -250,37 +250,37 @@
     </section>
 
     <!-- Why Choose Us -->
-    <section class="py-20 bg-gradient-to-br from-gray-50 via-white to-green-50">
+    <section class="py-20 bg-gradient-to-br from-gray-50 via-white to-green-50 dark:from-slate-950 dark:via-slate-900 dark:to-emerald-950/30 transition-colors duration-300">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
-                <span class="text-green-600 font-semibold text-sm tracking-wider uppercase">Keunggulan Kami</span>
-                <h2 class="text-4xl font-bold text-gray-800 mt-2">Mengapa Pilih BonsaiKu?</h2>
+                <span class="text-green-600 dark:text-emerald-400 font-semibold text-sm tracking-wider uppercase">Keunggulan Kami</span>
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-white mt-2">Mengapa Pilih RUANGBONSAI?</h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-500 mx-auto mt-4"></div>
             </div>
 
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="group text-center p-8 bg-white rounded-2xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100">
+                <div class="group text-center p-8 bg-white dark:bg-slate-850 dark:bg-slate-800/80 rounded-2xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 dark:border-slate-700/60">
                     <div class="bg-gradient-to-br from-green-400 to-emerald-500 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                         <i class="fas fa-leaf text-white text-2xl"></i>
                     </div>
-                    <h4 class="text-2xl font-bold mb-4 text-gray-800">Kualitas Premium</h4>
-                    <p class="text-gray-600 leading-relaxed">Setiap bonsai dipilih dengan teliti dan dijamin kualitasnya oleh ahli bonsai berpengalaman</p>
+                    <h4 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Kualitas Premium</h4>
+                    <p class="text-gray-600 dark:text-slate-300 leading-relaxed">Setiap bonsai dipilih dengan teliti dan dijamin kualitasnya oleh ahli bonsai berpengalaman</p>
                 </div>
 
-                <div class="group text-center p-8 bg-white rounded-2xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100">
+                <div class="group text-center p-8 bg-white dark:bg-slate-800/80 rounded-2xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 dark:border-slate-700/60">
                     <div class="bg-gradient-to-br from-blue-400 to-indigo-500 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                         <i class="fas fa-shipping-fast text-white text-2xl"></i>
                     </div>
-                    <h4 class="text-2xl font-bold mb-4 text-gray-800">Pengiriman Aman</h4>
-                    <p class="text-gray-600 leading-relaxed">Kemasan khusus untuk melindungi bonsai selama pengiriman hingga sampai dengan selamat</p>
+                    <h4 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Pengiriman Aman</h4>
+                    <p class="text-gray-600 dark:text-slate-300 leading-relaxed">Kemasan khusus untuk melindungi bonsai selama pengiriman hingga sampai dengan selamat</p>
                 </div>
 
-                <div class="group text-center p-8 bg-white rounded-2xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100">
+                <div class="group text-center p-8 bg-white dark:bg-slate-800/80 rounded-2xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 dark:border-slate-700/60">
                     <div class="bg-gradient-to-br from-purple-400 to-pink-500 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300">
                         <i class="fas fa-users text-white text-2xl"></i>
                     </div>
-                    <h4 class="text-2xl font-bold mb-4 text-gray-800">Komunitas & Support</h4>
-                    <p class="text-gray-600 leading-relaxed">Bergabung dengan komunitas pecinta bonsai dan dapatkan tips perawatan dari para ahli</p>
+                    <h4 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Komunitas & Support</h4>
+                    <p class="text-gray-600 dark:text-slate-300 leading-relaxed">Bergabung dengan komunitas pecinta bonsai dan dapatkan tips perawatan dari para ahli</p>
                 </div>
             </div>
         </div>

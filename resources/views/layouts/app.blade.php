@@ -355,8 +355,8 @@
 
             {{-- Logo --}}
             <div class="flex items-center h-14 px-4 shrink-0 border-b border-slate-100 dark:border-slate-800">
-                <i class="fas fa-leaf text-emerald-500 text-lg"></i>
-                <span class="sb-text ml-2.5 text-base font-bold text-slate-800 dark:text-white">BonsaiKu</span>
+                <img src="{{ asset('images/logo.png') }}" alt="RUANGBONSAI" class="h-7 w-auto object-contain">
+                <span class="sb-text ml-2.5 text-base font-black text-slate-800 dark:text-white tracking-tight">RUANGBONSAI</span>
             </div>
 
             {{-- Navigation --}}

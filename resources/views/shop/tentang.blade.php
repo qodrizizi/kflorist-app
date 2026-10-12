@@ -25,7 +25,7 @@
                     <span class="block">ke Rumah Anda</span>
                 </h1>
                 <p class="text-lg md:text-xl text-gray-300 mb-8 leading-relaxed max-w-2xl">
-                    BonsaiKu adalah tempat di mana seni dan alam bertemu. Kami berdedikasi untuk menyediakan bonsai berkualitas tinggi yang tidak hanya memperindah ruang Anda, tetapi juga membawa ketenangan dan filosofi hidup yang mendalam.
+                    RUANGBONSAI adalah tempat di mana seni dan alam bertemu. Kami berdedikasi untuk menyediakan bonsai berkualitas tinggi yang tidak hanya memperindah ruang Anda, tetapi juga membawa ketenangan dan filosofi hidup yang mendalam.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4">
                     <a href="{{ route('shop.produk') }}" 
@@ -46,94 +46,94 @@
 </section>
 
 <!-- Stats Section -->
-<section class="py-16 bg-white">
+<section class="py-16 bg-white dark:bg-slate-900 transition-colors duration-300">
     <div class="container mx-auto px-4">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
             <div class="text-center group">
-                <div class="bg-green-50 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-green-100 transition-colors">
-                    <i class="fas fa-seedling text-3xl text-green-600"></i>
+                <div class="bg-green-50 dark:bg-emerald-950/50 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-green-100 dark:group-hover:bg-emerald-900/60 transition-colors">
+                    <i class="fas fa-seedling text-3xl text-green-600 dark:text-emerald-400"></i>
                 </div>
-                <h3 class="text-3xl font-bold text-gray-800 mb-2 counter" data-count="1000">0</h3>
-                <p class="text-gray-600 font-medium">Bonsai Terjual</p>
+                <h3 class="text-3xl font-bold text-gray-800 dark:text-white mb-2 counter" data-count="1000">0</h3>
+                <p class="text-gray-600 dark:text-slate-300 font-medium">Bonsai Terjual</p>
             </div>
             <div class="text-center group">
-                <div class="bg-blue-50 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-100 transition-colors">
-                    <i class="fas fa-users text-3xl text-blue-600"></i>
+                <div class="bg-blue-50 dark:bg-sky-950/50 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-100 dark:group-hover:bg-sky-900/60 transition-colors">
+                    <i class="fas fa-users text-3xl text-blue-600 dark:text-sky-400"></i>
                 </div>
-                <h3 class="text-3xl font-bold text-gray-800 mb-2 counter" data-count="500">0</h3>
-                <p class="text-gray-600 font-medium">Pelanggan Puas</p>
+                <h3 class="text-3xl font-bold text-gray-800 dark:text-white mb-2 counter" data-count="500">0</h3>
+                <p class="text-gray-600 dark:text-slate-300 font-medium">Pelanggan Puas</p>
             </div>
             <div class="text-center group">
-                <div class="bg-purple-50 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-100 transition-colors">
-                    <i class="fas fa-award text-3xl text-purple-600"></i>
+                <div class="bg-purple-50 dark:bg-purple-950/50 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-100 dark:group-hover:bg-purple-900/60 transition-colors">
+                    <i class="fas fa-award text-3xl text-purple-600 dark:text-purple-400"></i>
                 </div>
-                <h3 class="text-3xl font-bold text-gray-800 mb-2 counter" data-count="35">0</h3>
-                <p class="text-gray-600 font-medium">Tahun Pengalaman</p>
+                <h3 class="text-3xl font-bold text-gray-800 dark:text-white mb-2 counter" data-count="35">0</h3>
+                <p class="text-gray-600 dark:text-slate-300 font-medium">Tahun Pengalaman</p>
             </div>
             <div class="text-center group">
-                <div class="bg-orange-50 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-orange-100 transition-colors">
-                    <i class="fas fa-globe-asia text-3xl text-orange-600"></i>
+                <div class="bg-orange-50 dark:bg-amber-950/50 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-orange-100 dark:group-hover:bg-amber-900/60 transition-colors">
+                    <i class="fas fa-globe-asia text-3xl text-orange-600 dark:text-amber-400"></i>
                 </div>
-                <h3 class="text-3xl font-bold text-gray-800 mb-2 counter" data-count="34">0</h3>
-                <p class="text-gray-600 font-medium">Kota Terlayani</p>
+                <h3 class="text-3xl font-bold text-gray-800 dark:text-white mb-2 counter" data-count="34">0</h3>
+                <p class="text-gray-600 dark:text-slate-300 font-medium">Kota Terlayani</p>
             </div>
         </div>
     </div>
 </section>
 
 <!-- Story Section -->
-<section id="story" class="py-20 bg-gradient-to-br from-gray-50 to-white">
+<section id="story" class="py-20 bg-gradient-to-br from-gray-50 to-white dark:from-slate-900 dark:to-slate-950 transition-colors duration-300">
     <div class="container mx-auto px-4">
         <div class="max-w-4xl mx-auto text-center mb-16">
-            <div class="inline-block bg-green-100 text-green-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+            <div class="inline-block bg-green-100 dark:bg-emerald-950/60 text-green-700 dark:text-emerald-300 px-4 py-2 rounded-full text-sm font-medium mb-4">
                 Cerita Kami
             </div>
-            <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-                Dari Hobi Menjadi <span class="text-green-600">Passion</span>
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
+                Dari Hobi Menjadi <span class="text-green-600 dark:text-emerald-400">Passion</span>
             </h2>
-            <p class="text-xl text-gray-600 leading-relaxed">
+            <p class="text-xl text-gray-600 dark:text-slate-300 leading-relaxed">
                 Perjalanan kami dimulai dari kecintaan sederhana terhadap seni bonsai yang akhirnya tumbuh menjadi misi untuk membagikan keindahan dan filosofi bonsai kepada seluruh Indonesia.
             </p>
         </div>
 
         <div class="grid lg:grid-cols-2 gap-16 items-center">
             <div class="space-y-6">
-                <div class="bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-shadow">
+                <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-8 shadow-xl dark:shadow-slate-950/50 hover:shadow-2xl transition-all border border-gray-100 dark:border-slate-700/60">
                     <div class="flex items-start gap-4">
-                        <div class="bg-green-100 p-3 rounded-xl">
-                            <i class="fas fa-heart text-green-600 text-xl"></i>
+                        <div class="bg-green-100 dark:bg-emerald-950/60 p-3 rounded-xl">
+                            <i class="fas fa-heart text-green-600 dark:text-emerald-400 text-xl"></i>
                         </div>
                         <div>
-                            <h4 class="text-xl font-bold text-gray-800 mb-2">Passion yang Mendalam</h4>
-                            <p class="text-gray-600 leading-relaxed">
-                                BonsaiKu lahir dari hobi sederhana di kebun belakang rumah. Kami melihat bagaimana bonsai dapat menjadi jembatan antara manusia dan alam, membawa kedamaian dan refleksi dalam kehidupan sehari-hari.
+                            <h4 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Passion yang Mendalam</h4>
+                            <p class="text-gray-600 dark:text-slate-300 leading-relaxed">
+                                RUANGBONSAI lahir dari hobi sederhana di kebun belakang rumah. Kami melihat bagaimana bonsai dapat menjadi jembatan antara manusia dan alam, membawa kedamaian dan refleksi dalam kehidupan sehari-hari.
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-shadow">
+                <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-8 shadow-xl dark:shadow-slate-950/50 hover:shadow-2xl transition-all border border-gray-100 dark:border-slate-700/60">
                     <div class="flex items-start gap-4">
-                        <div class="bg-blue-100 p-3 rounded-xl">
-                            <i class="fas fa-rocket text-blue-600 text-xl"></i>
+                        <div class="bg-blue-100 dark:bg-sky-950/60 p-3 rounded-xl">
+                            <i class="fas fa-rocket text-blue-600 dark:text-sky-400 text-xl"></i>
                         </div>
                         <div>
-                            <h4 class="text-xl font-bold text-gray-800 mb-2">Pertumbuhan Berkelanjutan</h4>
-                            <p class="text-gray-600 leading-relaxed">
+                            <h4 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Pertumbuhan Berkelanjutan</h4>
+                            <p class="text-gray-600 dark:text-slate-300 leading-relaxed">
                                 Dari kebun kecil, kini kami telah berkembang menjadi sumber terpercaya untuk koleksi bonsai premium di seluruh Indonesia, dengan jaringan pengiriman ke 34 kota besar.
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-shadow">
+                <div class="bg-white dark:bg-slate-800/90 rounded-2xl p-8 shadow-xl dark:shadow-slate-950/50 hover:shadow-2xl transition-all border border-gray-100 dark:border-slate-700/60">
                     <div class="flex items-start gap-4">
-                        <div class="bg-purple-100 p-3 rounded-xl">
-                            <i class="fas fa-gem text-purple-600 text-xl"></i>
+                        <div class="bg-purple-100 dark:bg-purple-950/60 p-3 rounded-xl">
+                            <i class="fas fa-gem text-purple-600 dark:text-purple-400 text-xl"></i>
                         </div>
                         <div>
-                            <h4 class="text-xl font-bold text-gray-800 mb-2">Kualitas Premium</h4>
-                            <p class="text-gray-600 leading-relaxed">
+                            <h4 class="text-xl font-bold text-gray-800 dark:text-white mb-2">Kualitas Premium</h4>
+                            <p class="text-gray-600 dark:text-slate-300 leading-relaxed">
                                 Setiap bonsai adalah hasil dedikasi, kesabaran, dan pengetahuan mendalam. Kami percaya setiap pohon memiliki cerita unik dan kami berkomitmen membantu Anda menemukan yang tepat.
                             </p>
                         </div>
@@ -142,22 +142,22 @@
             </div>
 
             <div class="relative">
-                <div class="absolute -inset-4 bg-gradient-to-r from-green-500 to-blue-500 rounded-3xl opacity-10 blur-2xl"></div>
-                <div class="relative bg-white rounded-3xl p-8 shadow-2xl">
-                    <img src="{{ asset('images/logo.png') }}" alt="BonsaiKu Story" 
+                <div class="absolute -inset-4 bg-gradient-to-r from-green-500 to-blue-500 rounded-3xl opacity-10 dark:opacity-20 blur-2xl"></div>
+                <div class="relative bg-white dark:bg-slate-800/90 rounded-3xl p-8 shadow-2xl dark:shadow-slate-950/60 border border-gray-100 dark:border-slate-700/60">
+                    <img src="{{ asset('images/logo.png') }}" alt="RUANGBONSAI Story" 
                          class="w-full rounded-2xl mb-6">
                     <div class="space-y-4">
                         <div class="flex items-center gap-3">
                             <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                            <span class="text-gray-700 font-medium">Dimulai tahun 1990</span>
+                            <span class="text-gray-700 dark:text-slate-200 font-medium">Dimulai tahun 1990</span>
                         </div>
                         <div class="flex items-center gap-3">
                             <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
-                            <span class="text-gray-700 font-medium">1000+ bonsai berkualitas tinggi</span>
+                            <span class="text-gray-700 dark:text-slate-200 font-medium">1000+ bonsai berkualitas tinggi</span>
                         </div>
                         <div class="flex items-center gap-3">
                             <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
-                            <span class="text-gray-700 font-medium">Komunitas 500+ pecinta bonsai</span>
+                            <span class="text-gray-700 dark:text-slate-200 font-medium">Komunitas 500+ pecinta bonsai</span>
                         </div>
                     </div>
                 </div>
@@ -167,60 +167,60 @@
 </section>
 
 <!-- Values Section -->
-<section class="py-20 bg-white">
+<section class="py-20 bg-white dark:bg-slate-900 transition-colors duration-300">
     <div class="container mx-auto px-4">
         <div class="text-center mb-16">
-            <div class="inline-block bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+            <div class="inline-block bg-blue-100 dark:bg-sky-950/60 text-blue-700 dark:text-sky-300 px-4 py-2 rounded-full text-sm font-medium mb-4">
                 Nilai-Nilai Kami
             </div>
-            <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-                Yang Membuat Kami <span class="text-blue-600">Berbeda</span>
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
+                Yang Membuat Kami <span class="text-blue-600 dark:text-sky-400">Berbeda</span>
             </h2>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p class="text-xl text-gray-600 dark:text-slate-300 max-w-3xl mx-auto">
                 Komitmen kami tidak hanya pada kualitas produk, tetapi juga pada pengalaman dan hubungan jangka panjang dengan setiap pelanggan.
             </p>
         </div>
 
         <div class="grid md:grid-cols-3 gap-8">
-            <div class="group bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
+            <div class="group bg-gradient-to-br from-green-50 to-green-100 dark:from-slate-800 dark:to-emerald-950/40 rounded-2xl p-8 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-green-100/50 dark:border-slate-700/60">
                 <div class="bg-gradient-to-br from-green-400 to-green-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                     <i class="fas fa-seedling text-3xl"></i>
                 </div>
-                <h4 class="text-2xl font-bold text-gray-800 mb-4">Kualitas & Integritas</h4>
-                <p class="text-gray-600 leading-relaxed mb-6">
+                <h4 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Kualitas & Integritas</h4>
+                <p class="text-gray-600 dark:text-slate-300 leading-relaxed mb-6">
                     Kami hanya menyediakan bonsai dengan kualitas terbaik, dirawat oleh ahli dengan standar yang tinggi. Kejujuran adalah prioritas kami dalam setiap transaksi.
                 </p>
                 <div class="flex justify-center gap-2">
-                    <span class="bg-green-200 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Premium Quality</span>
-                    <span class="bg-green-200 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Trusted</span>
+                    <span class="bg-green-200 dark:bg-emerald-900/60 text-green-800 dark:text-emerald-300 px-3 py-1 rounded-full text-sm font-medium">Premium Quality</span>
+                    <span class="bg-green-200 dark:bg-emerald-900/60 text-green-800 dark:text-emerald-300 px-3 py-1 rounded-full text-sm font-medium">Trusted</span>
                 </div>
             </div>
 
-            <div class="group bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
+            <div class="group bg-gradient-to-br from-blue-50 to-blue-100 dark:from-slate-800 dark:to-sky-950/40 rounded-2xl p-8 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-blue-100/50 dark:border-slate-700/60">
                 <div class="bg-gradient-to-br from-blue-400 to-blue-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                     <i class="fas fa-hands-helping text-3xl"></i>
                 </div>
-                <h4 class="text-2xl font-bold text-gray-800 mb-4">Edukasi & Dukungan</h4>
-                <p class="text-gray-600 leading-relaxed mb-6">
+                <h4 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Edukasi & Dukungan</h4>
+                <p class="text-gray-600 dark:text-slate-300 leading-relaxed mb-6">
                     Kami tidak hanya menjual, tetapi juga mendidik. Kami menyediakan panduan perawatan lengkap dan dukungan 24/7 untuk memastikan bonsai Anda tumbuh subur.
                 </p>
                 <div class="flex justify-center gap-2">
-                    <span class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">24/7 Support</span>
-                    <span class="bg-blue-200 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">Expert Guide</span>
+                    <span class="bg-blue-200 dark:bg-sky-900/60 text-blue-800 dark:text-sky-300 px-3 py-1 rounded-full text-sm font-medium">24/7 Support</span>
+                    <span class="bg-blue-200 dark:bg-sky-900/60 text-blue-800 dark:text-sky-300 px-3 py-1 rounded-full text-sm font-medium">Expert Guide</span>
                 </div>
             </div>
 
-            <div class="group bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-8 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
+            <div class="group bg-gradient-to-br from-purple-50 to-purple-100 dark:from-slate-800 dark:to-purple-950/40 rounded-2xl p-8 text-center transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border border-purple-100/50 dark:border-slate-700/60">
                 <div class="bg-gradient-to-br from-purple-400 to-purple-600 text-white w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform">
                     <i class="fas fa-users text-3xl"></i>
                 </div>
-                <h4 class="text-2xl font-bold text-gray-800 mb-4">Komunitas Pecinta Bonsai</h4>
-                <p class="text-gray-600 leading-relaxed mb-6">
+                <h4 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Komunitas Pecinta Bonsai</h4>
+                <p class="text-gray-600 dark:text-slate-300 leading-relaxed mb-6">
                     Kami membangun komunitas yang solid. Bergabunglah dengan kami untuk berbagi pengalaman, tips, dan inspirasi dengan sesama pecinta bonsai di seluruh Indonesia.
                 </p>
                 <div class="flex justify-center gap-2">
-                    <span class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">Community</span>
-                    <span class="bg-purple-200 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">Sharing</span>
+                    <span class="bg-purple-200 dark:bg-purple-900/60 text-purple-800 dark:text-purple-300 px-3 py-1 rounded-full text-sm font-medium">Community</span>
+                    <span class="bg-purple-200 dark:bg-purple-900/60 text-purple-800 dark:text-purple-300 px-3 py-1 rounded-full text-sm font-medium">Sharing</span>
                 </div>
             </div>
         </div>
@@ -228,14 +228,14 @@
 </section>
 
 <!-- Timeline Section -->
-<section class="py-20 bg-gray-50">
+<section class="py-20 bg-gray-50 dark:bg-slate-950 transition-colors duration-300">
     <div class="container mx-auto px-4">
         <div class="text-center mb-16">
-            <div class="inline-block bg-gray-200 text-gray-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+            <div class="inline-block bg-gray-200 dark:bg-slate-800 text-gray-700 dark:text-slate-300 px-4 py-2 rounded-full text-sm font-medium mb-4 border dark:border-slate-700">
                 Perjalanan Kami
             </div>
-            <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-                <span class="text-gray-600">Timeline</span> BonsaiKu
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
+                <span class="text-gray-600 dark:text-emerald-400">Timeline</span> RUANGBONSAI
             </h2>
         </div>
 
@@ -246,13 +246,13 @@
                 <div class="space-y-16">
                     <div class="flex items-center gap-8">
                         <div class="w-1/2 text-right pr-8">
-                            <div class="bg-white rounded-xl p-6 shadow-lg">
-                                <h4 class="text-xl font-bold text-gray-800 mb-2">1990 - Awal Mula</h4>
-                                <p class="text-gray-600">Memulai dari hobi pribadi dengan 5 bonsai di kebun belakang rumah</p>
+                            <div class="bg-white dark:bg-slate-850 dark:bg-slate-800/90 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700/60">
+                                <h4 class="text-xl font-bold text-gray-800 dark:text-white mb-2">1990 - Awal Mula</h4>
+                                <p class="text-gray-600 dark:text-slate-300">Memulai dari hobi pribadi dengan 5 bonsai di kebun belakang rumah</p>
                             </div>
                         </div>
                         <div class="relative">
-                            <div class="w-6 h-6 bg-green-500 rounded-full border-4 border-white shadow-lg"></div>
+                            <div class="w-6 h-6 bg-green-500 rounded-full border-4 border-white dark:border-slate-900 shadow-lg"></div>
                         </div>
                         <div class="w-1/2"></div>
                     </div>
@@ -260,25 +260,25 @@
                     <div class="flex items-center gap-8">
                         <div class="w-1/2"></div>
                         <div class="relative">
-                            <div class="w-6 h-6 bg-blue-500 rounded-full border-4 border-white shadow-lg"></div>
+                            <div class="w-6 h-6 bg-blue-500 rounded-full border-4 border-white dark:border-slate-900 shadow-lg"></div>
                         </div>
                         <div class="w-1/2 pl-8">
-                            <div class="bg-white rounded-xl p-6 shadow-lg">
-                                <h4 class="text-xl font-bold text-gray-800 mb-2">2015 - Ekspansi Online</h4>
-                                <p class="text-gray-600">Meluncurkan platform online dan mencapai 100 pelanggan pertama</p>
+                            <div class="bg-white dark:bg-slate-800/90 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700/60">
+                                <h4 class="text-xl font-bold text-gray-800 dark:text-white mb-2">2015 - Ekspansi Online</h4>
+                                <p class="text-gray-600 dark:text-slate-300">Meluncurkan platform online dan mencapai 100 pelanggan pertama</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="flex items-center gap-8">
                         <div class="w-1/2 text-right pr-8">
-                            <div class="bg-white rounded-xl p-6 shadow-lg">
-                                <h4 class="text-xl font-bold text-gray-800 mb-2">2020 - Milestone 500+</h4>
-                                <p class="text-gray-600">Mencapai 500+ pelanggan puas dan 20 kota jangkauan pengiriman</p>
+                            <div class="bg-white dark:bg-slate-800/90 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700/60">
+                                <h4 class="text-xl font-bold text-gray-800 dark:text-white mb-2">2020 - Milestone 500+</h4>
+                                <p class="text-gray-600 dark:text-slate-300">Mencapai 500+ pelanggan puas dan 20 kota jangkauan pengiriman</p>
                             </div>
                         </div>
                         <div class="relative">
-                            <div class="w-6 h-6 bg-purple-500 rounded-full border-4 border-white shadow-lg"></div>
+                            <div class="w-6 h-6 bg-purple-500 rounded-full border-4 border-white dark:border-slate-900 shadow-lg"></div>
                         </div>
                         <div class="w-1/2"></div>
                     </div>
@@ -286,12 +286,12 @@
                     <div class="flex items-center gap-8">
                         <div class="w-1/2"></div>
                         <div class="relative">
-                            <div class="w-6 h-6 bg-orange-500 rounded-full border-4 border-white shadow-lg"></div>
+                            <div class="w-6 h-6 bg-orange-500 rounded-full border-4 border-white dark:border-slate-900 shadow-lg"></div>
                         </div>
                         <div class="w-1/2 pl-8">
-                            <div class="bg-white rounded-xl p-6 shadow-lg">
-                                <h4 class="text-xl font-bold text-gray-800 mb-2">2025 - Era Baru</h4>
-                                <p class="text-gray-600">1000+ bonsai terjual, 34 kota terlayani, dan komunitas solid pecinta bonsai</p>
+                            <div class="bg-white dark:bg-slate-800/90 rounded-xl p-6 shadow-lg border border-gray-100 dark:border-slate-700/60">
+                                <h4 class="text-xl font-bold text-gray-800 dark:text-white mb-2">2025 - Era Baru</h4>
+                                <p class="text-gray-600 dark:text-slate-300">1000+ bonsai terjual, 34 kota terlayani, dan komunitas solid pecinta bonsai</p>
                             </div>
                         </div>
                     </div>
@@ -302,19 +302,19 @@
 </section>
 
 <!-- Testimonials Section -->
-<section class="py-20 bg-white">
+<section class="py-20 bg-white dark:bg-slate-900 transition-colors duration-300">
     <div class="container mx-auto px-4">
         <div class="text-center mb-16">
-            <div class="inline-block bg-yellow-100 text-yellow-700 px-4 py-2 rounded-full text-sm font-medium mb-4">
+            <div class="inline-block bg-yellow-100 dark:bg-amber-950/60 text-yellow-700 dark:text-amber-300 px-4 py-2 rounded-full text-sm font-medium mb-4">
                 Testimoni Pelanggan
             </div>
-            <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-                Apa Kata <span class="text-yellow-600">Pelanggan</span>
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-800 dark:text-white mb-6">
+                Apa Kata <span class="text-yellow-600 dark:text-amber-400">Pelanggan</span>
             </h2>
         </div>
 
         <div class="grid md:grid-cols-3 gap-8 mb-12">
-            <div class="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-100 rounded-2xl p-8 hover:shadow-xl transition-shadow">
+            <div class="bg-gradient-to-br from-gray-50 to-white dark:from-slate-800 dark:to-slate-850 dark:to-slate-800/70 border-2 border-gray-100 dark:border-slate-700/60 rounded-2xl p-8 hover:shadow-xl transition-shadow">
                 <div class="flex items-center gap-1 mb-4">
                     <i class="fas fa-star text-yellow-400"></i>
                     <i class="fas fa-star text-yellow-400"></i>
@@ -322,21 +322,21 @@
                     <i class="fas fa-star text-yellow-400"></i>
                     <i class="fas fa-star text-yellow-400"></i>
                 </div>
-                <p class="text-gray-700 mb-6 italic leading-relaxed">
-                    "Bonsai dari BonsaiKu benar-benar berkualitas premium. Sudah 2 tahun merawatnya dan masih tumbuh subur. Dukungan dari tim juga sangat membantu!"
+                <p class="text-gray-700 dark:text-slate-300 mb-6 italic leading-relaxed">
+                    "Bonsai dari RUANGBONSAI benar-benar berkualitas premium. Sudah 2 tahun merawatnya dan masih tumbuh subur. Dukungan dari tim juga sangat membantu!"
                 </p>
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 bg-gradient-to-r from-green-400 to-blue-400 rounded-full flex items-center justify-center text-white font-bold">
                         AS
                     </div>
                     <div>
-                        <h5 class="font-bold text-gray-800">Andi Setiawan</h5>
-                        <p class="text-sm text-gray-600">Jakarta</p>
+                        <h5 class="font-bold text-gray-800 dark:text-white">Andi Setiawan</h5>
+                        <p class="text-sm text-gray-600 dark:text-slate-400">Jakarta</p>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-100 rounded-2xl p-8 hover:shadow-xl transition-shadow">
+            <div class="bg-gradient-to-br from-gray-50 to-white dark:from-slate-800 dark:to-slate-850 dark:to-slate-800/70 border-2 border-gray-100 dark:border-slate-700/60 rounded-2xl p-8 hover:shadow-xl transition-shadow">
                 <div class="flex items-center gap-1 mb-4">
                     <i class="fas fa-star text-yellow-400"></i>
                     <i class="fas fa-star text-yellow-400"></i>
@@ -344,7 +344,7 @@
                     <i class="fas fa-star text-yellow-400"></i>
                     <i class="fas fa-star text-yellow-400"></i>
                 </div>
-                <p class="text-gray-700 mb-6 italic leading-relaxed">
+                <p class="text-gray-700 dark:text-slate-300 mb-6 italic leading-relaxed">
                     "Pelayanan sangat memuaskan! Pengiriman cepat dan aman. Bonsainya sampai dalam kondisi sempurna. Highly recommended!"
                 </p>
                 <div class="flex items-center gap-4">
@@ -352,13 +352,13 @@
                         SM
                     </div>
                     <div>
-                        <h5 class="font-bold text-gray-800">Sari Melati</h5>
-                        <p class="text-sm text-gray-600">Surabaya</p>
+                        <h5 class="font-bold text-gray-800 dark:text-white">Sari Melati</h5>
+                        <p class="text-sm text-gray-600 dark:text-slate-400">Surabaya</p>
                     </div>
                 </div>
             </div>
 
-            <div class="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-100 rounded-2xl p-8 hover:shadow-xl transition-shadow">
+            <div class="bg-gradient-to-br from-gray-50 to-white dark:from-slate-800 dark:to-slate-850 dark:to-slate-800/70 border-2 border-gray-100 dark:border-slate-700/60 rounded-2xl p-8 hover:shadow-xl transition-shadow">
                 <div class="flex items-center gap-1 mb-4">
                     <i class="fas fa-star text-yellow-400"></i>
                     <i class="fas fa-star text-yellow-400"></i>
@@ -366,16 +366,16 @@
                     <i class="fas fa-star text-yellow-400"></i>
                     <i class="fas fa-star text-yellow-400"></i>
                 </div>
-                <p class="text-gray-700 mb-6 italic leading-relaxed">
-                    "Komunitasnya sangat supportif! Banyak tips dan sharing dari sesama pecinta bonsai. BonsaiKu lebih dari sekedar toko online."
+                <p class="text-gray-700 dark:text-slate-300 mb-6 italic leading-relaxed">
+                    "Komunitasnya sangat supportif! Banyak tips dan sharing dari sesama pecinta bonsai. RUANGBONSAI lebih dari sekedar toko online."
                 </p>
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 bg-gradient-to-r from-orange-400 to-red-400 rounded-full flex items-center justify-center text-white font-bold">
                         BP
                     </div>
                     <div>
-                        <h5 class="font-bold text-gray-800">Budi Prasetyo</h5>
-                        <p class="text-sm text-gray-600">Bandung</p>
+                        <h5 class="font-bold text-gray-800 dark:text-white">Budi Prasetyo</h5>
+                        <p class="text-sm text-gray-600 dark:text-slate-400">Bandung</p>
                     </div>
                 </div>
             </div>

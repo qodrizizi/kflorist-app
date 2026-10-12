@@ -130,6 +130,10 @@ Route::middleware(['prevent.admin'])->group(function () {
         // Pesanan Saya Routes
         Route::get('/pesanan', [App\Http\Controllers\PesananController::class, 'index'])->name('shop.pesanan');
         Route::get('/pesanan/{id}/bayar', [App\Http\Controllers\PesananController::class, 'pay'])->name('shop.pesanan.pay');
+        Route::get('/pesanan/{id}/cek-status', [App\Http\Controllers\PesananController::class, 'syncStatus'])->name('shop.pesanan.syncStatus');
+        Route::get('/pesanan/{id}/status-json', [App\Http\Controllers\PesananController::class, 'statusJson'])->name('shop.pesanan.statusJson');
+        Route::get('/pesanan/{id}/struk', [App\Http\Controllers\PesananController::class, 'struk'])->name('shop.pesanan.struk');
+        Route::post('/pesanan/{id}/ganti-pembayaran', [App\Http\Controllers\CheckoutController::class, 'changePaymentMethod'])->name('shop.pesanan.changePayment');
         Route::put('/pesanan/{id}/selesai', [App\Http\Controllers\PesananController::class, 'complete'])->name('shop.pesanan.complete');
         
         // Review Route

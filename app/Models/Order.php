@@ -27,6 +27,8 @@ class Order extends Model
         'payment_biller_code',
         'payment_qr_url',
         'payment_expiry_time',
+        'midtrans_order_id',
+        'snap_token',
     ];
 
     public function user()

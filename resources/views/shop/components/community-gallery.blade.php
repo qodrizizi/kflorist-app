@@ -4,18 +4,27 @@
         $rawImages = [];
     }
     $imgCount = count($rawImages);
-    $formattedImages = array_map(function($img) {
-        return str_starts_with($img, 'http') ? $img : asset($img);
-    }, $rawImages);
-    $imagesJson = json_encode($formattedImages);
+    $formattedImages = array_values(array_filter(array_map(function($img) {
+        if (empty($img)) return '';
+        if (is_string($img) && (str_starts_with($img, 'http://') || str_starts_with($img, 'https://'))) {
+            $parsed = parse_url($img);
+            if (!empty($parsed['path'])) {
+                return '/' . ltrim($parsed['path'], '/');
+            }
+        }
+        return '/' . ltrim((string)$img, '/');
+    }, $rawImages)));
+    $imgCount = count($formattedImages);
 @endphp
 
 @if($imgCount > 0)
-    <div class="community-gallery w-full bg-slate-950 overflow-hidden select-none">
+    <div class="community-gallery w-full bg-slate-950 overflow-hidden select-none"
+         data-gallery-images='@json($formattedImages)'>
         @if($imgCount === 1)
             <!-- 1 Image: Full Width -->
             <div class="relative max-h-[460px] overflow-hidden flex items-center justify-center cursor-pointer group"
-                 onclick="openLightbox({{ $imagesJson }}, 0)">
+                 data-src="{{ $formattedImages[0] }}"
+                 onclick="openGalleryItem(this, 0)">
                 <img src="{{ $formattedImages[0] }}" 
                      alt="Foto Bonsai" 
                      loading="lazy"
@@ -35,7 +44,8 @@
             <div class="grid grid-cols-2 gap-1 max-h-[360px] sm:max-h-[380px] overflow-hidden">
                 @foreach($formattedImages as $idx => $imgUrl)
                     <div class="relative h-60 sm:h-72 overflow-hidden cursor-pointer group"
-                         onclick="openLightbox({{ $imagesJson }}, {{ $idx }})">
+                         data-src="{{ $imgUrl }}"
+                         onclick="openGalleryItem(this, {{ $idx }})">
                         <img src="{{ $imgUrl }}" 
                              alt="Foto Bonsai {{ $idx + 1 }}" 
                              loading="lazy"
@@ -53,7 +63,8 @@
             <!-- 3 Images: 1 Left Big (2 cols) + 2 Right Stacked (1 col) -->
             <div class="grid grid-cols-3 gap-1 max-h-[380px] sm:max-h-[420px] overflow-hidden">
                 <div class="col-span-2 h-72 sm:h-80 relative overflow-hidden cursor-pointer group"
-                     onclick="openLightbox({{ $imagesJson }}, 0)">
+                     data-src="{{ $formattedImages[0] }}"
+                     onclick="openGalleryItem(this, 0)">
                     <img src="{{ $formattedImages[0] }}" 
                          alt="Foto Bonsai 1" 
                          loading="lazy"
@@ -67,7 +78,8 @@
                 <div class="col-span-1 grid grid-rows-2 gap-1 h-72 sm:h-80">
                     @for($i = 1; $i <= 2; $i++)
                         <div class="relative h-full overflow-hidden cursor-pointer group"
-                             onclick="openLightbox({{ $imagesJson }}, {{ $i }})">
+                             data-src="{{ $formattedImages[$i] }}"
+                             onclick="openGalleryItem(this, {{ $i }})">
                             <img src="{{ $formattedImages[$i] }}" 
                                  alt="Foto Bonsai {{ $i + 1 }}" 
                                  loading="lazy"
@@ -87,7 +99,8 @@
             <div class="grid grid-cols-2 gap-1 max-h-[380px] sm:max-h-[420px] overflow-hidden">
                 @foreach($formattedImages as $idx => $imgUrl)
                     <div class="relative h-44 sm:h-48 overflow-hidden cursor-pointer group"
-                         onclick="openLightbox({{ $imagesJson }}, {{ $idx }})">
+                         data-src="{{ $imgUrl }}"
+                         onclick="openGalleryItem(this, {{ $idx }})">
                         <img src="{{ $imgUrl }}" 
                              alt="Foto Bonsai {{ $idx + 1 }}" 
                              loading="lazy"
@@ -106,7 +119,8 @@
             <div class="grid grid-cols-2 gap-1 max-h-[380px] sm:max-h-[420px] overflow-hidden">
                 @for($idx = 0; $idx < 3; $idx++)
                     <div class="relative h-44 sm:h-48 overflow-hidden cursor-pointer group"
-                         onclick="openLightbox({{ $imagesJson }}, {{ $idx }})">
+                         data-src="{{ $formattedImages[$idx] }}"
+                         onclick="openGalleryItem(this, {{ $idx }})">
                         <img src="{{ $formattedImages[$idx] }}" 
                              alt="Foto Bonsai {{ $idx + 1 }}" 
                              loading="lazy"
@@ -120,7 +134,8 @@
                 @endfor
                 <!-- 4th item with overlay -->
                 <div class="relative h-44 sm:h-48 overflow-hidden cursor-pointer group"
-                     onclick="openLightbox({{ $imagesJson }}, 3)">
+                     data-src="{{ $formattedImages[3] }}"
+                     onclick="openGalleryItem(this, 3)">
                     <img src="{{ $formattedImages[3] }}" 
                          alt="Foto Bonsai 4" 
                          loading="lazy"

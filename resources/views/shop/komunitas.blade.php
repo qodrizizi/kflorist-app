@@ -497,7 +497,7 @@
                                 </div>
                                 <div>
                                     <p class="text-xs font-semibold text-slate-800">Ingin ikut berdiskusi atau memamerkan koleksi?</p>
-                                    <p class="text-[11px] text-slate-400">Masuk terlebih dahulu ke akun BonsaiKu Anda.</p>
+                                    <p class="text-[11px] text-slate-400">Masuk terlebih dahulu ke akun RUANGBONSAI Anda.</p>
                                 </div>
                             </div>
                             <a href="{{ route('login') }}" class="py-1.5 px-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition shadow-sm">
@@ -555,7 +555,7 @@
                                             @if($author && $author->profile_photo_path)
                                                 <img src="{{ asset('storage/' . $author->profile_photo_path) }}" alt="{{ $author->name }}" class="w-full h-full object-cover">
                                             @elseif($isAuthorAdmin)
-                                                <img src="{{ asset('images/logonobg.png') }}" alt="Admin" class="w-full h-full object-contain">
+                                                <img src="{{ asset('images/logo.png') }}" alt="Admin" class="w-full h-full object-contain">
                                             @else
                                                 {{ $authorInitial }}
                                             @endif
@@ -679,11 +679,13 @@
                             @elseif($post->post_type === 'before_after' && $post->before_image && $post->after_image)
                                 @php
                                     $baGallery = [
-                                        str_starts_with($post->before_image, 'http') ? $post->before_image : asset($post->before_image),
-                                        str_starts_with($post->after_image, 'http') ? $post->after_image : asset($post->after_image)
+                                        str_starts_with($post->before_image, 'http') ? (parse_url($post->before_image, PHP_URL_PATH) ?: $post->before_image) : '/' . ltrim($post->before_image, '/'),
+                                        str_starts_with($post->after_image, 'http') ? (parse_url($post->after_image, PHP_URL_PATH) ?: $post->after_image) : '/' . ltrim($post->after_image, '/')
                                     ];
                                 @endphp
-                                <div class="relative w-full h-[360px] sm:h-[400px] overflow-hidden select-none bg-slate-950 before-after-container" id="ba-container-{{ $post->id }}">
+                                <div class="relative w-full h-[360px] sm:h-[400px] overflow-hidden select-none bg-slate-950 before-after-container" 
+                                     id="ba-container-{{ $post->id }}"
+                                     data-gallery-images='@json($baGallery)'>
                                     <!-- AFTER IMAGE (Background) -->
                                     <img src="{{ asset($post->after_image) }}" alt="Sesudah" class="absolute inset-0 w-full h-full object-cover pointer-events-none">
                                     <span class="absolute top-3 right-3 bg-emerald-900/80 backdrop-blur-md text-emerald-200 text-[10px] font-bold px-2.5 py-1 rounded-full border border-emerald-400/30 z-10">
@@ -699,7 +701,7 @@
                                     </div>
 
                                     <!-- Lightbox Zoom Button -->
-                                    <button type="button" onclick="openLightbox({{ json_encode($baGallery) }}, 0)" 
+                                    <button type="button" onclick="openGalleryItem(this, 0)" 
                                             class="absolute bottom-3 right-3 z-30 px-2.5 py-1 rounded-full bg-slate-900/80 backdrop-blur-md text-white text-[11px] font-semibold hover:bg-emerald-600 transition flex items-center gap-1.5 shadow-lg border border-white/20">
                                         <i class="fas fa-search-plus text-xs text-emerald-400"></i>
                                         <span>Perbesar Foto</span>
@@ -977,7 +979,7 @@
 </div>
 
 <!-- ================= LIGHTBOX / IMAGE MODAL VIEWER ================= -->
-<div id="communityLightbox" class="fixed inset-0 z-[99999] bg-slate-950/95 backdrop-blur-xl flex flex-col justify-between hidden select-none transition-opacity duration-300 opacity-0" role="dialog" aria-modal="true">
+<div id="communityLightbox" class="fixed inset-0 z-[99999] bg-slate-950/95 backdrop-blur-xl flex flex-col justify-between hidden select-none" role="dialog" aria-modal="true" style="display: none;">
     <!-- Top Navigation & Controls Bar -->
     <div class="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-white/10 bg-slate-900/60 backdrop-blur-md z-30">
         <!-- Counter & Badge -->
@@ -1024,7 +1026,7 @@
         <!-- Image Viewport -->
         <div class="relative max-h-full max-w-full flex items-center justify-center cursor-grab active:cursor-grabbing" id="lbImageWrapper">
             <img id="lbMainImage" src="" alt="Pratinjau Foto Bonsai" 
-                 class="max-h-[75vh] sm:max-h-[82vh] max-w-[94vw] sm:max-w-[88vw] object-contain rounded-xl shadow-2xl transition-transform duration-150 select-none">
+                 class="max-h-[75vh] sm:max-h-[82vh] max-w-[94vw] sm:max-w-[88vw] object-contain rounded-xl shadow-2xl transition-transform duration-150 select-none block">
         </div>
 
         <!-- Next Arrow Button -->
@@ -1177,20 +1179,66 @@
     let lbTranslateX = 0;
     let lbTranslateY = 0;
 
+    function openGalleryItem(el, index = 0) {
+        if (!el) return;
+        try {
+            const container = el.closest('[data-gallery-images]');
+            if (container && container.dataset.galleryImages) {
+                const images = JSON.parse(container.dataset.galleryImages);
+                if (Array.isArray(images) && images.length > 0) {
+                    openLightbox(images, index);
+                    return;
+                }
+            }
+        } catch(err) {
+            console.error('Error parsing gallery images:', err);
+        }
+
+        // Direct fallback: data-src or child img src
+        const directSrc = el.dataset.src || (el.querySelector('img') ? el.querySelector('img').src : null);
+        if (directSrc) {
+            openLightbox([directSrc], 0);
+        }
+    }
+
     function openLightbox(images, startIndex = 0) {
-        if (!images || images.length === 0) return;
-        lbImages = images;
-        lbCurrentIndex = Math.max(0, Math.min(startIndex, images.length - 1));
+        if (!images) return;
+
+        // If it's a JSON string, parse it
+        if (typeof images === 'string') {
+            const trimmed = images.trim();
+            if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+                try {
+                    images = JSON.parse(trimmed);
+                } catch(e) {
+                    images = [trimmed];
+                }
+            } else {
+                images = [trimmed];
+            }
+        }
+
+        if (!Array.isArray(images)) {
+            images = [images];
+        }
+
+        // Clean & normalize URLs
+        lbImages = images.map(item => {
+            if (typeof item === 'string') return item;
+            return item.url || item.src || '';
+        }).filter(Boolean);
+
+        if (lbImages.length === 0) return;
+
+        lbCurrentIndex = Math.max(0, Math.min(startIndex, lbImages.length - 1));
         
         const modal = document.getElementById('communityLightbox');
         if (!modal) return;
 
         modal.classList.remove('hidden');
-        setTimeout(() => {
-            modal.classList.remove('opacity-0');
-        }, 10);
-
+        modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
+
         showLightboxImage(lbCurrentIndex);
     }
 
@@ -1198,12 +1246,10 @@
         const modal = document.getElementById('communityLightbox');
         if (!modal) return;
 
-        modal.classList.add('opacity-0');
-        setTimeout(() => {
-            modal.classList.add('hidden');
-            document.body.style.overflow = '';
-            resetLightboxZoom();
-        }, 200);
+        modal.classList.add('hidden');
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+        resetLightboxZoom();
     }
 
     function showLightboxImage(index) {
@@ -1217,11 +1263,12 @@
         const nextBtn = document.getElementById('lbNextBtn');
 
         if (mainImg) {
-            mainImg.style.opacity = '0.4';
-            mainImg.src = lbImages[index];
-            mainImg.onload = () => {
-                mainImg.style.opacity = '1';
+            mainImg.style.opacity = '1';
+            mainImg.alt = `Foto Bonsai ${index + 1}`;
+            mainImg.onerror = function() {
+                console.warn('Gagal memuat gambar di lightbox:', this.src);
             };
+            mainImg.src = lbImages[index];
         }
 
         if (counter) {
@@ -1517,7 +1564,7 @@
         if (typeof Swal !== 'undefined') {
             Swal.fire({
                 icon: 'info',
-                title: 'Komunitas BonsaiKu',
+                title: 'Komunitas RUANGBONSAI',
                 text: msg,
                 confirmButtonColor: '#059669',
                 confirmButtonText: 'Oke Mengerti'

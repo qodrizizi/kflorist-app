@@ -17,7 +17,7 @@ use Carbon\Carbon;
 class CommunityController extends Controller
 {
     /**
-     * Tampilkan halaman utama Komunitas BonsaiKu
+     * Tampilkan halaman utama Komunitas RUANGBONSAI
      */
     public function index(Request $request)
     {

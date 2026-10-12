@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk ke Akun - BonsaiKu | Khadir Florist</title>
-    <link rel="icon" type="image/png" href="{{ asset('images/logonobg.png') }}">
+    <title>Masuk ke Akun - RUANGBONSAI | Khadir Florist</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -122,12 +122,12 @@
             <div class="relative z-10">
                 <div class="flex items-center space-x-3 mb-6">
                     <div class="w-11 h-11 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-inner overflow-hidden p-1.5 flex-shrink-0">
-                        <img src="{{ asset('images/logonobg.png') }}" alt="BonsaiKu Logo" class="w-full h-full object-contain"
+                        <img src="{{ asset('images/logo.png') }}" alt="RUANGBONSAI Logo" class="w-full h-full object-contain"
                              onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%2334d399\'><path d=\'M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.4z\'/></svg>'">
                     </div>
                     <div>
                         <span class="text-[10px] uppercase font-extrabold tracking-widest text-emerald-300/90 block">Khadir Florist</span>
-                        <h2 class="text-xl font-bold tracking-tight text-white leading-none mt-0.5">BonsaiKu</h2>
+                        <h2 class="text-xl font-bold tracking-tight text-white leading-none mt-0.5">RUANGBONSAI</h2>
                     </div>
                 </div>
 
@@ -200,8 +200,8 @@
             <div class="flex items-center justify-between mb-5">
                 <!-- Mobile brand logo (visible on mobile only) -->
                 <div class="flex lg:hidden items-center space-x-2">
-                    <img src="{{ asset('images/logonobg.png') }}" class="w-7 h-7 object-contain" alt="Logo">
-                    <span class="font-bold text-emerald-900 text-base">BonsaiKu</span>
+                    <img src="{{ asset('images/logo.png') }}" class="w-7 h-7 object-contain" alt="Logo">
+                    <span class="font-bold text-emerald-900 text-base">RUANGBONSAI</span>
                 </div>
 
                 <!-- Back to Shop -->

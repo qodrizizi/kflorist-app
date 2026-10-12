@@ -1,111 +1,263 @@
 @extends('layouts.shop')
 
 @section('content')
-<section class="py-16 bg-gray-50 min-h-screen">
+<section class="py-10 md:py-14 bg-slate-50 min-h-screen">
     <div class="container mx-auto px-4 md:px-8 max-w-5xl">
-        <div class="mb-8">
-            <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">Pesanan Saya</h1>
-            <p class="text-sm md:text-base text-gray-500">Lacak dan kelola pesanan bonsai Anda</p>
+        
+        <!-- HERO BANNER & STATS DASHBOARD -->
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-900 via-teal-800 to-emerald-700 text-white p-6 sm:p-8 md:p-10 mb-8 shadow-xl border border-emerald-600/30">
+            <!-- Decorative Glow Elements -->
+            <div class="absolute -top-24 -right-24 w-72 h-72 bg-emerald-400/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-teal-300/15 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute right-6 bottom-4 opacity-10 pointer-events-none hidden md:block">
+                <i class="fas fa-tree text-9xl"></i>
+            </div>
+
+            <!-- Header Content -->
+            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <div class="max-w-xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider bg-white/15 text-emerald-100 backdrop-blur-md border border-white/20 mb-3 shadow-inner">
+                        <i class="fas fa-seedling text-emerald-300 animate-pulse"></i>
+                        <span>Pusat Manajemen Transaksi</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight leading-tight mb-2">
+                        Pesanan Saya
+                    </h1>
+                    <p class="text-xs sm:text-sm md:text-base text-emerald-100/90 font-medium leading-relaxed">
+                        Lacak dan kelola pesanan bonsai Anda, pantau pengiriman ekspedisi bergaransi, dan unduh struk transaksi resmi kapan saja.
+                    </p>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="flex items-center gap-3 shrink-0">
+                    <a href="{{ route('shop.index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 bg-white/15 hover:bg-white/25 text-white backdrop-blur-md border border-white/25 rounded-2xl text-xs sm:text-sm font-bold transition-all shadow-sm">
+                        <i class="fas fa-compass text-emerald-300"></i>
+                        <span>Eksplorasi Katalog</span>
+                    </a>
+                    <a href="https://wa.me/6281234567890?text=Halo%20Admin%20RUANGBONSAI,%20saya%20ingin%20bertanya%20mengenai%20status%20pesanan%20saya" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-white rounded-2xl text-xs sm:text-sm font-bold transition-all shadow-md">
+                        <i class="fab fa-whatsapp text-base"></i>
+                        <span>Bantuan CS</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- INTERACTIVE STATS SUMMARY GRID -->
+            <div class="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mt-8 pt-6 border-t border-white/15">
+                <!-- Belum Bayar -->
+                <div onclick="switchTab('pending')" class="group cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-2xl p-3.5 transition-all transform hover:-translate-y-0.5">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-200">Belum Bayar</span>
+                        <div class="w-6 h-6 rounded-lg bg-amber-400/25 text-amber-300 flex items-center justify-center text-xs">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-2xl font-black text-white font-mono">{{ $pending->count() }}</span>
+                        <span class="text-[11px] text-emerald-200/80">Pesanan</span>
+                    </div>
+                </div>
+
+                <!-- Diproses -->
+                <div onclick="switchTab('processing')" class="group cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-2xl p-3.5 transition-all transform hover:-translate-y-0.5">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-200">Diproses</span>
+                        <div class="w-6 h-6 rounded-lg bg-sky-400/25 text-sky-300 flex items-center justify-center text-xs">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-2xl font-black text-white font-mono">{{ $processing->count() }}</span>
+                        <span class="text-[11px] text-emerald-200/80">Pesanan</span>
+                    </div>
+                </div>
+
+                <!-- Dikirim -->
+                <div onclick="switchTab('shipping')" class="group cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-2xl p-3.5 transition-all transform hover:-translate-y-0.5">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-200">Dikirim</span>
+                        <div class="w-6 h-6 rounded-lg bg-purple-400/25 text-purple-300 flex items-center justify-center text-xs">
+                            <i class="fas fa-truck-fast"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-2xl font-black text-white font-mono">{{ $shipping->count() }}</span>
+                        <span class="text-[11px] text-emerald-200/80">Pesanan</span>
+                    </div>
+                </div>
+
+                <!-- Selesai -->
+                <div onclick="switchTab('completed')" class="group cursor-pointer bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 rounded-2xl p-3.5 transition-all transform hover:-translate-y-0.5">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-200">Selesai</span>
+                        <div class="w-6 h-6 rounded-lg bg-emerald-400/25 text-emerald-300 flex items-center justify-center text-xs">
+                            <i class="fas fa-circle-check"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-baseline gap-2">
+                        <span class="text-2xl font-black text-white font-mono">{{ $completed->count() }}</span>
+                        <span class="text-[11px] text-emerald-200/80">Pesanan</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
         @if(session('success'))
-            <div class="mb-6 bg-green-50 border-l-4 border-emerald-500 p-4 rounded-r-xl">
-                <span class="text-emerald-800 font-medium">{{ session('success') }}</span>
+            <div class="mb-6 bg-emerald-50 border border-emerald-200 p-4 rounded-2xl flex items-center gap-3 shadow-sm">
+                <div class="w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0">
+                    <i class="fas fa-check"></i>
+                </div>
+                <span class="text-emerald-900 font-semibold text-sm">{{ session('success') }}</span>
             </div>
         @endif
 
         @if(session('error'))
-            <div class="mb-6 bg-red-50 border-l-4 border-red-500 p-4 rounded-r-xl">
-                <span class="text-red-800 font-medium">{{ session('error') }}</span>
+            <div class="mb-6 bg-rose-50 border border-rose-200 p-4 rounded-2xl flex items-center gap-3 shadow-sm">
+                <div class="w-9 h-9 rounded-xl bg-rose-500 text-white flex items-center justify-center shrink-0">
+                    <i class="fas fa-triangle-exclamation"></i>
+                </div>
+                <span class="text-rose-900 font-semibold text-sm">{{ session('error') }}</span>
             </div>
         @endif
 
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            
-            <!-- Tabs Navigation -->
-            <div class="flex overflow-x-auto border-b border-gray-200 hide-scroll snap-x">
-                <button onclick="switchTab('pending')" id="tab-pending" class="tab-btn snap-start flex-1 min-w-[110px] md:min-w-[140px] py-4 text-xs md:text-sm font-bold text-center border-b-2 border-emerald-500 text-emerald-600 transition-colors whitespace-nowrap">
-                    Belum Bayar <span class="bg-emerald-100 text-emerald-600 px-1.5 md:px-2 py-0.5 rounded-full text-[10px] md:text-xs ml-1">{{ $pending->count() }}</span>
-                </button>
-                <button onclick="switchTab('processing')" id="tab-processing" class="tab-btn snap-start flex-1 min-w-[110px] md:min-w-[140px] py-4 text-xs md:text-sm font-bold text-center border-b-2 border-transparent text-gray-500 hover:text-emerald-600 transition-colors whitespace-nowrap">
-                    Diproses <span class="bg-gray-100 text-gray-600 px-1.5 md:px-2 py-0.5 rounded-full text-[10px] md:text-xs ml-1">{{ $processing->count() }}</span>
-                </button>
-                <button onclick="switchTab('shipping')" id="tab-shipping" class="tab-btn snap-start flex-1 min-w-[110px] md:min-w-[140px] py-4 text-xs md:text-sm font-bold text-center border-b-2 border-transparent text-gray-500 hover:text-emerald-600 transition-colors whitespace-nowrap">
-                    Dikirim <span class="bg-gray-100 text-gray-600 px-1.5 md:px-2 py-0.5 rounded-full text-[10px] md:text-xs ml-1">{{ $shipping->count() }}</span>
-                </button>
-                <button onclick="switchTab('completed')" id="tab-completed" class="tab-btn snap-start flex-1 min-w-[110px] md:min-w-[140px] py-4 text-xs md:text-sm font-bold text-center border-b-2 border-transparent text-gray-500 hover:text-emerald-600 transition-colors whitespace-nowrap">
-                    Selesai <span class="bg-gray-100 text-gray-600 px-1.5 md:px-2 py-0.5 rounded-full text-[10px] md:text-xs ml-1">{{ $completed->count() }}</span>
-                </button>
-                <button onclick="switchTab('cancelled')" id="tab-cancelled" class="tab-btn snap-start flex-1 min-w-[110px] md:min-w-[140px] py-4 text-xs md:text-sm font-bold text-center border-b-2 border-transparent text-gray-500 hover:text-emerald-600 transition-colors whitespace-nowrap">
-                    Dibatalkan <span class="bg-gray-100 text-gray-600 px-1.5 md:px-2 py-0.5 rounded-full text-[10px] md:text-xs ml-1">{{ $cancelled->count() }}</span>
-                </button>
-            </div>
-
-            <!-- Tab Contents -->
-            <div class="p-4 md:p-6 bg-gray-50/50">
-                
-                <!-- Tab: Pending -->
-                <div id="content-pending" class="tab-content space-y-6">
-                    @forelse($pending as $order)
-                        @include('shop.components.order-card', ['order' => $order, 'badgeClass' => 'bg-orange-100 text-orange-700'])
-                    @empty
-                        <div class="text-center py-12">
-                            <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
-                            <p class="text-gray-500">Tidak ada pesanan menunggu pembayaran.</p>
-                        </div>
-                    @endforelse
-                </div>
-
-                <!-- Tab: Processing -->
-                <div id="content-processing" class="tab-content hidden space-y-6">
-                    @forelse($processing as $order)
-                        @include('shop.components.order-card', ['order' => $order, 'badgeClass' => 'bg-blue-100 text-blue-700'])
-                    @empty
-                        <div class="text-center py-12">
-                            <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
-                            <p class="text-gray-500">Tidak ada pesanan yang sedang diproses.</p>
-                        </div>
-                    @endforelse
-                </div>
-
-                <!-- Tab: Shipping -->
-                <div id="content-shipping" class="tab-content hidden space-y-6">
-                    @forelse($shipping as $order)
-                        @include('shop.components.order-card', ['order' => $order, 'badgeClass' => 'bg-purple-100 text-purple-700', 'showAction' => true])
-                    @empty
-                        <div class="text-center py-12">
-                            <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
-                            <p class="text-gray-500">Tidak ada pesanan yang sedang dikirim.</p>
-                        </div>
-                    @endforelse
-                </div>
-
-                <!-- Tab: Completed -->
-                <div id="content-completed" class="tab-content hidden space-y-6">
-                    @forelse($completed as $order)
-                        @include('shop.components.order-card', ['order' => $order, 'badgeClass' => 'bg-emerald-100 text-emerald-700'])
-                    @empty
-                        <div class="text-center py-12">
-                            <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
-                            <p class="text-gray-500">Belum ada pesanan yang selesai.</p>
-                        </div>
-                    @endforelse
-                </div>
-
-                <!-- Tab: Cancelled -->
-                <div id="content-cancelled" class="tab-content hidden space-y-6">
-                    @forelse($cancelled as $order)
-                        @include('shop.components.order-card', ['order' => $order, 'badgeClass' => 'bg-red-100 text-red-700'])
-                    @empty
-                        <div class="text-center py-12">
-                            <i class="fas fa-box-open text-6xl text-gray-300 mb-4"></i>
-                            <p class="text-gray-500">Tidak ada pesanan yang dibatalkan.</p>
-                        </div>
-                    @endforelse
-                </div>
-
-            </div>
+        <!-- SEGMENTED TABS NAVIGATION -->
+        <div class="bg-white p-2 rounded-2xl shadow-sm border border-slate-200/80 mb-6 overflow-x-auto hide-scroll flex items-center gap-1.5 snap-x">
+            <button onclick="switchTab('pending')" id="tab-pending" class="tab-btn snap-start flex-1 min-w-[125px] py-3 px-3 text-xs md:text-sm font-bold text-center rounded-xl transition-all whitespace-nowrap flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-green-600 text-white shadow-md shadow-emerald-600/20">
+                <i class="fas fa-wallet text-xs"></i>
+                <span>Belum Bayar</span>
+                <span class="tab-badge px-2 py-0.5 rounded-full text-[10px] md:text-xs font-black bg-white/20 text-white">{{ $pending->count() }}</span>
+            </button>
+            <button onclick="switchTab('processing')" id="tab-processing" class="tab-btn snap-start flex-1 min-w-[125px] py-3 px-3 text-xs md:text-sm font-semibold text-center rounded-xl transition-all whitespace-nowrap flex items-center justify-center gap-2 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50/50">
+                <i class="fas fa-box-open text-xs"></i>
+                <span>Diproses</span>
+                <span class="tab-badge px-2 py-0.5 rounded-full text-[10px] md:text-xs font-bold bg-slate-100 text-slate-600">{{ $processing->count() }}</span>
+            </button>
+            <button onclick="switchTab('shipping')" id="tab-shipping" class="tab-btn snap-start flex-1 min-w-[125px] py-3 px-3 text-xs md:text-sm font-semibold text-center rounded-xl transition-all whitespace-nowrap flex items-center justify-center gap-2 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50/50">
+                <i class="fas fa-truck-fast text-xs"></i>
+                <span>Dikirim</span>
+                <span class="tab-badge px-2 py-0.5 rounded-full text-[10px] md:text-xs font-bold bg-slate-100 text-slate-600">{{ $shipping->count() }}</span>
+            </button>
+            <button onclick="switchTab('completed')" id="tab-completed" class="tab-btn snap-start flex-1 min-w-[125px] py-3 px-3 text-xs md:text-sm font-semibold text-center rounded-xl transition-all whitespace-nowrap flex items-center justify-center gap-2 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50/50">
+                <i class="fas fa-circle-check text-xs"></i>
+                <span>Selesai</span>
+                <span class="tab-badge px-2 py-0.5 rounded-full text-[10px] md:text-xs font-bold bg-slate-100 text-slate-600">{{ $completed->count() }}</span>
+            </button>
+            <button onclick="switchTab('cancelled')" id="tab-cancelled" class="tab-btn snap-start flex-1 min-w-[125px] py-3 px-3 text-xs md:text-sm font-semibold text-center rounded-xl transition-all whitespace-nowrap flex items-center justify-center gap-2 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50/50">
+                <i class="fas fa-ban text-xs"></i>
+                <span>Dibatalkan</span>
+                <span class="tab-badge px-2 py-0.5 rounded-full text-[10px] md:text-xs font-bold bg-slate-100 text-slate-600">{{ $cancelled->count() }}</span>
+            </button>
         </div>
+
+        <!-- TAB CONTENTS -->
+        <div class="space-y-6">
+            
+            <!-- Tab: Pending -->
+            <div id="content-pending" class="tab-content space-y-5">
+                @forelse($pending as $order)
+                    @include('shop.components.order-card', ['order' => $order, 'badgeClass' => 'bg-amber-100 text-amber-800 border-amber-200'])
+                @empty
+                    <div class="text-center py-16 px-4 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                        <div class="w-20 h-20 bg-amber-50 text-amber-500 rounded-3xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm border border-amber-100">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <h3 class="text-base md:text-lg font-bold text-gray-800 mb-1">Tidak Ada Pesanan Menunggu Pembayaran</h3>
+                        <p class="text-xs md:text-sm text-gray-500 max-w-sm mx-auto mb-6">
+                            Semua tagihan Anda telah diselesaikan atau Anda belum memesan koleksi bonsai baru.
+                        </p>
+                        <a href="{{ route('shop.index') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-bold rounded-2xl text-xs md:text-sm shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                            <i class="fas fa-tree"></i>
+                            <span>Jelajahi Koleksi Bonsai</span>
+                        </a>
+                    </div>
+                @endforelse
+            </div>
+
+            <!-- Tab: Processing -->
+            <div id="content-processing" class="tab-content hidden space-y-5">
+                @forelse($processing as $order)
+                    @include('shop.components.order-card', ['order' => $order, 'badgeClass' => 'bg-sky-100 text-sky-800 border-sky-200'])
+                @empty
+                    <div class="text-center py-16 px-4 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                        <div class="w-20 h-20 bg-sky-50 text-sky-500 rounded-3xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm border border-sky-100">
+                            <i class="fas fa-box-open"></i>
+                        </div>
+                        <h3 class="text-base md:text-lg font-bold text-gray-800 mb-1">Tidak Ada Pesanan yang Sedang Diproses</h3>
+                        <p class="text-xs md:text-sm text-gray-500 max-w-sm mx-auto mb-6">
+                            Pesanan yang telah dibayar akan masuk ke sini untuk penyiapan peti kayu pengaman dan perawatan sebelum dikirim.
+                        </p>
+                        <a href="{{ route('shop.index') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-bold rounded-2xl text-xs md:text-sm shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                            <i class="fas fa-tree"></i>
+                            <span>Beli Bonsai Sekarang</span>
+                        </a>
+                    </div>
+                @endforelse
+            </div>
+
+            <!-- Tab: Shipping -->
+            <div id="content-shipping" class="tab-content hidden space-y-5">
+                @forelse($shipping as $order)
+                    @include('shop.components.order-card', ['order' => $order, 'badgeClass' => 'bg-purple-100 text-purple-800 border-purple-200', 'showAction' => true])
+                @empty
+                    <div class="text-center py-16 px-4 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                        <div class="w-20 h-20 bg-purple-50 text-purple-500 rounded-3xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm border border-purple-100">
+                            <i class="fas fa-truck-fast"></i>
+                        </div>
+                        <h3 class="text-base md:text-lg font-bold text-gray-800 mb-1">Tidak Ada Pesanan Dalam Pengiriman</h3>
+                        <p class="text-xs md:text-sm text-gray-500 max-w-sm mx-auto mb-6">
+                            Saat ini belum ada paket bonsai yang sedang dalam perjalanan menuju alamat Anda.
+                        </p>
+                        <a href="{{ route('shop.index') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-bold rounded-2xl text-xs md:text-sm shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>Koleksi Terbaru</span>
+                        </a>
+                    </div>
+                @endforelse
+            </div>
+
+            <!-- Tab: Completed -->
+            <div id="content-completed" class="tab-content hidden space-y-5">
+                @forelse($completed as $order)
+                    @include('shop.components.order-card', ['order' => $order, 'badgeClass' => 'bg-emerald-100 text-emerald-800 border-emerald-200'])
+                @empty
+                    <div class="text-center py-16 px-4 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                        <div class="w-20 h-20 bg-emerald-50 text-emerald-600 rounded-3xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm border border-emerald-100">
+                            <i class="fas fa-circle-check"></i>
+                        </div>
+                        <h3 class="text-base md:text-lg font-bold text-gray-800 mb-1">Belum Ada Pesanan yang Selesai</h3>
+                        <p class="text-xs md:text-sm text-gray-500 max-w-sm mx-auto mb-6">
+                            Pesanan yang telah sampai dan Anda konfirmasi akan tercatat di sini beserta ulasan bintang Anda.
+                        </p>
+                        <a href="{{ route('shop.index') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-bold rounded-2xl text-xs md:text-sm shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                            <i class="fas fa-seedling"></i>
+                            <span>Mulai Belanja</span>
+                        </a>
+                    </div>
+                @endforelse
+            </div>
+
+            <!-- Tab: Cancelled -->
+            <div id="content-cancelled" class="tab-content hidden space-y-5">
+                @forelse($cancelled as $order)
+                    @include('shop.components.order-card', ['order' => $order, 'badgeClass' => 'bg-rose-100 text-rose-800 border-rose-200'])
+                @empty
+                    <div class="text-center py-16 px-4 bg-white rounded-3xl border border-slate-100 shadow-sm">
+                        <div class="w-20 h-20 bg-rose-50 text-rose-400 rounded-3xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm border border-rose-100">
+                            <i class="fas fa-check-double"></i>
+                        </div>
+                        <h3 class="text-base md:text-lg font-bold text-gray-800 mb-1">Tidak Ada Pesanan Dibatalkan</h3>
+                        <p class="text-xs md:text-sm text-gray-500 max-w-sm mx-auto mb-6">
+                            Bagus! Anda tidak memiliki catatan pesanan yang kedaluwarsa atau dibatalkan.
+                        </p>
+                        <a href="{{ route('shop.index') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-bold rounded-2xl text-xs md:text-sm shadow-md hover:shadow-lg transition-all transform hover:-translate-y-0.5">
+                            <i class="fas fa-compass"></i>
+                            <span>Lihat Koleksi Bonsai</span>
+                        </a>
+                    </div>
+                @endforelse
+            </div>
+
+        </div>
+
     </div>
 </section>
 
@@ -121,30 +273,33 @@
 
         // Hide all contents
         document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-        // Reset all buttons
+        
+        // Reset all buttons to inactive state
         document.querySelectorAll('.tab-btn').forEach(el => {
-            el.classList.remove('border-emerald-500', 'text-emerald-600');
-            el.classList.add('border-transparent', 'text-gray-500');
+            el.className = 'tab-btn snap-start flex-1 min-w-[125px] py-3 px-3 text-xs md:text-sm font-semibold text-center rounded-xl transition-all whitespace-nowrap flex items-center justify-center gap-2 text-slate-600 hover:text-emerald-700 hover:bg-emerald-50/50';
+            
             // reset badge
-            let badge = el.querySelector('span');
+            let badge = el.querySelector('.tab-badge');
             if(badge) {
-                badge.classList.remove('bg-emerald-100', 'text-emerald-600');
-                badge.classList.add('bg-gray-100', 'text-gray-600');
+                badge.className = 'tab-badge px-2 py-0.5 rounded-full text-[10px] md:text-xs font-bold bg-slate-100 text-slate-600';
             }
         });
 
         // Show selected content
-        document.getElementById('content-' + tabId).classList.remove('hidden');
-        // Highlight selected button
+        const targetContent = document.getElementById('content-' + tabId);
+        if (targetContent) {
+            targetContent.classList.remove('hidden');
+        }
+
+        // Highlight selected button with gradient & shadow
         const activeBtn = document.getElementById('tab-' + tabId);
         if(activeBtn) {
-            activeBtn.classList.remove('border-transparent', 'text-gray-500');
-            activeBtn.classList.add('border-emerald-500', 'text-emerald-600');
+            activeBtn.className = 'tab-btn snap-start flex-1 min-w-[125px] py-3 px-3 text-xs md:text-sm font-bold text-center rounded-xl transition-all whitespace-nowrap flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-600 to-green-600 text-white shadow-md shadow-emerald-600/20';
+            
             // highlight badge
-            let activeBadge = activeBtn.querySelector('span');
+            let activeBadge = activeBtn.querySelector('.tab-badge');
             if(activeBadge) {
-                activeBadge.classList.remove('bg-gray-100', 'text-gray-600');
-                activeBadge.classList.add('bg-emerald-100', 'text-emerald-600');
+                activeBadge.className = 'tab-badge px-2 py-0.5 rounded-full text-[10px] md:text-xs font-black bg-white/20 text-white';
             }
         }
     }

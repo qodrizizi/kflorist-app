@@ -85,62 +85,105 @@
 
                     <!-- Metode Pembayaran -->
                     <div class="bg-white rounded-3xl shadow-lg p-6 md:p-8 border border-gray-100">
-                        <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center border-b pb-4">
-                            <i class="fas fa-wallet text-emerald-500 mr-3"></i> Metode Pembayaran
-                        </h2>
+                        <div class="flex items-center justify-between border-b pb-4 mb-6">
+                            <h2 class="text-xl font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-shield-alt text-emerald-500 mr-3"></i> Metode Pembayaran
+                            </h2>
+                            <span class="text-xs font-semibold px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full flex items-center gap-1.5">
+                                <i class="fas fa-lock text-[10px]"></i> Midtrans Secure 256-bit
+                            </span>
+                        </div>
                         
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <!-- BCA VA -->
-                            <label class="relative flex flex-col p-4 border-2 border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-500 transition-all group has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/30">
-                                <input type="radio" name="metode_pembayaran" value="bca" class="hidden" required>
-                                <div class="flex justify-between items-start mb-4">
-                                    <span class="font-bold text-gray-800">BCA Virtual Account</span>
-                                    <div class="bg-blue-600 text-white px-2 py-0.5 rounded text-[10px] font-bold">BCA</div>
+                        <div class="space-y-4">
+                            <!-- MIDTRANS ALL CHANNELS (REKOMENDASI UTAMA) -->
+                            <label class="relative flex flex-col sm:flex-row sm:items-center justify-between p-5 border-2 border-emerald-500 bg-emerald-50/30 rounded-2xl cursor-pointer hover:border-emerald-600 transition-all group shadow-sm has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/40">
+                                <input type="radio" name="metode_pembayaran" value="midtrans" class="hidden" checked required>
+                                <div class="space-y-2 mb-3 sm:mb-0">
+                                    <div class="flex items-center gap-2.5">
+                                        <span class="px-2.5 py-1 bg-gradient-to-r from-emerald-600 to-green-600 text-white text-[11px] font-black rounded-lg uppercase tracking-wider shadow-sm">
+                                            MIDTRANS
+                                        </span>
+                                        <h3 class="font-extrabold text-gray-900 text-base">Semua Metode Pembayaran (Full)</h3>
+                                        <span class="text-[10px] font-bold text-emerald-700 bg-emerald-200/70 px-2 py-0.5 rounded-full">Rekomendasi</span>
+                                    </div>
+                                    <p class="text-xs text-gray-600 leading-relaxed max-w-xl">
+                                        Pilihan terlengkap resmi Midtrans: <strong>QRIS, GoPay, ShopeePay, Semua VA Bank (BCA, Mandiri, BRI, BNI, Permata, CIMB), Kartu Kredit, Alfamart & Indomaret</strong>.
+                                    </p>
+                                    <div class="flex flex-wrap items-center gap-1.5 pt-1">
+                                        <span class="text-[10px] font-bold bg-white text-gray-700 px-2 py-0.5 rounded border border-gray-200">QRIS</span>
+                                        <span class="text-[10px] font-bold bg-white text-emerald-600 px-2 py-0.5 rounded border border-gray-200">GoPay</span>
+                                        <span class="text-[10px] font-bold bg-white text-orange-600 px-2 py-0.5 rounded border border-gray-200">ShopeePay</span>
+                                        <span class="text-[10px] font-bold bg-white text-blue-700 px-2 py-0.5 rounded border border-gray-200">BCA</span>
+                                        <span class="text-[10px] font-bold bg-white text-amber-600 px-2 py-0.5 rounded border border-gray-200">Mandiri</span>
+                                        <span class="text-[10px] font-bold bg-white text-blue-900 px-2 py-0.5 rounded border border-gray-200">BRI</span>
+                                        <span class="text-[10px] font-bold bg-white text-orange-700 px-2 py-0.5 rounded border border-gray-200">BNI</span>
+                                        <span class="text-[10px] font-bold bg-white text-purple-700 px-2 py-0.5 rounded border border-gray-200">Permata</span>
+                                        <span class="text-[10px] font-bold bg-white text-indigo-700 px-2 py-0.5 rounded border border-gray-200">Kartu Kredit</span>
+                                        <span class="text-[10px] font-bold bg-white text-red-600 px-2 py-0.5 rounded border border-gray-200">Alfamart/Indomaret</span>
+                                    </div>
                                 </div>
-                                <div class="mt-auto flex justify-between items-center">
-                                    <span class="text-xs text-gray-500">Otomatis Terverifikasi</span>
-                                    <i class="fas fa-check-circle text-emerald-500 opacity-0 group-has-[:checked]:opacity-100 transition-opacity"></i>
-                                </div>
-                            </label>
-
-                            <!-- Mandiri VA -->
-                            <label class="relative flex flex-col p-4 border-2 border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-500 transition-all group has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/30">
-                                <input type="radio" name="metode_pembayaran" value="mandiri" class="hidden">
-                                <div class="flex justify-between items-start mb-4">
-                                    <span class="font-bold text-gray-800">Mandiri Bill Payment</span>
-                                    <div class="bg-yellow-500 text-white px-2 py-0.5 rounded text-[10px] font-bold">MANDIRI</div>
-                                </div>
-                                <div class="mt-auto flex justify-between items-center">
-                                    <span class="text-xs text-gray-500">Otomatis Terverifikasi</span>
-                                    <i class="fas fa-check-circle text-emerald-500 opacity-0 group-has-[:checked]:opacity-100 transition-opacity"></i>
-                                </div>
-                            </label>
-
-                            <!-- BRI VA -->
-                            <label class="relative flex flex-col p-4 border-2 border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-500 transition-all group has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/30">
-                                <input type="radio" name="metode_pembayaran" value="bri" class="hidden">
-                                <div class="flex justify-between items-start mb-4">
-                                    <span class="font-bold text-gray-800">BRI Virtual Account</span>
-                                    <div class="bg-blue-800 text-white px-2 py-0.5 rounded text-[10px] font-bold">BRI</div>
-                                </div>
-                                <div class="mt-auto flex justify-between items-center">
-                                    <span class="text-xs text-gray-500">Otomatis Terverifikasi</span>
-                                    <i class="fas fa-check-circle text-emerald-500 opacity-0 group-has-[:checked]:opacity-100 transition-opacity"></i>
+                                <div class="shrink-0 sm:pl-4 flex items-center">
+                                    <i class="fas fa-check-circle text-emerald-600 text-2xl group-has-[:checked]:opacity-100 opacity-0 transition-opacity"></i>
                                 </div>
                             </label>
 
-                            <!-- QRIS -->
-                            <label class="relative flex flex-col p-4 border-2 border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-500 transition-all group has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/30">
-                                <input type="radio" name="metode_pembayaran" value="qris" class="hidden">
-                                <div class="flex justify-between items-start mb-4">
-                                    <span class="font-bold text-gray-800">QRIS (Gopay/OVO/Dana)</span>
-                                    <div class="bg-rose-500 text-white px-2 py-0.5 rounded text-[10px] font-bold">QRIS</div>
+                            <!-- PILIHAN METODE CEPAT -->
+                            <div class="pt-2">
+                                <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Atau Pilih Langsung Saluran Favorit:</p>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <!-- QRIS -->
+                                    <label class="relative flex flex-col p-3.5 border-2 border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-500 transition-all group has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/30">
+                                        <input type="radio" name="metode_pembayaran" value="qris" class="hidden">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <span class="font-bold text-gray-800 text-sm">QRIS Bersama</span>
+                                            <div class="bg-slate-900 text-white px-2 py-0.5 rounded text-[10px] font-bold">QRIS</div>
+                                        </div>
+                                        <div class="mt-auto flex justify-between items-center text-xs text-gray-500">
+                                            <span>Scan e-Wallet / m-Banking</span>
+                                            <i class="fas fa-check-circle text-emerald-500 opacity-0 group-has-[:checked]:opacity-100 transition-opacity"></i>
+                                        </div>
+                                    </label>
+
+                                    <!-- BCA VA -->
+                                    <label class="relative flex flex-col p-3.5 border-2 border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-500 transition-all group has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/30">
+                                        <input type="radio" name="metode_pembayaran" value="bca" class="hidden">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <span class="font-bold text-gray-800 text-sm">BCA Virtual Account</span>
+                                            <div class="bg-blue-600 text-white px-2 py-0.5 rounded text-[10px] font-bold">BCA</div>
+                                        </div>
+                                        <div class="mt-auto flex justify-between items-center text-xs text-gray-500">
+                                            <span>Otomatis Terverifikasi</span>
+                                            <i class="fas fa-check-circle text-emerald-500 opacity-0 group-has-[:checked]:opacity-100 transition-opacity"></i>
+                                        </div>
+                                    </label>
+
+                                    <!-- Mandiri Bill -->
+                                    <label class="relative flex flex-col p-3.5 border-2 border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-500 transition-all group has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/30">
+                                        <input type="radio" name="metode_pembayaran" value="mandiri" class="hidden">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <span class="font-bold text-gray-800 text-sm">Mandiri Bill Payment</span>
+                                            <div class="bg-amber-500 text-white px-2 py-0.5 rounded text-[10px] font-bold">MANDIRI</div>
+                                        </div>
+                                        <div class="mt-auto flex justify-between items-center text-xs text-gray-500">
+                                            <span>Livin' by Mandiri / ATM</span>
+                                            <i class="fas fa-check-circle text-emerald-500 opacity-0 group-has-[:checked]:opacity-100 transition-opacity"></i>
+                                        </div>
+                                    </label>
+
+                                    <!-- BRI VA -->
+                                    <label class="relative flex flex-col p-3.5 border-2 border-gray-200 rounded-2xl cursor-pointer hover:border-emerald-500 transition-all group has-[:checked]:border-emerald-500 has-[:checked]:bg-emerald-50/30">
+                                        <input type="radio" name="metode_pembayaran" value="bri" class="hidden">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <span class="font-bold text-gray-800 text-sm">BRI Virtual Account (BRIVA)</span>
+                                            <div class="bg-blue-800 text-white px-2 py-0.5 rounded text-[10px] font-bold">BRI</div>
+                                        </div>
+                                        <div class="mt-auto flex justify-between items-center text-xs text-gray-500">
+                                            <span>BRImo / ATM</span>
+                                            <i class="fas fa-check-circle text-emerald-500 opacity-0 group-has-[:checked]:opacity-100 transition-opacity"></i>
+                                        </div>
+                                    </label>
                                 </div>
-                                <div class="mt-auto flex justify-between items-center">
-                                    <span class="text-xs text-gray-500">Scan & Bayar Instan</span>
-                                    <i class="fas fa-check-circle text-emerald-500 opacity-0 group-has-[:checked]:opacity-100 transition-opacity"></i>
-                                </div>
-                            </label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -155,7 +198,7 @@
                         <div class="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2 custom-scrollbar">
                             @foreach($items as $item)
                                 <div class="flex items-center gap-4 border-b border-gray-100 pb-4 last:border-0 last:pb-0">
-                                    <img src="{{ $item['bonsai']->image_path ? asset('storage/' . $item['bonsai']->image_path) : asset('images/logonobg.png') }}" 
+                                    <img src="{{ $item['bonsai']->image_path ? asset('storage/' . $item['bonsai']->image_path) : asset('images/logo.png') }}" 
                                          class="w-16 h-16 rounded-lg object-cover bg-emerald-50">
                                     <div class="flex-grow">
                                         <h4 class="text-sm font-bold text-gray-800 leading-tight">{{ $item['bonsai']->name }}</h4>

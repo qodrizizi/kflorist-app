@@ -13,7 +13,7 @@ class MidtransController extends Controller
      */
     public function callback(Request $request)
     {
-        $serverKey = env('MIDTRANS_SERVER_KEY');
+        $serverKey = config('services.midtrans.server_key', env('MIDTRANS_SERVER_KEY'));
         $hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
         
         if ($hashed !== $request->signature_key) {

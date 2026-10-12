@@ -86,15 +86,37 @@ class ShopController extends Controller
      */
     public function show($id)
     {
-        $product = Bonsai::with(['category', 'reviews.user'])->findOrFail($id);
+        $product = Bonsai::with(['category', 'reviews.user', 'perawatans'])
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
+            ->findOrFail($id);
         
-        // Produk terkait
-        $relatedProducts = Bonsai::where('category_id', $product->category_id)
+        // Produk terkait dalam kategori yang sama atau produk unggulan lain jika kategori sedikit
+        $relatedProducts = Bonsai::with('category')
+            ->withAvg('reviews', 'rating')
+            ->withCount('reviews')
             ->where('id', '!=', $id)
             ->where('is_active', true)
             ->where('status', 'available')
+            ->where(function ($query) use ($product) {
+                if ($product->category_id) {
+                    $query->where('category_id', $product->category_id);
+                }
+            })
             ->take(4)
             ->get();
+
+        if ($relatedProducts->isEmpty()) {
+            $relatedProducts = Bonsai::with('category')
+                ->withAvg('reviews', 'rating')
+                ->withCount('reviews')
+                ->where('id', '!=', $id)
+                ->where('is_active', true)
+                ->where('status', 'available')
+                ->latest()
+                ->take(4)
+                ->get();
+        }
             
         return view('shop.detail', compact('product', 'relatedProducts'));
     }
